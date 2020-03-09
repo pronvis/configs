@@ -91,8 +91,8 @@ curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
 
 # Link Configs
 - `cd {this_repo_directory}`
-- `ln -s tmux/tmux.conf ~/.tmux.conf`
+- `ln -s $PWD/tmux/tmux.conf ~/.tmux.conf`
 - `mkdir -p ~/.config/nvim/scripts/`
-- `ln -s vim/init.vim ~/.config/nvim/init.vim`
-- `ln -s vim/spacetab.vim ~/.config/nvim/scripts/spacetab.vim`
-- `ln -s vim/coc-settings.json ~/.config/nvim/coc-settings.json`
+- `ln -s $PWD/vim/init.vim ~/.config/nvim/init.vim`
+- `ln -s $PWD/vim/spacetab.vim ~/.config/nvim/scripts/spacetab.vim`
+- `ln -s $PWD/vim/coc-settings.json ~/.config/nvim/coc-settings.json`
