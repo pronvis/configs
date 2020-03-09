@@ -1,6 +1,6 @@
 # Installation steps
 First of all install those usefull tools:
-- `cargo install clippy`
+- `rustup component add clippy-preview`
 - `brew install tmux`
 - `brew install neovim`
 - `brew install fd`
