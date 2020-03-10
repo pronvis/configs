@@ -60,7 +60,7 @@ Plug 'sheerun/vim-polyglot'
 call plug#end()
 
 " pronvis changes
-let g:rooter_patterns = ['Rakefile', '.git/', 'Cargo.toml']
+let g:rooter_patterns = ['Rakefile', '.git/', 'Cargo.toml', 'build.sbt']
 let g:ale_lint_on_text_changed = 1 
 let g:syntastic_rust_checkers = ['rustc', 'clippy']
 
@@ -471,3 +471,16 @@ autocmd Filetype html,xml,xsl,php source ~/.config/nvim/scripts/closetag.vim
 if has('nvim')
 	runtime! plugin/python_setup.vim
 endif
+
+" =============================================================================
+" This allows you to visually select a section and then hit @ to run a macro
+" on all lines. Only lines which match will change. Without this script the
+" macro would stop at lines which don’t match the macro.
+" =============================================================================
+
+xnoremap @ :<C-u>call ExecuteMacroOverVisualRange()<CR>
+
+function! ExecuteMacroOverVisualRange()
+  echo "@".getcmdline()
+  execute ":'<,'>normal @".nr2char(getchar())
+endfunction
