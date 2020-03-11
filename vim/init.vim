@@ -452,7 +452,7 @@ endif
 au Filetype rust source ~/.config/nvim/scripts/spacetab.vim
 au Filetype rust set colorcolumn=100
 
-au Filetype scala set colorcolumn=150
+au Filetype scala set colorcolumn=100
 
 " Help filetype detection
 autocmd BufRead *.plot set filetype=gnuplot
@@ -486,3 +486,20 @@ function! ExecuteMacroOverVisualRange()
   echo "@".getcmdline()
   execute ":'<,'>normal @".nr2char(getchar())
 endfunction
+
+" =============================================================================
+" Create directories before save file
+" =============================================================================
+
+function s:MkNonExDir(file, buf)
+    if empty(getbufvar(a:buf, '&buftype')) && a:file!~#'\v^\w+\:\/'
+        let dir=fnamemodify(a:file, ':h')
+        if !isdirectory(dir)
+            call mkdir(dir, 'p')
+        endif
+    endif
+endfunction
+augroup BWCCreateDir
+    autocmd!
+    autocmd BufWritePre * :call s:MkNonExDir(expand('<afile>'), +expand('<abuf>'))
+augroup END

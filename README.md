@@ -89,6 +89,14 @@ curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
 - === === ===
 - **for rust** another language server, but I choose previous one `:CocInstall coc-rust-analyzer` [coc-rust-analyzer](https://github.com/fannheyward/coc-rust-analyzer)
 
+#### Install [vim-gitgutter](https://github.com/airblade/vim-gitgutter)
+```
+mkdir -p ~/.config/nvim/pack/airblade/start
+cd ~/.config/nvim/pack/airblade/start
+git clone https://github.com/airblade/vim-gitgutter.git
+nvim -u NONE -c "helptags vim-gitgutter/doc" -c q
+```
+
 # Link Configs
 - `cd {this_repo_directory}`
 - `ln -s $PWD/tmux/tmux.conf ~/.tmux.conf`
