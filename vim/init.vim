@@ -503,3 +503,20 @@ augroup BWCCreateDir
     autocmd!
     autocmd BufWritePre * :call s:MkNonExDir(expand('<afile>'), +expand('<abuf>'))
 augroup END
+
+
+" =============================================================================
+" Custom macros
+" =============================================================================nnoremap <leader>ri @i<cr>
+
+func! SetDefaultValue()
+" will replace `fieldName: String` with `fieldName = "FieldName",`
+" first it check if current line contains `: String`
+    if search('\: String', 'n', line('.')) != 0
+	normal w"zywwd$A = "",hh"zp
+    elseif search('\: Option\[String\]', 'n', line('.')) != 0
+	normal w"zywwd$A = Some(""),hhh"zp
+    endif
+endfunc
+let @i = ':call SetDefaultValue()'
+nnoremap <leader>ri @i<cr>
