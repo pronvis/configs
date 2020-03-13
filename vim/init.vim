@@ -337,6 +337,9 @@ map L $
 noremap <leader>p :read !pbpaste<cr>
 noremap <leader>c :w !pbcopy<cr><cr>
 
+" <leader>p for paste without yanking
+vnoremap <leader>p "_dP
+
 " <leader>s for Rg search
 noremap <leader>s :Rg 
 let g:fzf_layout = { 'down': '~20%' }
@@ -507,7 +510,7 @@ augroup END
 
 " =============================================================================
 " Custom macros
-" =============================================================================nnoremap <leader>ri @i<cr>
+" =============================================================================
 
 func! SetDefaultValue()
 " will replace `fieldName: String` with `fieldName = "FieldName",`
