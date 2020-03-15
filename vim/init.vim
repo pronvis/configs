@@ -63,6 +63,7 @@ let g:rooter_patterns = ['Rakefile', '.git/', 'Cargo.toml', 'build.sbt']
 let g:ale_lint_on_text_changed = 1 
 let g:syntastic_rust_checkers = ['rustc', 'clippy']
 au BufRead,BufNewFile *.conf set filetype=conf
+au BufRead,BufNewFile .tmux.conf set filetype=tmux
 
 " from https://scalameta.org/metals/docs/editors/vim.html
 " Configuration for vim-scala
