@@ -46,7 +46,7 @@ Plug 'chriskempson/base16-vim'
 " log viewer: https://github.com/MTDL9/vim-log-highlighting
 Plug 'mtdl9/vim-log-highlighting'
 
-" Plug 'jiangmiao/auto-pairs'
+Plug 'jiangmiao/auto-pairs'
 Plug 'derekwyatt/vim-scala'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'preservim/nerdtree'
