@@ -524,3 +524,8 @@ func! SetDefaultValue()
 endfunc
 let @i = ':call SetDefaultValue()'
 nnoremap <leader>ri @i<cr>
+
+" =============================================================================
+" NERDTree
+" =============================================================================
+nmap <F2> :NERDTreeFind<CR>
