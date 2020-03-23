@@ -105,3 +105,4 @@ nvim -u NONE -c "helptags vim-gitgutter/doc" -c q
 - `ln -s $PWD/vim/spacetab.vim ~/.config/nvim/scripts/spacetab.vim`
 - `ln -s $PWD/vim/coc-settings.json ~/.config/nvim/coc-settings.json`
 - `ln -s $PWD/iterm/zshrc_conf.zshrc ~/.zshrc`
+- `ln -s $PWD/idea/ideavimrc ~/.ideavimrc`
