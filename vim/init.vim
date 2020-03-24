@@ -57,6 +57,9 @@ Plug 'sainnhe/sonokai'
 " syntax highlighting
 Plug 'sheerun/vim-polyglot'
 
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'RyanMillerC/better-vim-tmux-resizer'
+
 call plug#end()
 
 let g:rooter_patterns = ['Rakefile', '.git/', 'Cargo.toml', 'build.sbt']
@@ -402,8 +405,8 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 " Show commands.
 nnoremap <silent> <space>C  :<C-u>CocList commands<cr>
 " 'Smart' nevigation
-nmap <silent> E <Plug>(coc-diagnostic-prev)
-nmap <silent> W <Plug>(coc-diagnostic-next)
+nmap <silent> W <Plug>(coc-diagnostic-prev)
+nmap <silent> E <Plug>(coc-diagnostic-next)
 nmap <silent> <leader>l <Plug>(coc-diagnostic-info)
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
