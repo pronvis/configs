@@ -60,6 +60,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'RyanMillerC/better-vim-tmux-resizer'
 
+Plug 'tpope/vim-commentary'
 call plug#end()
 
 let g:rooter_patterns = ['Rakefile', '.git/', 'Cargo.toml', 'build.sbt']
