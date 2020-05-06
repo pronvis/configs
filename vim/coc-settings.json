@@ -2,5 +2,6 @@
     "rust-analyzer.serverPath": "~/.cargo/bin/rust-analyzer",
     "rust.clippy_preference": "on",
     "coc.preferences.formatOnType":true,
-    "coc.preferences.formatOnSaveFiletypes": ["scala"]
+    "coc.preferences.formatOnSaveFiletypes": ["scala"],
+    "sql.lintOnSave": true
 }

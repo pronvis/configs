@@ -61,6 +61,8 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'RyanMillerC/better-vim-tmux-resizer'
 
 Plug 'tpope/vim-commentary'
+
+Plug 'itchyny/vim-gitbranch'
 call plug#end()
 
 let g:rooter_patterns = ['Rakefile', '.git/', 'Cargo.toml', 'build.sbt']
@@ -123,12 +125,25 @@ let g:secure_modelines_allowed_items = [
 
 " Lightline
 let g:lightline = {
+      \ 'colorscheme': 'seoul256',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'readonly', 'filename', 'modified' ],
+      \             [ 'git_st', 'gitbranch'] ]
+      \ },
       \ 'component_function': {
       \   'filename': 'LightlineFilename',
+      \   'git_st': 'GitStatus',
+      \   'gitbranch': 'gitbranch#name',
       \ },
 \ }
 function! LightlineFilename()
   return expand('%:t') !=# '' ? @% : '[No Name]'
+endfunction
+
+function! GitStatus()
+  let [a,m,r] = GitGutterGetHunkSummary()
+  return printf('+%d ~%d -%d', a, m, r)
 endfunction
 
 " from http://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
@@ -405,7 +420,11 @@ nnoremap k gk
 command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
 " Show commands.
 nnoremap <silent> <space>C  :<C-u>CocList commands<cr>
-" 'Smart' nevigation
+" Apply AutoFix to problem on the current line.
+nmap <leader>qf  <Plug>(coc-fix-current)
+" Remap keys for applying codeAction to the current line.
+nmap <leader>ac  <Plug>(coc-codeaction)
+" 'Smart' navigation
 nmap <silent> W <Plug>(coc-diagnostic-prev)
 nmap <silent> E <Plug>(coc-diagnostic-next)
 nmap <silent> <leader>l <Plug>(coc-diagnostic-info)
@@ -434,9 +453,6 @@ nnoremap <leader>, :set invlist<cr>
 
 " <leader>q shows stats
 nnoremap <leader>q g<c-g>
-" Apply AutoFix to problem on the current line.
-nmap <leader>qf  <Plug>(coc-fix-current)
-
 " Keymap for replacing up to next _ or -
 noremap <leader>m ct_
 
