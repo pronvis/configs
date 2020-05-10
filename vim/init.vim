@@ -63,6 +63,7 @@ Plug 'RyanMillerC/better-vim-tmux-resizer'
 Plug 'tpope/vim-commentary'
 
 Plug 'itchyny/vim-gitbranch'
+Plug 'tpope/vim-surround'
 call plug#end()
 
 let g:rooter_patterns = ['Rakefile', '.git/', 'Cargo.toml', 'build.sbt']
@@ -211,6 +212,19 @@ inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<
 " =============================================================================
 " # Editor settings
 " =============================================================================
+" Configuration for vim-markdown
+let g:vim_markdown_conceal = 2
+let g:vim_markdown_conceal_code_blocks = 0
+let g:vim_markdown_math = 1
+let g:vim_markdown_toml_frontmatter = 1
+let g:vim_markdown_frontmatter = 1
+let g:vim_markdown_strikethrough = 1
+let g:vim_markdown_autowrite = 1
+let g:vim_markdown_edit_url_in = 'buffer'
+let g:vim_markdown_follow_anchor = 1
+let g:vim_markdown_new_list_item_indent = 0
+let g:vim_markdown_auto_insert_bullets = 0
+
 filetype plugin indent on
 set autoindent
 set timeoutlen=300 " http://stackoverflow.com/questions/2158516/delay-before-o-opens-a-new-line
@@ -221,9 +235,6 @@ set hidden
 set nowrap
 set nojoinspaces
 let g:sneak#s_next = 1
-let g:vim_markdown_new_list_item_indent = 0
-let g:vim_markdown_auto_insert_bullets = 0
-let g:vim_markdown_frontmatter = 1
 set printfont=:h10
 set printencoding=utf-8
 set printoptions=paper:letter
@@ -343,8 +354,8 @@ lnoremap <C-c> <Esc>
 tnoremap <C-c> <Esc>
 
 " Ctrl+h to stop searching
-vnoremap <C-h> :nohlsearch<cr>
-nnoremap <C-h> :nohlsearch<cr>
+vnoremap <C-s> :nohlsearch<cr>
+nnoremap <C-s> :nohlsearch<cr>
 
 " Suspend with Ctrl+f
 inoremap <C-f> :sus<cr>
