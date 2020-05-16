@@ -362,6 +362,10 @@ inoremap <C-f> :sus<cr>
 vnoremap <C-f> :sus<cr>
 nnoremap <C-f> :sus<cr>
 
+" Increment/Decrement the next number on this line
+nnoremap + <C-a>
+nnoremap - <C-x>
+
 " Jump to start and end of line using the home row keys
 map H ^
 map L $
