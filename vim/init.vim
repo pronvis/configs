@@ -48,7 +48,6 @@ Plug 'mtdl9/vim-log-highlighting'
 
 Plug 'jiangmiao/auto-pairs'
 Plug 'derekwyatt/vim-scala'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'preservim/nerdtree'
 
 " sonokai theme
