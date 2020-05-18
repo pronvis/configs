@@ -85,11 +85,9 @@ curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
 - inside vim `:PlugInstall`
 
 #### Install coc plugins
-- **for rust** language server `:CocInstall coc-rls` [coc-rls](https://github.com/neoclide/coc-rls)
+- **for rust** language server `:CocInstall coc-rust-analyzer` [coc-rust-analyzer](https://github.com/fannheyward/coc-rust-analyzer)
 - `:CocInstall coc-json`
 - **for scala** `:CocInstall coc-metals`
-- === === ===
-- **for rust** another language server, but I choose previous one `:CocInstall coc-rust-analyzer` [coc-rust-analyzer](https://github.com/fannheyward/coc-rust-analyzer)
 
 #### Install [vim-gitgutter](https://github.com/airblade/vim-gitgutter)
 ```
