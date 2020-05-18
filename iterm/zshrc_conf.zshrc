@@ -77,6 +77,7 @@ export PATH="/usr/local/opt/llvm/bin:$PATH"
 export PATH="/usr/local/php5/bin:$PATH"
 export PATH="$HOME/.fluence/bin:$PATH"
 export PATH="/opt/local/bin:$PATH"
+export CARGO_TARGET_DIR="$HOME/rust/rust_build_artifacts"
 export VAULT_ADDR=https://vault.wvservices.com:8200
 
 # you need to install https://vulkan.lunarg.com/sdk/home first

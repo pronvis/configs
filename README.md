@@ -8,6 +8,8 @@ First of all install those usefull tools:
 - `brew install go`
 - `brew install autojump`
 - `cargo install proximity-sort`
+- `cargo install cargo-add`
+- `cargo install cargo-whatfeatures`
 - `git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell`
 
 ## Iterm2
