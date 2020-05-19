@@ -380,7 +380,6 @@ nnoremap - <C-x>
 " Run tests
 nnoremap <leader>T :call RunRustTests()<cr>
 nnoremap <leader>t :w<cr>:call spectacular#run_tests()<cr>
-nnoremap <leader>k :w<cr>:call spectacular#run_tests_with_current_line()<cr>
 
 " Jump to start and end of line using the home row keys
 map H ^
