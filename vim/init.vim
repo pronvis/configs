@@ -49,6 +49,7 @@ Plug 'mtdl9/vim-log-highlighting'
 Plug 'jiangmiao/auto-pairs'
 Plug 'derekwyatt/vim-scala'
 Plug 'preservim/nerdtree'
+Plug 'davidpdrsn/vim-spectacular'
 
 " sonokai theme
 Plug 'sainnhe/sonokai'
@@ -64,6 +65,8 @@ Plug 'tpope/vim-commentary'
 Plug 'itchyny/vim-gitbranch'
 Plug 'tpope/vim-surround'
 call plug#end()
+
+source ~/.config/nvim/functions.vim
 
 let g:rooter_patterns = ['Rakefile', '.git/', 'Cargo.toml', 'build.sbt']
 let g:ale_lint_on_text_changed = 1 
@@ -289,6 +292,15 @@ nnoremap / /\v
 cnoremap %s/ %sm/
 
 " =============================================================================
+" # Auto commands
+" =============================================================================
+
+augroup neorun
+  autocmd!
+  autocmd TermClose * :call TerminalOnTermClose(0+expand('<abuf>'))
+augroup end
+
+" =============================================================================
 " # GUI settings
 " =============================================================================
 " set guioptions-=T " Remove toolbar
@@ -364,6 +376,11 @@ nnoremap <C-f> :sus<cr>
 " Increment/Decrement the next number on this line
 nnoremap + <C-a>
 nnoremap - <C-x>
+
+" Run tests
+nnoremap <leader>T :call RunRustTests()<cr>
+nnoremap <leader>t :w<cr>:call spectacular#run_tests()<cr>
+nnoremap <leader>k :w<cr>:call spectacular#run_tests_with_current_line()<cr>
 
 " Jump to start and end of line using the home row keys
 map H ^
@@ -569,3 +586,14 @@ nnoremap <leader>ri @i<cr>
 " NERDTree
 " =============================================================================
 nmap <F2> :NERDTreeFind<CR>
+
+" =============================================================================
+" Test running
+" =============================================================================
+call spectacular#reset()
+
+call spectacular#add_test_runner(
+      \ 'rust, pest, toml, cfg, ron, graphql',
+      \ ':call SmartRun("cargo check && cargo check --tests && cargo check --examples")',
+      \ '.rs'
+      \ )
