@@ -493,3 +493,12 @@ function! RunRustTests()
   end
   call SmartRun("cargo test --all -- --test-threads=1 && echo DONE 🎉")
 endfunction
+
+function! RunRustCurrentTest()
+  if &modified
+    write
+  end
+  let path = expand('%:r')
+  let filename = split(path, "/")[-1]
+  call SmartRun("cargo test " . filename . " -- --test-threads=1 && echo DONE 🎉")
+endfunction

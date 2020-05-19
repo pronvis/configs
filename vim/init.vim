@@ -377,8 +377,11 @@ nnoremap <C-f> :sus<cr>
 nnoremap + <C-a>
 nnoremap - <C-x>
 
+nnoremap <leader>i :call IndentEntireFile()<cr>
+"
 " Run tests
 nnoremap <leader>T :call RunRustTests()<cr>
+nnoremap <leader>r :call RunRustCurrentTest()<cr>
 nnoremap <leader>t :w<cr>:call spectacular#run_tests()<cr>
 
 " Jump to start and end of line using the home row keys
