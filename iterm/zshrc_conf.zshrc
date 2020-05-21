@@ -77,8 +77,8 @@ export PATH="/usr/local/opt/llvm/bin:$PATH"
 export PATH="/usr/local/php5/bin:$PATH"
 export PATH="$HOME/.fluence/bin:$PATH"
 export PATH="/opt/local/bin:$PATH"
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export CARGO_TARGET_DIR="$HOME/rust/rust_build_artifacts"
-export VAULT_ADDR=https://vault.wvservices.com:8200
 
 # you need to install https://vulkan.lunarg.com/sdk/home first
 export VULKAN_SDK=$HOME/vulkan_sdk/macOS
@@ -172,6 +172,7 @@ function setjdk() {
    export PATH=$JAVA_HOME/bin:$PATH
   fi
  }
+
  function removeFromPath() {
   export PATH=$(echo $PATH | sed -E -e "s;:$1;;" -e "s;$1:?;;")
  }
@@ -201,11 +202,13 @@ unsetopt share_history
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh" || true
 
 # Fix 'less' italic highlighting in tmux (reason why it is italic is `tmux-256color`)
 # https://unix.stackexchange.com/questions/179173/make-less-highlight-search-patterns-instead-of-italicizing-them
 export LESS_TERMCAP_so=$'\E[30;43m'
 export LESS_TERMCAP_se=$'\E[39;49m'
+
+# git branch symbol, but it doesn't work :(
+# local branch="\ue0a0"
+# ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}$branch:(%{$fg[red]%}"
