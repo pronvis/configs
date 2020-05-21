@@ -418,7 +418,7 @@ endfunction
           \ 'on_exit': function('TerminalOnExit'),
           \ 'buf': expand('<abuf>')
           \})
-    execute "normal G"
+    execute "normal i"
   endfunction
 
   function! TerminalOnExit(job_id, exit_code, event) dict
