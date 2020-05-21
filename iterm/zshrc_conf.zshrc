@@ -209,6 +209,6 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 export LESS_TERMCAP_so=$'\E[30;43m'
 export LESS_TERMCAP_se=$'\E[39;49m'
 
-# git branch symbol, but it doesn't work :(
-# local branch="\ue0a0"
-# ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}$branch:(%{$fg[red]%}"
+# git branch symbol
+local branch="\ue0a0"
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}$branch:(%{$fg[red]%}"
