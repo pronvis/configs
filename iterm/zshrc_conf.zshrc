@@ -68,9 +68,9 @@ plugins=(git)
 # User configuration
 
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-export PATH="/Users/$USER_NAME/programs/liquibase:$PATH"
-export PATH="/Users/$USER_NAME/programs/activator:$PATH"
-export PATH="/Users/$USER_NAME/bin:$PATH"
+export PATH="$HOME/programs/liquibase:$PATH"
+export PATH="$HOME/programs/activator:$PATH"
+export PATH="$HOME/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="/usr/local/opt/nss/bin:$PATH"
 export PATH="/usr/local/opt/llvm/bin:$PATH"
@@ -79,6 +79,8 @@ export PATH="$HOME/.fluence/bin:$PATH"
 export PATH="/opt/local/bin:$PATH"
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export CARGO_TARGET_DIR="$HOME/rust/rust_build_artifacts"
+export GOPATH="$HOME/go"
+export PATH="$GOPATH/bin:$PATH"
 
 # you need to install https://vulkan.lunarg.com/sdk/home first
 export VULKAN_SDK=$HOME/vulkan_sdk/macOS
@@ -210,5 +212,15 @@ export LESS_TERMCAP_so=$'\E[30;43m'
 export LESS_TERMCAP_se=$'\E[39;49m'
 
 # git branch symbol
-local branch="\ue0a0"
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}$branch:(%{$fg[red]%}"
+local git_branch_symbol="\ue0a0"
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}$git_branch_symbol:(%{$fg[red]%}"
+
+# TWF (like NERDTree): https://github.com/wvanlint/twf
+twf-widget() {
+  local selected=$(twf --height=0.5)
+  BUFFER="$BUFFER$selected"
+  zle reset-prompt
+  zle end-of-line
+  return $ret
+}
+zle -N twf-widget
