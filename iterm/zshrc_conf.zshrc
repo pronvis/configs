@@ -1,7 +1,7 @@
 export LC_ALL=en_US.UTF-8
 export USER_NAME=`whoami`
 
-export TERM=screen-256color
+export TERM=xterm-256color
 
 # For autojump
 [[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
@@ -13,13 +13,18 @@ export ZSH=/Users/$USER_NAME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="robbyrussell"
+# ZSH_THEME="robbyrussell"
+ZSH_THEME=""
 plugins=(git colored-man colorize github jira vagrant virtualenv pip python brew osx zsh-syntax-highlighting)
 
 BASE16_SHELL="$HOME/.config/base16-shell/"
 [ -n "$PS1" ] && \
 [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
      eval "$("$BASE16_SHELL/profile_helper.sh")"
+
+# export BASE16_THEME=railscasts
+# export BASE16_THEME=base16_tomorrow-night-eighties
+export BASE16_THEME=base16_material-vivid
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -214,6 +219,9 @@ export LESS_TERMCAP_se=$'\E[39;49m'
 # git branch symbol
 local git_branch_symbol="\ue0a0"
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}$git_branch_symbol:(%{$fg[red]%}"
+ZSH_THEME_GIT_PROMPT_SUFFIX=")$reset_color "
+ZSH_THEME_GIT_PROMPT_DIRTY="$fg[blue]"
+ZSH_THEME_GIT_PROMPT_CLEAN="$fg[green]"
 
 # TWF (like NERDTree): https://github.com/wvanlint/twf
 twf-widget() {

@@ -26,9 +26,6 @@ Plug 'airblade/vim-rooter'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
-" Semantic language support
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
 " Syntastic language support
 Plug 'cespare/vim-toml'
 Plug 'stephpy/vim-yaml'
@@ -64,6 +61,15 @@ Plug 'tpope/vim-commentary'
 
 Plug 'itchyny/vim-gitbranch'
 Plug 'tpope/vim-surround'
+
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'prabirshrestha/asyncomplete-buffer.vim'
+Plug 'thomasfaingnaert/vim-lsp-snippets'
+Plug 'thomasfaingnaert/vim-lsp-ultisnips'
+Plug 'maximbaz/lightline-ale'
 call plug#end()
 
 source ~/.config/nvim/functions.vim
@@ -112,6 +118,47 @@ hi Normal ctermbg=NONE
 " Get syntax
 syntax on
 
+" Ale
+let g:ale_enabled = 1
+let g:ale_linters = {
+  \ 'rust': ['cargo'] ,
+  \ 'scala': ['metals'],
+  \ }
+let g:ale_rust_rls_config = {
+  \   'rust': {
+  \     'clippy_preference': 'on'
+  \   }
+  \ }
+let g:ale_rust_cargo_use_clippy = 1
+let g:ale_rust_cargo_check_tests = 1
+let g:ale_rust_cargo_check_examples = 1
+let g:ale_rust_cargo_use_check = 0
+let g:ale_rust_cargo_clippy_options = ""
+let g:ale_lint_on_text_changed = 'never'
+let g:ale_set_highlights = 1
+
+let g:ale_completion_enabled = 1
+set omnifunc=ale#completion#OmniFunc
+
+let g:ale_fixers = {
+  \   'scala': [
+  \       'scalafmt',
+  \       'trim_whitespace',
+  \       'remove_trailing_lines',
+  \   ],
+  \   'rust': [
+  \       'rustfmt',
+  \       'trim_whitespace',
+  \       'remove_trailing_lines',
+  \   ],
+  \}
+
+let g:ale_sign_error = "✖"
+let g:ale_sign_warning = "⚠"
+let g:ale_sign_info = "i"
+let g:ale_sign_hint = "➤"
+
+
 " Plugin settings
 let g:secure_modelines_allowed_items = [
                 \ "textwidth",   "tw",
@@ -130,6 +177,8 @@ let g:secure_modelines_allowed_items = [
 let g:lightline = {
       \ 'colorscheme': 'seoul256',
       \ 'active': {
+  \   'right': [[ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ],
+  \             [ 'lineinfo' ]],
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'readonly', 'filename', 'modified' ],
       \             [ 'git_st', 'gitbranch'] ]
@@ -139,6 +188,18 @@ let g:lightline = {
       \   'git_st': 'GitStatus',
       \   'gitbranch': 'gitbranch#name',
       \ },
+  \ 'component_expand': {
+  \   'linter_checking': 'lightline#ale#checking',
+  \   'linter_warnings': 'lightline#ale#warnings',
+  \   'linter_errors': 'lightline#ale#errors',
+  \   'linter_ok': 'lightline#ale#ok',
+  \ },
+  \ 'component_type': {
+  \   'linter_checking': 'left',
+  \   'linter_warnings': 'warning',
+  \   'linter_errors': 'error',
+  \   'linter_ok': 'left',
+  \ }
 \ }
 function! LightlineFilename()
   return expand('%:t') !=# '' ? @% : '[No Name]'
@@ -186,6 +247,84 @@ let g:rustfmt_emit_files = 1
 let g:rustfmt_fail_silently = 0
 
 let $RUST_SRC_PATH = systemlist("rustc --print sysroot")[0] . "/lib/rustlib/src/rust/src"
+
+" =============================================================================
+" ============================== LSP ==========================================
+" =============================================================================
+let g:vista_default_executive = 'vim_lsp'
+
+let g:vista_executive_for = {
+    \ 'rust': 'vim_lsp',
+    \ }
+
+highlight LspErrorHighlight ctermfg=red guifg=red
+
+nmap <silent> <leader>l :LspDocumentDiagnostics<cr>
+nnoremap <leader>la :LspCodeAction<cr>
+nnoremap <F6> :LspRename<cr>
+nmap <silent> gr :LspReferences<cr>
+nmap <silent> gd :LspDefinition<cr>
+nmap <silent> gy :LspPeekTypeDefinition<cr>
+nmap <silent> gi :LspImplementation<cr>
+nmap gD :LspPeekDefinition<cr>
+nmap <silent> W :LspPreviousError<cr>
+nmap <silent> E :LspNextError<cr>
+" there is no function to print function types
+" nnoremap <silent> M :<cr>
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    :LspHover<cr>
+  endif
+endfunction
+
+au User lsp_setup call lsp#register_server({
+    \ 'name': 'rust-analyzer',
+    \ 'cmd': {server_info->['rust-analyzer-mac']},
+    \ 'workspace_config': {'rust': {'clippy_preference': 'on'}},
+    \ 'whitelist': ['rust'],
+    \ })
+
+if executable('metals-vim')
+   au User lsp_setup call lsp#register_server({
+      \ 'name': 'metals',
+      \ 'cmd': {server_info->['metals-vim']},
+      \ 'initialization_options': { 'rootPatterns': 'build.sbt' },
+      \ 'whitelist': [ 'scala', 'sbt' ],
+      \ })
+endif
+
+let g:lsp_signs_enabled = 1
+let g:lsp_diagnostics_echo_cursor = 1
+let g:lsp_signs_error = {'text': '✗'}
+let g:lsp_signs_warning = {'text': '‼'}
+
+call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+    \ 'name': 'buffer',
+    \ 'whitelist': ['*'],
+    \ 'blacklist': ['go'],
+    \ 'completor': function('asyncomplete#sources#buffer#completor'),
+    \ 'config': {
+    \    'max_buffer_size': 5000000,
+    \  },
+    \ }))
+
+
+let g:lsp_virtual_text_enabled = 1
+
+let g:lsp_highlight_references_enabled = 1
+highlight lspReference ctermfg=darkred
+
+highlight link LspWarningText Comment
+
+let g:diminactive_enable_focus = 1
+let g:diminactive_use_colorcolumn = 1
+" =============================================================================
+" =============================================================================
+" =============================================================================
 
 " Completion
 " Better display for messages
@@ -449,37 +588,10 @@ nnoremap <right> :bn<CR>
 nnoremap j gj
 nnoremap k gk
 
-autocmd CursorHold * silent call CocActionAsync('highlight')
-highlight CocHighlightText ctermfg=darkred guibg=#726a6c
-
 " Add `:OR` command for organize imports of the current buffer.
 command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
 " Show commands.
 nnoremap <silent> <space>C  :<C-u>CocList commands<cr>
-" Apply AutoFix to problem on the current line.
-nmap <leader>qf  <Plug>(coc-fix-current)
-" Remap keys for applying codeAction to the current line.
-nmap <leader>ac  <Plug>(coc-codeaction)
-" 'Smart' navigation
-nmap <silent> W <Plug>(coc-diagnostic-prev)
-nmap <silent> E <Plug>(coc-diagnostic-next)
-nmap <silent> <leader>l <Plug>(coc-diagnostic-info)
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-nmap <silent> <F6> <Plug>(coc-rename)
-" Use M to show signature help in preview window
-nnoremap <silent> M :call CocActionAsync('showSignatureHelp')<CR>
-" Use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
 
 " <leader><leader> toggles between buffers
 nnoremap <leader><leader> <c-^>
