@@ -51,9 +51,6 @@ Plug 'derekwyatt/vim-scala'
 Plug 'preservim/nerdtree'
 Plug 'davidpdrsn/vim-spectacular'
 
-" sonokai theme
-Plug 'sainnhe/sonokai'
-
 " syntax highlighting
 Plug 'sheerun/vim-polyglot'
 
@@ -98,15 +95,12 @@ endif
 set background=dark
 " Base16
 let base16colorspace=256
-" colorscheme base16-bespin
-" colorscheme base16-gruvbox-dark-soft
-
-" need that for sonokai
-let g:sonokai_style = 'andromeda'
-let g:sonokai_enable_italic = 1
-let g:sonokai_disable_italic_comment = 0
-
-colorscheme sonokai 
+" personal voting:
+" 1st: base16-tomorrow-night-eighties
+" 2nd: base16-gruvbox-dark-soft
+" 3rd: base16-monokai
+" 4th: base16-woodland
+colorscheme base16-tomorrow-night-eighties
 
 hi Normal ctermbg=NONE
 " Get syntax

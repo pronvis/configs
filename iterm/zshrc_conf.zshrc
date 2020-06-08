@@ -22,9 +22,7 @@ BASE16_SHELL="$HOME/.config/base16-shell/"
 [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
      eval "$("$BASE16_SHELL/profile_helper.sh")"
 
-# export BASE16_THEME=railscasts
-# export BASE16_THEME=base16_tomorrow-night-eighties
-export BASE16_THEME=base16_material-vivid
+export BASE16_THEME=base16_tomorrow-night-eighties
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
