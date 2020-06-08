@@ -443,8 +443,10 @@ nnoremap <right> :bn<CR>
 nnoremap j gj
 nnoremap k gk
 
-autocmd CursorHold * silent call CocActionAsync('highlight')
-highlight CocHighlightText ctermfg=darkred guibg=#726a6c
+autocmd CursorMoved * silent call CocActionAsync('highlight')
+highlight CocHighlightText ctermfg=darkred guifg=#c4c4c4 guibg=#646464
+highlight CocErrorSign ctermfg=red guifg=#ff3636
+highlight CocErrorLine ctermfg=red guifg=#ff0000
 
 " Add `:OR` command for organize imports of the current buffer.
 command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
