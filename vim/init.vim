@@ -465,6 +465,7 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 nmap <silent> <F6> <Plug>(coc-rename)
+nmap <silent> ga <Plug>(coc-codeaction)
 " Use M to show signature help in preview window
 nnoremap <silent> M :call CocActionAsync('showSignatureHelp')<CR>
 " Use K to show documentation in preview window
