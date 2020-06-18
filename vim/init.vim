@@ -10,6 +10,9 @@ call plug#begin()
 " Rainbow parenthesis
 Plug 'luochen1990/rainbow'
 let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowToggle
+let g:rainbow_conf = {
+\	'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', '#cc5e5e'],
+\}
 
 " VIM enhancements
 Plug 'ciaranm/securemodelines'
@@ -163,6 +166,9 @@ let g:latex_indent_enabled = 1
 let g:latex_fold_envs = 0
 let g:latex_fold_sections = []
 
+" SQL
+let g:sql_type_default = 'pgsql'
+ 
 " Open hotkeys
 map <C-p> :Files<CR>
 nmap <leader>; :Buffers<CR>
@@ -284,6 +290,9 @@ nnoremap <silent> g* g*zz
 nnoremap ? ?\v
 nnoremap / /\v
 cnoremap %s/ %sm/
+
+" exit terminal mode
+tnoremap <F1> <C-\><C-n>
 
 " =============================================================================
 " # Auto commands
@@ -426,6 +435,8 @@ command! -bang -nargs=? -complete=dir Files
 
 " Open new file adjacent to current file
 nnoremap <leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
+" copy full file name to clipboard
+nnoremap <leader>P :let @+ = expand("%:p")<CR>
 
 " No arrow keys --- force yourself to use the home row
 nnoremap <up> <nop>
@@ -444,9 +455,10 @@ nnoremap j gj
 nnoremap k gk
 
 autocmd CursorMoved * silent call CocActionAsync('highlight')
-highlight CocHighlightText ctermfg=darkred guifg=#c4c4c4 guibg=#646464
+highlight CocHighlightText ctermfg=darkred guifg=#c4c4c4 guibg=#4a4a4a
 highlight CocErrorSign ctermfg=red guifg=#ff3636
-highlight CocErrorLine ctermfg=red guifg=#ff0000
+highlight CocErrorHighlight ctermfg=darkred guifg=#ff0000 
+" highlight CocErrorLine ctermfg=red guifg=#ff0000
 
 " Add `:OR` command for organize imports of the current buffer.
 command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
