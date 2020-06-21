@@ -64,6 +64,8 @@ Plug 'tpope/vim-commentary'
 
 Plug 'itchyny/vim-gitbranch'
 Plug 'tpope/vim-surround'
+
+Plug 'rhysd/git-messenger.vim'
 call plug#end()
 
 source ~/.config/nvim/functions.vim
@@ -340,6 +342,9 @@ nnoremap ; :
 " Quickly insert an empty new line without entering insert mode
 nnoremap <Leader>o o<Esc>
 nnoremap <Leader>O O<Esc>
+
+" show git message
+nmap <Leader>gm <Plug>(git-messenger)
 
 " Ctrl+c and Ctrl+j as Esc
 " Ctrl-j is a little awkward unfortunately:
