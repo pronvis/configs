@@ -216,8 +216,8 @@ export LESS_TERMCAP_se=$'\E[39;49m'
 
 # git branch symbol
 local git_branch_symbol="\ue0a0"
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}$git_branch_symbol:(%{$fg[red]%}"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg_bold[blue]%})$reset_color "
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[blue]%}$git_branch_symbol:(%{$fg[red]%}"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg[blue]%})$reset_color "
 ZSH_THEME_GIT_PROMPT_DIRTY="$fg[blue]"
 ZSH_THEME_GIT_PROMPT_CLEAN="$fg[green]"
 

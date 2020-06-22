@@ -9,5 +9,6 @@
         "filetypes": ["rust"],
         "rootPatterns": ["Cargo.toml"]
       }
-    }
+    }, 
+    "diagnostic.warningSign":"w"
 }

@@ -461,9 +461,10 @@ nnoremap k gk
 
 autocmd CursorMoved * silent call CocActionAsync('highlight')
 highlight CocHighlightText ctermfg=darkred guifg=#c4c4c4 guibg=#4a4a4a
-highlight CocErrorSign ctermfg=red guifg=#ff3636
+highlight CocErrorSign ctermfg=red guifg=#ff3636 guibg=#3a3a3a
 highlight CocErrorHighlight ctermfg=darkred guifg=#ff0000 
 " highlight CocErrorLine ctermfg=red guifg=#ff0000
+highlight CocWarningSign ctermfg=yellow guifg=#ff922b guibg=#3a3a3a
 
 " Add `:OR` command for organize imports of the current buffer.
 command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
