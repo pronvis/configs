@@ -209,8 +209,8 @@ export LESS_TERMCAP_se=$'\E[39;49m'
 local git_branch_symbol="\ue0a0"
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[blue]%}$git_branch_symbol:(%{$fg[red]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg[blue]%})$reset_color "
-ZSH_THEME_GIT_PROMPT_DIRTY="$fg[blue]"
-ZSH_THEME_GIT_PROMPT_CLEAN="$fg[green]"
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}"
+ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%}"
 
 if command -v pyenv 1>/dev/null 2>&1; then
 	eval "$(pyenv init -)"
