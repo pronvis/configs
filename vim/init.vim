@@ -459,7 +459,7 @@ nnoremap <right> :bn<CR>
 nnoremap j gj
 nnoremap k gk
 
-autocmd CursorMoved * silent call CocActionAsync('highlight')
+autocmd CursorHold * silent call CocActionAsync('highlight')
 highlight CocHighlightText ctermfg=darkred guifg=#c4c4c4 guibg=#4a4a4a
 highlight CocErrorSign ctermfg=red guifg=#ff3636 guibg=#3a3a3a
 highlight CocErrorHighlight ctermfg=darkred guifg=#ff0000 
