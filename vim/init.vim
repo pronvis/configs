@@ -233,7 +233,7 @@ filetype plugin indent on
 set autoindent
 set timeoutlen=300 " http://stackoverflow.com/questions/2158516/delay-before-o-opens-a-new-line
 set encoding=utf-8
-set scrolloff=5
+set scrolloff=15
 set noshowmode
 set hidden
 set nowrap

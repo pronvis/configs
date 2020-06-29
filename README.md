@@ -12,7 +12,6 @@ First of all install those usefull tools:
 - `cargo install cargo-whatfeatures`
 - `cargo install --git https://github.com/davidpdrsn/cargo-docserver.git`
 - `git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell`
-- `go get github.com/wvanlint/twf/cmd/twf`
 
 ## Iterm2
 #### Iterm2 integration with Unix (tmux, ssh, etc.)

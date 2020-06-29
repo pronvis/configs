@@ -185,17 +185,8 @@ function setjdk() {
 # setjdk "1.7.0_80"
  setjdk "1.8.0_192"
 
-### zsh-history-substring-search ###
-# source /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh
-# bindkey "$terminfo[kcuu1]" history-substring-search-up
-# bindkey "$terminfo[kcud1]" history-substring-search-down
-
 ### zsh-autosuggestions ###
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-### rbenv ###
-# export PATH="$HOME/.rbenv/bin:$PATH"
-# eval "$(rbenv init -)"
 
 local ret_status="%(?:%{$fg_bold[green]%}%~ ➜ :%{$fg_bold[red]%}%~ ➜ )"
 PROMPT='${ret_status}%{$reset_color%}$(git_prompt_info)'
@@ -220,16 +211,6 @@ ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[blue]%}$git_branch_symbol:(%{$fg[red]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg[blue]%})$reset_color "
 ZSH_THEME_GIT_PROMPT_DIRTY="$fg[blue]"
 ZSH_THEME_GIT_PROMPT_CLEAN="$fg[green]"
-
-# TWF (like NERDTree): https://github.com/wvanlint/twf
-twf-widget() {
-  local selected=$(twf --height=0.5)
-  BUFFER="$BUFFER$selected"
-  zle reset-prompt
-  zle end-of-line
-  return $ret
-}
-zle -N twf-widget
 
 if command -v pyenv 1>/dev/null 2>&1; then
 	eval "$(pyenv init -)"
