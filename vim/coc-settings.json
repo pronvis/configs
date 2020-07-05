@@ -3,12 +3,6 @@
     "coc.preferences.formatOnType":true,
     "coc.preferences.formatOnSaveFiletypes": ["scala"],
     "sql.lintOnSave": true,
-    "languageserver": {
-      "rust": {
-        "command": "rust-analyzer-mac",
-        "filetypes": ["rust"],
-        "rootPatterns": ["Cargo.toml"]
-      }
-    }, 
+    "rust-analyzer.serverPath": "/usr/local/bin/rust-analyzer-mac",
     "diagnostic.warningSign":"w"
 }
