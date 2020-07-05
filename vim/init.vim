@@ -130,13 +130,14 @@ let g:lightline = {
       \ 'colorscheme': 'seoul256',
       \ 'active': {
       \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'readonly', 'filename', 'modified' ],
+      \             [ 'readonly', 'filename', 'modified', 'cocstatus' ],
       \             [ 'git_st', 'gitbranch'] ]
       \ },
       \ 'component_function': {
       \   'filename': 'LightlineFilename',
       \   'git_st': 'GitStatus',
       \   'gitbranch': 'gitbranch#name',
+      \   'cocstatus': 'coc#status',
       \ },
 \ }
 function! LightlineFilename()
@@ -487,12 +488,26 @@ nmap <silent> <F6> <Plug>(coc-rename)
 nnoremap <silent> M :call CocActionAsync('showSignatureHelp')<CR>
 " Use K to show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
+au FileType rust nmap <silent> <C-k> <Plug>(rust-doc)
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
   else
     call CocActionAsync('doHover')
   endif
+endfunction
+
+function! StatusDiagnostic() abort
+  let info = get(b:, 'coc_diagnostic_info', {})
+  if empty(info) | return '' | endif
+  let msgs = []
+  if get(info, 'error', 0)
+    call add(msgs, 'E' . info['error'])
+  endif
+  if get(info, 'warning', 0)
+    call add(msgs, 'W' . info['warning'])
+  endif
+  return join(msgs, ' '). ' ' . get(g:, 'coc_status', '')
 endfunction
 
 " <leader><leader> toggles between buffers
