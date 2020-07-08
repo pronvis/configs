@@ -493,7 +493,6 @@ nmap <silent> <F6> <Plug>(coc-rename)
 nnoremap <silent> M :call CocActionAsync('showSignatureHelp')<CR>
 " Use K to show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
-au FileType rust nmap <silent> <C-k> <Plug>(rust-doc)
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
