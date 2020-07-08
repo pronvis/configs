@@ -110,3 +110,4 @@ nvim -u NONE -c "helptags vim-gitgutter/doc" -c q
 - `ln -s ~/config_repo/vim/functions.vim ~/.config/nvim/functions.vim`
 - `ln -s $PWD/iterm/zshrc_conf.zshrc ~/.zshrc`
 - `ln -s $PWD/idea/ideavimrc ~/.ideavimrc`
+- `ln -s $PWD/global_gitignore ~/.gitignore`

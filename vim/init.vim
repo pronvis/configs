@@ -60,10 +60,11 @@ Plug 'sheerun/vim-polyglot'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'RyanMillerC/better-vim-tmux-resizer'
 
-Plug 'tpope/vim-commentary'
-
 Plug 'itchyny/vim-gitbranch'
+
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-obsession'
+Plug 'tpope/vim-commentary'
 
 Plug 'rhysd/git-messenger.vim'
 call plug#end()
@@ -385,6 +386,9 @@ nnoremap <C-f> :sus<cr>
 " Increment/Decrement the next number on this line
 nnoremap + <C-a>
 nnoremap - <C-x>
+
+" do Highlighting a search term without moving the cursor https://superuser.com/questions/255024/highlighting-a-search-term-without-moving-the-cursor
+nnoremap * :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<C-M>
 
 nnoremap <leader>i :call IndentEntireFile()<cr>
 "
