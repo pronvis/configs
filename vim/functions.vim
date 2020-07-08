@@ -424,9 +424,6 @@ endfunction
   function! TerminalOnExit(job_id, exit_code, event) dict
     if a:exit_code == 0
       execute "bd! " . s:test_buffer_number
-      wincmd =
-    else
-      wincmd =
     endif
   endfunction
 
