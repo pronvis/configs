@@ -130,6 +130,7 @@ let g:secure_modelines_allowed_items = [
 let g:lightline = {
       \ 'colorscheme': 'seoul256',
       \ 'active': {
+      \   'right': [ ['lineinfo'], ['obsession_status', 'percent'], ['fileformat', 'fileencoding', 'filetype'] ],
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'readonly', 'filename', 'modified', 'cocstatus' ],
       \             [ 'git_st', 'gitbranch'] ]
@@ -139,8 +140,14 @@ let g:lightline = {
       \   'git_st': 'GitStatus',
       \   'gitbranch': 'gitbranch#name',
       \   'cocstatus': 'coc#status',
+      \   'obsession_status': 'ObsStatus',
       \ },
 \ }
+
+function! ObsStatus()
+	return printf('%s', ObsessionStatus("\u24c7", "\u24df"))
+endfunction
+
 function! LightlineFilename()
   return expand('%:t') !=# '' ? @% : '[No Name]'
 endfunction

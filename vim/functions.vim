@@ -473,20 +473,6 @@ function! SmartRun(cmd)
   endif
 endfunction
 
-function! Ready(...)
-  silent execute "! /Users/david/dotfiles/bin/notify Build ready"
-endfunction
-
-function! ImportBuild()
-  call lsp#send_request('metals', {
-    \ 'method': 'workspace/executeCommand',
-    \ 'params': {
-    \   'command': 'build-import',
-    \ },
-    \ 'on_notification': function('Ready'),
-    \ })
-endfunction
-
 function! RunRustTests()
   if &modified
     write
