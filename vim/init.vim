@@ -166,6 +166,9 @@ if executable('rg')
 	set grepformat=%f:%l:%c:%m
 endif
 
+let g:lightline.separator = {'left': '', 'right': ''}
+let g:lightline.subseparator = {'left': '', 'right': ''}
+
 " Javascript
 let javaScript_fold=0
 
