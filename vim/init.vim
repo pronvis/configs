@@ -572,15 +572,6 @@ autocmd BufRead *.xlsx.axlsx set filetype=ruby
 autocmd Filetype html,xml,xsl,php source ~/.config/nvim/scripts/closetag.vim
 
 " =============================================================================
-" # Footer
-" =============================================================================
-
-" nvim
-if has('nvim')
-	runtime! plugin/python_setup.vim
-endif
-
-" =============================================================================
 " This allows you to visually select a section and then hit @ to run a macro
 " on all lines. Only lines which match will change. Without this script the
 " macro would stop at lines which don’t match the macro.
