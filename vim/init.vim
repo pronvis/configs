@@ -40,9 +40,6 @@ Plug 'rhysd/vim-clang-format'
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 
-" gruvbox
-Plug 'morhetz/gruvbox'
-
 " base16 support
 Plug 'chriskempson/base16-vim'
 
