@@ -89,13 +89,8 @@ end
 if !has('gui_running')
   set t_Co=256
 endif
-if (match($TERM, "-256color") != -1) && (match($TERM, "screen-256color") == -1)
-  " screen does not (yet) support truecolor
-  set termguicolors
-endif
 
 " Colors
-set background=dark
 " Base16
 let base16colorspace=256
 " personal voting:
@@ -103,7 +98,11 @@ let base16colorspace=256
 " 2nd: base16-gruvbox-dark-soft
 " 3rd: base16-monokai
 " 4th: base16-woodland
-colorscheme base16-tomorrow-night-eighties
+if filereadable(expand("~/.vimrc_background")) 
+   source ~/.vimrc_background
+else
+   colorscheme base16-tomorrow-night-eighties
+endif
 
 hi Normal ctermbg=NONE
 " Get syntax
@@ -242,7 +241,7 @@ filetype plugin indent on
 set autoindent
 set timeoutlen=300 " http://stackoverflow.com/questions/2158516/delay-before-o-opens-a-new-line
 set encoding=utf-8
-set scrolloff=15
+set scrolloff=5
 set noshowmode
 set hidden
 set nowrap
@@ -355,32 +354,6 @@ nnoremap <Leader>O O<Esc>
 " show git message
 nmap <Leader>gm <Plug>(git-messenger)
 
-" Ctrl+c and Ctrl+j as Esc
-" Ctrl-j is a little awkward unfortunately:
-" https://github.com/neovim/neovim/issues/5916
-" So we also map Ctrl+k
-inoremap <C-j> <Esc>
-
-nnoremap <C-k> <Esc>
-inoremap <C-k> <Esc>
-vnoremap <C-k> <Esc>
-snoremap <C-k> <Esc>
-xnoremap <C-k> <Esc>
-cnoremap <C-k> <Esc>
-onoremap <C-k> <Esc>
-lnoremap <C-k> <Esc>
-tnoremap <C-k> <Esc>
-
-nnoremap <C-c> <Esc>
-inoremap <C-c> <Esc>
-vnoremap <C-c> <Esc>
-snoremap <C-c> <Esc>
-xnoremap <C-c> <Esc>
-cnoremap <C-c> <Esc>
-onoremap <C-c> <Esc>
-lnoremap <C-c> <Esc>
-tnoremap <C-c> <Esc>
-
 " Ctrl+h to stop searching
 vnoremap <C-s> :nohlsearch<cr>
 nnoremap <C-s> :nohlsearch<cr>
@@ -471,13 +444,19 @@ nnoremap <right> :bn<CR>
 nnoremap j gj
 nnoremap k gk
 
-hi MatchParen gui=none guibg=#668dff guifg=white 
 autocmd CursorHold * silent call CocActionAsync('highlight')
-highlight CocHighlightText ctermfg=darkred guifg=#c4c4c4 guibg=#4a4a4a
-highlight CocErrorSign ctermfg=red guifg=#ff3636 guibg=#3a3a3a
-highlight CocErrorHighlight ctermfg=darkred guifg=#ff0000 
-" highlight CocErrorLine ctermfg=red guifg=#ff0000
-highlight CocWarningSign ctermfg=yellow guifg=#ff922b guibg=#3a3a3a
+" TERMINAL
+" see NR-8 :help cterm-colors
+highlight CocHighlightText ctermbg=8 
+highlight CocErrorSign ctermfg=red
+highlight CocWarningSign ctermfg=yellow
+highlight CocErrorHighlight ctermfg=darkred cterm=underline
+" GUI
+highlight CocHighlightText guifg=#c4c4c4 guibg=#4a4a4a
+highlight CocErrorSign guifg=#ff3636 guibg=#393939
+highlight CocWarningSign guifg=#ff922b guibg=#3a3a3a
+highlight CocErrorHighlight guifg=#ff0000 
+highlight MatchParen gui=none guibg=#668dff guifg=whit
 
 " Add `:OR` command for organize imports of the current buffer.
 command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
