@@ -447,7 +447,7 @@ nnoremap k gk
 autocmd CursorHold * silent call CocActionAsync('highlight')
 " TERMINAL
 " see NR-8 :help cterm-colors
-highlight CocHighlightText ctermbg=8 
+highlight CocHighlightText cterm=underline,bold ctermfg=white
 highlight CocErrorSign ctermfg=red
 highlight CocWarningSign ctermfg=yellow
 highlight CocErrorHighlight ctermfg=darkred cterm=underline
