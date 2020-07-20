@@ -1,8 +1,6 @@
 export LC_ALL=en_US.UTF-8
 export USER_NAME=`whoami`
 
-export TERM=xterm-256color
-
 # For autojump
 [[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
 
