@@ -196,9 +196,9 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 # Fix 'less' italic highlighting in tmux (reason why it is italic is `tmux-256color`)
 # https://unix.stackexchange.com/questions/179173/make-less-highlight-search-patterns-instead-of-italicizing-them
 #
-# It is "xterm-256color", so I don't need it
-# export LESS_TERMCAP_so=$'\E[30;43m'
-# export LESS_TERMCAP_se=$'\E[39;49m'
+# It is "xterm-256color", so I don't need it. Actually not always
+export LESS_TERMCAP_so=$'\E[30;43m'
+export LESS_TERMCAP_se=$'\E[39;49m'
 
 # git branch symbol
 local git_branch_symbol="\ue0a0"

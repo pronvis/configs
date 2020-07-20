@@ -320,7 +320,7 @@ augroup end
 " =============================================================================
 " # GUI settings
 " =============================================================================
-" set guioptions-=T " Remove toolbar
+set guioptions-=T " Remove toolbar
 set vb t_vb= " No more beeps
 set backspace=2 " Backspace over newlines
 set nofoldenable
@@ -339,7 +339,7 @@ set colorcolumn=80 " and give me a colored column
 set showcmd " Show (partial) command in status line.
 set mouse=a " Enable mouse usage (all modes) in terminals
 set shortmess+=c " don't give |ins-completion-menu| messages.
-set shortmess-=S " do not show search count message when searching, e.g."[1/5]"
+" set shortmess-=S " do not show search count message when searching, e.g."[1/5]"
 
 " Show those damn hidden characters
 " Verbose: set listchars=nbsp:¬,eol:¶,extends:»,precedes:«,trail:•
@@ -357,6 +357,9 @@ nnoremap <Leader>O O<Esc>
 
 " show git message
 nmap <Leader>gm <Plug>(git-messenger)
+
+" git undo
+nmap ghu <Plug>(GitGutterUndoHunk)
 
 " Ctrl+h to stop searching
 vnoremap <C-s> :nohlsearch<cr>
