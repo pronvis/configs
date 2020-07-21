@@ -483,5 +483,5 @@ function! RunRustCurrentTest()
   end
   let path = expand('%:r')
   let filename = split(path, "/")[-1]
-  call SmartRun("cargo test " . filename . " -- --test-threads=1 && echo DONE 🎉")
+  call SmartRun("cargo test " . filename . "::" . " -- --test-threads=1 --nocapture && echo DONE 🎉")
 endfunction

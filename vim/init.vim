@@ -325,6 +325,7 @@ set vb t_vb= " No more beeps
 set backspace=2 " Backspace over newlines
 set nofoldenable
 set ttyfast
+set nocursorline
 " https://github.com/vim/vim/issues/1735#issuecomment-383353563
 set lazyredraw
 set synmaxcol=500
@@ -542,7 +543,7 @@ endif
 
 " Follow Rust code style rules
 au Filetype rust source ~/.config/nvim/scripts/spacetab.vim
-au Filetype rust set colorcolumn=100
+au Filetype rust set colorcolumn=
 
 au Filetype scala set colorcolumn=100
 
