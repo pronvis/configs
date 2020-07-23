@@ -383,7 +383,7 @@ nnoremap <leader>i :call IndentEntireFile()<cr>
 " Run tests
 nnoremap <leader>T :call RunRustTests()<cr>
 nnoremap <leader>r :call RunRustCurrentTest()<cr>
-nnoremap <leader>t :w<cr>:call spectacular#run_tests()<cr>
+nnoremap <leader>t :w<cr>:call Run_clippy_with_fix()<cr>
 
 " Jump to start and end of line using the home row keys
 map H ^
@@ -615,10 +615,15 @@ nmap <F2> :NERDTreeFind<CR>
 " =============================================================================
 call spectacular#reset()
 
-" `find . | grep "\.rs$" | xargs touch` is workaround for
-" https://github.com/rust-lang/rust-clippy/issues/4612
 call spectacular#add_test_runner(
       \ 'rust, pest, toml, cfg, ron, graphql',
-      \ ':call SmartRun("cargo check && cargo check --tests && cargo check --examples && find . | grep "\.rs$" | xargs touch")',
+      \ ':call SmartRun("cargo clippy")',
       \ '.rs'
       \ )
+
+" `find . | grep "\.rs$" | xargs touch` is workaround for
+" https://github.com/rust-lang/rust-clippy/issues/4612
+func! Run_clippy_with_fix()
+	call spectacular#run_tests()
+	execute ':!find . | grep "\.rs$" | xargs touch'
+endfunc
