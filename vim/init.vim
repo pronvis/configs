@@ -615,8 +615,10 @@ nmap <F2> :NERDTreeFind<CR>
 " =============================================================================
 call spectacular#reset()
 
+" `find . | grep "\.rs$" | xargs touch` is workaround for
+" https://github.com/rust-lang/rust-clippy/issues/4612
 call spectacular#add_test_runner(
       \ 'rust, pest, toml, cfg, ron, graphql',
-      \ ':call SmartRun("cargo check && cargo check --tests && cargo check --examples")',
+      \ ':call SmartRun("cargo check && cargo check --tests && cargo check --examples && find . | grep "\.rs$" | xargs touch")',
       \ '.rs'
       \ )
