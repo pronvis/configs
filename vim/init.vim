@@ -48,7 +48,6 @@ Plug 'mtdl9/vim-log-highlighting'
 
 Plug 'jiangmiao/auto-pairs'
 Plug 'derekwyatt/vim-scala'
-Plug 'preservim/nerdtree'
 Plug 'davidpdrsn/vim-spectacular'
 
 " syntax highlighting
@@ -606,9 +605,9 @@ let @i = ':call SetDefaultValue()'
 nnoremap <leader>ri @i<cr>
 
 " =============================================================================
-" NERDTree
+" Explorer
 " =============================================================================
-nmap <F2> :NERDTreeFind<CR>
+nmap <F2> :CocCommand explorer<CR>
 
 " =============================================================================
 " Test running
