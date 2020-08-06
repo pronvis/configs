@@ -370,6 +370,9 @@ inoremap <C-f> :sus<cr>
 vnoremap <C-f> :sus<cr>
 nnoremap <C-f> :sus<cr>
 
+" To search for visually selected text
+vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
+
 " Increment/Decrement the next number on this line
 nnoremap + <C-a>
 nnoremap - <C-x>
