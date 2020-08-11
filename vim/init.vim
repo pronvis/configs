@@ -356,7 +356,7 @@ nnoremap <Leader>o o<Esc>
 nnoremap <Leader>O O<Esc>
 
 " show git message
-nmap <Leader>gm <Plug>(git-messenger)
+nmap <F3> <Plug>(git-messenger)
 
 " git undo
 nmap ghu <Plug>(GitGutterUndoHunk)
