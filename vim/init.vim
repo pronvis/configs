@@ -392,16 +392,16 @@ map H ^
 map L $
 
 " Neat X clipboard integration
-" ,p will paste clipboard into buffer
-" ,c will copy entire buffer into clipboard
-noremap <leader>p :read !pbpaste<cr>
+" <leader>p will paste clipboard into buffer
+" <leader>c will copy entire buffer into clipboard
+" noremap <leader>p :read !pbpaste<cr>
 noremap <leader>c :w !pbcopy<cr><cr>
 
 " <leader>p for paste without yanking
-vnoremap <leader>p "_dP
+vnoremap <leader>p "_dp
 
 " <leader>s for Rg search
-noremap <leader>s :Rg 
+noremap <leader>s :Rg! 
 let g:fzf_layout = { 'down': '~20%' }
 
 function! s:rg_args(args)
