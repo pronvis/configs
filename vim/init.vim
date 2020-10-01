@@ -67,6 +67,9 @@ call plug#end()
 
 source ~/.config/nvim/functions.vim
 
+" using russian language in Normal mode
+set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz
+
 let g:rooter_patterns = ['Rakefile', '.git/', 'Cargo.toml', 'build.sbt']
 let g:ale_lint_on_text_changed = 1 
 let g:syntastic_rust_checkers = ['rustc', 'clippy']
