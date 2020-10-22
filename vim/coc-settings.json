@@ -4,6 +4,8 @@
     "coc.preferences.formatOnSaveFiletypes": ["scala"],
     "sql.lintOnSave": true,
     "rust-analyzer.serverPath": "/usr/local/bin/rust-analyzer-mac",
+    "rust-analyzer.cargo.loadOutDirsFromCheck": true,
+    "rust-analyzer.procMacro.enable": true,
     "rust-analyzer.inlayHints.chainingHints": false,
     "diagnostic.warningSign":"w"
 }

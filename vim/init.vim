@@ -135,12 +135,11 @@ let g:lightline = {
       \   'right': [ ['lineinfo'], ['obsession_status', 'percent'], ['fileformat', 'fileencoding', 'filetype'] ],
       \   'left': [ [ 'mode', 'paste' ],
       \             [ 'readonly', 'filename', 'modified', 'cocstatus' ],
-      \             [ 'git_st', 'gitbranch'] ]
+      \             [ 'git_st' ] ]
       \ },
       \ 'component_function': {
       \   'filename': 'LightlineFilename',
       \   'git_st': 'GitStatus',
-      \   'gitbranch': 'gitbranch#name',
       \   'cocstatus': 'coc#status',
       \   'obsession_status': 'ObsStatus',
       \ },
@@ -360,9 +359,6 @@ nnoremap <Leader>O O<Esc>
 
 " show git message
 nmap <F3> <Plug>(git-messenger)
-
-" git undo
-nmap ghu <Plug>(GitGutterUndoHunk)
 
 " Ctrl+h to stop searching
 vnoremap <C-s> :nohlsearch<cr>
