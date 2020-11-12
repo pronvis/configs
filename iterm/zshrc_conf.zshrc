@@ -77,6 +77,7 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export CARGO_TARGET_DIR="$HOME/rust/rust_build_artifacts"
 export GOPATH="$HOME/go"
 export PATH="$GOPATH/bin:$PATH"
+export CARGO_NET_GIT_FETCH_WITH_CLI=true
 
 # you need to install https://vulkan.lunarg.com/sdk/home first
 export VULKAN_SDK=$HOME/vulkan_sdk/macOS
