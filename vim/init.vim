@@ -474,7 +474,7 @@ nnoremap <silent> <space>C  :<C-u>CocList commands<cr>
 " Apply AutoFix to problem on the current line.
 nmap <leader>qf  <Plug>(coc-fix-current)
 " Remap keys for applying codeAction to the current line.
-nmap <leader>ac  <Plug>(coc-codeaction)
+nmap <leader>ac v<Plug>(coc-codeaction-selected)
 " 'Smart' navigation
 nmap <silent> W <Plug>(coc-diagnostic-prev)
 nmap <silent> E <Plug>(coc-diagnostic-next)
