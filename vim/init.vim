@@ -376,6 +376,13 @@ vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 nnoremap + <C-a>
 nnoremap - <C-x>
 
+let g:tmux_resizer_no_mappings = 1
+
+nnoremap <silent> ˙ :TmuxResizeLeft<CR>
+nnoremap <silent> ∆ :TmuxResizeDown<CR>
+nnoremap <silent> ˚ :TmuxResizeUp<CR>
+nnoremap <silent> ¬ :TmuxResizeRight<CR>
+
 " do Highlighting a search term without moving the cursor https://superuser.com/questions/255024/highlighting-a-search-term-without-moving-the-cursor
 nnoremap * :let @/ = '\<'.expand('<cword>').'\>'\|set hlsearch<C-M>
 
