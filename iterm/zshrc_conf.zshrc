@@ -1,6 +1,14 @@
 export LC_ALL=en_US.UTF-8
 export USER_NAME=`whoami`
 
+bindkey "^[[1;3C" forward-word
+bindkey "^[[1;3D" backward-word
+bindkey "^[[1;5C" forward-word
+bindkey "^[[1;5D" backward-word
+# don't know why those 2 do not works :(
+bindkey "^[[H"    beginning-of-line
+bindkey "^[[F"    end-of-line
+
 # For autojump
 [[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
 
