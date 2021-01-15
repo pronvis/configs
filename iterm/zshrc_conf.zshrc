@@ -88,6 +88,8 @@ export VK_LAYER_PATH=$VULKAN_SDK/etc/vulkan/explicit_layer.d
 
 source $ZSH/oh-my-zsh.sh
 
+fpath+=$HOME/.zsh_functions
+
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 LC_CTYPE=en_US.UTF-8

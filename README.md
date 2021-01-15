@@ -102,6 +102,7 @@ nvim -u NONE -c "helptags vim-gitgutter/doc" -c q
 ```
 
 # Link Configs
+- `mkdir $HOME/.zsh_functions`
 - `cd {this_repo_directory}`
 - `ln -s $PWD/tmux/tmux.conf ~/.tmux.conf`
 - `mkdir -p ~/.config/nvim/scripts/`
