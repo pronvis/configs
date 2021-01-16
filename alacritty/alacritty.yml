@@ -105,24 +105,24 @@ env:
 font:
   # Normal (roman) font face
   normal:
-    family: JetBrains mono
+    family: JetBrains Mono
+    # family: Pragmata Pro Mono
+    # family: JuliaMono
+    style: Thin
+
+  # Bold font face
+  bold:
+    family: JetBrains Mono
     # family: Pragmata Pro Mono
     # family: JuliaMono
     style: Regular
 
-  # Bold font face
-  bold:
-    family: JetBrains mono
-    # family: Pragmata Pro Mono
-    # family: JuliaMono
-    style: Bold
-
   # Italic font face
   italic:
-    family: JetBrains mono
+    family: JetBrains Mono
     # family: Pragmata Pro Mono
     # family: JuliaMono
-    style: Italic
+    style: Thin Italic
 
   # Bold italic font face
   # bold_italic:
