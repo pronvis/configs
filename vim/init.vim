@@ -185,7 +185,7 @@ let g:latex_fold_sections = []
 let g:sql_type_default = 'pgsql'
  
 " Open hotkeys
-map <C-p> :Files<CR>
+map <C-p> :call FuzzyFileFind("")<CR>
 nmap <leader>; :Buffers<CR>
 
 " Quick-save
@@ -352,6 +352,9 @@ set listchars=nbsp:¬,extends:»,precedes:«,trail:•
 " =============================================================================
 " ; as :
 nnoremap ; :
+
+" Disable useless and annoying keys
+noremap Q <Nop>
 
 " Quickly insert an empty new line without entering insert mode
 nnoremap <Leader>o o<Esc>
