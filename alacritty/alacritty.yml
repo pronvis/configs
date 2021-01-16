@@ -105,23 +105,23 @@
 font:
   # Normal (roman) font face
   normal:
-    # family: JetBrains mono
+    family: JetBrains mono
     # family: Pragmata Pro Mono
-    family: JuliaMono
+    # family: JuliaMono
     style: Regular
 
   # Bold font face
   bold:
-    # family: JetBrains mono
+    family: JetBrains mono
     # family: Pragmata Pro Mono
-    family: JuliaMono
+    # family: JuliaMono
     style: Bold
 
   # Italic font face
   italic:
-    # family: JetBrains mono
+    family: JetBrains mono
     # family: Pragmata Pro Mono
-    family: JuliaMono
+    # family: JuliaMono
     style: Italic
 
   # Bold italic font face
@@ -139,7 +139,7 @@ font:
   # spacing.
   offset:
     x: 0
-    y: 5
+    y: 1
 
   # Glyph offset determines the locations of the glyphs within their cells with
   # the default being at the bottom. Increasing `x` moves the glyph to the
