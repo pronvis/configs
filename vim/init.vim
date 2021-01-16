@@ -65,6 +65,8 @@ Plug 'tpope/vim-commentary'
 Plug 'rhysd/git-messenger.vim'
 call plug#end()
 
+let $FZF_DEFAULT_COMMAND = "rg --files --hidden"
+
 source ~/.config/nvim/functions.vim
 
 " using russian language in Normal mode
