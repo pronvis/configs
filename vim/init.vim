@@ -413,20 +413,9 @@ vnoremap <leader>p "_dp
 noremap <leader>s :Rg! 
 let g:fzf_layout = { 'down': '~20%' }
 
-function! s:rg_args(args)
-	let main = 'rg --column --line-number --no-heading --color=always '
-	let addition = ''
-	let res_args = a:args
-	if(res_args[0:1] == '-i')
-		let addition = '--ignore-case '
-		let res_args = res_args[3:]
-	endif
-	return main.addition.shellescape(res_args)
-endfunction
-
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
-  \   s:rg_args(<q-args>), 1,
+  \   'rg --column --line-number --no-heading --color=always --smart-case --hidden -- '.shellescape(<q-args>), 1,
   \   <bang>0 ? fzf#vim#with_preview('up:60%')
   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
   \   <bang>0)
