@@ -65,15 +65,21 @@ Plug 'tpope/vim-commentary'
 Plug 'rhysd/git-messenger.vim'
 call plug#end()
 
-let $FZF_DEFAULT_COMMAND = "rg --files --hidden"
+let $FZF_DEFAULT_COMMAND = "rg --files --no-ignore-vcs --hidden | rg -v \"(^|/)(target|\.git)/\" | rg -v \".DS_Store\""
+
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always --smart-case --hidden -- '.shellescape(<q-args>), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   <bang>0)
 
 source ~/.config/nvim/functions.vim
 
 " using russian language in Normal mode
 set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz
 
-let g:rooter_patterns = ['Rakefile', '.git/', 'Cargo.toml', 'build.sbt']
-let g:ale_lint_on_text_changed = 1 
+let g:rooter_patterns = ['.git/', 'Cargo.toml', 'build.sbt']
 let g:syntastic_rust_checkers = ['rustc', 'clippy']
 au BufRead,BufNewFile *.conf set filetype=conf
 au BufRead,BufNewFile .tmux.conf set filetype=tmux
@@ -160,15 +166,6 @@ function! GitStatus()
   return printf('+%d ~%d -%d', a, m, r)
 endfunction
 
-" from http://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
-if executable('ag')
-	set grepprg=ag\ --nogroup\ --nocolor
-endif
-if executable('rg')
-	set grepprg=rg\ --no-heading\ --vimgrep
-	set grepformat=%f:%l:%c:%m
-endif
-
 let g:lightline.separator = {'left': '', 'right': ''}
 let g:lightline.subseparator = {'left': '', 'right': ''}
 
@@ -187,14 +184,11 @@ let g:latex_fold_sections = []
 let g:sql_type_default = 'pgsql'
  
 " Open hotkeys
-map <C-p> :call FuzzyFileFind("")<CR>
+map <C-p> :Files<CR>
 nmap <leader>; :Buffers<CR>
 
 " Quick-save
 nmap <leader>w :w<CR>
-
-" Don't confirm .lvimrc
-let g:localvimrc_ask = 0
 
 " racer + rust
 " https://github.com/rust-lang/rust.vim/issues/192
@@ -259,10 +253,6 @@ set printencoding=utf-8
 set printoptions=paper:letter
 " Always draw sign column. Prevent buffer moving when adding/deleting sign.
 set signcolumn=yes
-
-" Settings needed for .lvimrc
-set exrc
-set secure
 
 " Sane splits
 set splitright
@@ -364,6 +354,8 @@ nnoremap <Leader>O O<Esc>
 
 " show git message
 nmap <F3> <Plug>(git-messenger)
+" file explorer
+nmap <F2> :CocCommand explorer<CR>
 
 " Ctrl+h to stop searching
 vnoremap <C-s> :nohlsearch<cr>
@@ -413,25 +405,6 @@ vnoremap <leader>p "_dp
 
 " <leader>s for Rg search
 noremap <leader>s :Rg! 
-let g:fzf_layout = { 'down': '~20%' }
-
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always --smart-case --hidden -- '.shellescape(<q-args>), 1,
-  \   <bang>0 ? fzf#vim#with_preview('up:60%')
-  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \   <bang>0)
-
-
-function! s:list_cmd()
-  let base = fnamemodify(expand('%'), ':h:.:S')
-  return base == '.' ? 'fd --type file --follow' : printf('fd --type file --follow | proximity-sort %s', shellescape(expand('%')))
-endfunction
-
-command! -bang -nargs=? -complete=dir Files
-  \ call fzf#vim#files(<q-args>, {'source': s:list_cmd(),
-  \                               'options': '--tiebreak=index'}, <bang>0)
-
 
 " Open new file adjacent to current file
 nnoremap <leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
@@ -606,11 +579,6 @@ func! SetDefaultValue()
 endfunc
 let @i = ':call SetDefaultValue()'
 nnoremap <leader>ri @i<cr>
-
-" =============================================================================
-" Explorer
-" =============================================================================
-nmap <F2> :CocCommand explorer<CR>
 
 " =============================================================================
 " Test running

@@ -400,10 +400,6 @@ function! NeomakeStatusLine()
   endif
 endfunction
 
-function! FuzzyFileFind(path)
-    execute "Files " . a:path
-endfunction
-
 " <test-running-functions>
   " Functions used to run tests in a terminal split and automatically closing
   " the split if the tests are green. If they're red, jump forward to the
