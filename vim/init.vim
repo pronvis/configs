@@ -79,7 +79,6 @@ source ~/.config/nvim/functions.vim
 " using russian language in Normal mode
 set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz
 
-let g:rooter_patterns = ['.git/', 'Cargo.toml', 'build.sbt']
 let g:syntastic_rust_checkers = ['rustc', 'clippy']
 au BufRead,BufNewFile *.conf set filetype=conf
 au BufRead,BufNewFile .tmux.conf set filetype=tmux
