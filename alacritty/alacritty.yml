@@ -433,7 +433,8 @@ font:
     #modifiers: None
 mouse:
   url:
-    launcher: firefox
+    launcher:
+      program: /Applications/Firefox.app/Contents/MacOS/firefox
 
 # Mouse bindings
 #
