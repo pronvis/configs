@@ -93,14 +93,6 @@ curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
 - `:CocInstall coc-rust-analyzer`
 - **for scala** `:CocInstall coc-metals`
 
-#### Install [vim-gitgutter](https://github.com/airblade/vim-gitgutter)
-```
-mkdir -p ~/.config/nvim/pack/airblade/start
-cd ~/.config/nvim/pack/airblade/start
-git clone https://github.com/airblade/vim-gitgutter.git
-nvim -u NONE -c "helptags vim-gitgutter/doc" -c q
-```
-
 # Link Configs
 - `mkdir $HOME/.zsh_functions`
 - `cd {this_repo_directory}`

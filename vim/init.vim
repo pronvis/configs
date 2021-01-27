@@ -56,7 +56,8 @@ Plug 'sheerun/vim-polyglot'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'RyanMillerC/better-vim-tmux-resizer'
 
-Plug 'itchyny/vim-gitbranch'
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
 
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-obsession'
@@ -351,6 +352,8 @@ noremap Q <Nop>
 nnoremap <Leader>o o<Esc>
 nnoremap <Leader>O O<Esc>
 
+" git show hunk diff
+nmap <leader>hj <Plug>(GitGutterPreviewHunk)
 " show git message
 nmap <F3> <Plug>(git-messenger)
 " file explorer
