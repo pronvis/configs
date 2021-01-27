@@ -352,6 +352,10 @@ noremap Q <Nop>
 nnoremap <Leader>o o<Esc>
 nnoremap <Leader>O O<Esc>
 
+" git search in file changes
+" the same as connsole: git log -p --all -S 'search string'
+" for regular expression change to: git log -p --all -G 'match regular expression'
+command! -nargs=* Gsearch :G log -p --all -S <q-args>
 " git show hunk diff
 nmap <leader>hj <Plug>(GitGutterPreviewHunk)
 " show git message
@@ -467,8 +471,10 @@ nnoremap <silent> K :call <SID>show_documentation()<CR>
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
-  else
+  elseif (coc#rpc#ready())
     call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
   endif
 endfunction
 
