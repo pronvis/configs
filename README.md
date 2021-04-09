@@ -95,6 +95,7 @@ curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
 - **for scala** `:CocInstall coc-metals`
 
 # Link Configs
+- `mkdir $HOME/.zsh_sessions`
 - `mkdir $HOME/.zsh_functions`
 - `cd {this_repo_directory}`
 - `ln -s $PWD/tmux/tmux.conf ~/.tmux.conf`
