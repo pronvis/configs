@@ -227,3 +227,10 @@ fi
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Use a different histfile per shell, and write to it immediately after each command.
+TMUX_SESSION_ID=$(tmux display -pt $TMUX_PANE '#S:#I.#P')
+export HISTFILE="$HOME/.zsh_sessions/history_$TMUX_SESSION_ID"
+setopt INC_APPEND_HISTORY
+# For new shells, initialize history with the history of the most recently used shell.
+if [ ! -e $HISTFILE ]; then cp "$HOME/.zsh_sessions/$(ls -Art $HOME/.zsh_sessions | tail -n 1)" "$HISTFILE"; fi
