@@ -92,6 +92,7 @@ curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
 - `:CocInstall coc-explorer`
 - `:CocInstall coc-rust-analyzer`
 - `:CocInstall coc-tsserver`
+- `:CocInstall coc-go`
 - **for scala** `:CocInstall coc-metals`
 
 # Link Configs
