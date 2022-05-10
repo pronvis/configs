@@ -106,7 +106,7 @@ curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
 - `ln -s $PWD/vim/spacetab.vim ~/.config/nvim/scripts/spacetab.vim`
 - `ln -s $PWD/vim/closetag.vim ~/.config/nvim/scripts/closetag.vim`
 - `ln -s $PWD/vim/coc-settings.json ~/.config/nvim/coc-settings.json`
-- `ln -s ~/config_repo/vim/functions.vim ~/.config/nvim/functions.vim`
+- `ln -s $PWD/vim/functions.vim ~/.config/nvim/functions.vim`
 - `ln -s $PWD/iterm/zshrc_conf.zshrc ~/.zshrc`
 - `ln -s $PWD/idea/ideavimrc ~/.ideavimrc`
 - `ln -s $PWD/global_gitignore ~/.gitignore`
