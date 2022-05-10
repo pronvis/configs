@@ -13,6 +13,8 @@ First of all install those usefull tools:
 - `cargo install cargo-whatfeatures`
 - `cargo install --git https://github.com/davidpdrsn/cargo-docserver.git`
 - `git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell`
+- `git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions`
+- `git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting`
 
 ## Iterm2
 #### Iterm2 integration with Unix (tmux, ssh, etc.)
