@@ -1,5 +1,6 @@
 # Installation steps
 First of all install those usefull tools:
+- `sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`
 - `rustup component add clippy`
 - `brew install tmux`
 - `brew install neovim`
