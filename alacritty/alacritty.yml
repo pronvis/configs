@@ -432,7 +432,7 @@ font:
     # binding section.
     #modifiers: None
 mouse:
-  url:
+  hints:
     launcher:
       program: /Applications/Firefox.app/Contents/MacOS/firefox
 
