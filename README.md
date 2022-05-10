@@ -88,7 +88,6 @@ curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
 
 #### Install coc plugins
 - download rust-analyzer: `curl -L https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-mac -o /usr/local/bin/rust-analyzer-mac; chmod +x /usr/local/bin/rust-analyzer-mac`
-- `:CocInstall coc-exporer`
 - `:CocInstall coc-json`
 - `:CocInstall coc-explorer`
 - `:CocInstall coc-rust-analyzer`
