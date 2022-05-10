@@ -6,7 +6,8 @@
     "rust-analyzer.serverPath": "/usr/local/bin/rust-analyzer-mac",
     "rust-analyzer.cargo.loadOutDirsFromCheck": true,
     "rust.show_hover_context": false,
-    "rust-analyzer.procMacro.enable": false,
+    "rust-analyzer.procMacro.enable": true,
+    "rust-analyzer.experimental.procAttrMacros": true,
     "rust-analyzer.inlayHints.chainingHints": false,
     "diagnostic.warningSign":"w"
 }
