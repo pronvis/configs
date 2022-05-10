@@ -110,3 +110,4 @@ curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
 - `ln -s $PWD/idea/ideavimrc ~/.ideavimrc`
 - `ln -s $PWD/global_gitignore ~/.gitignore`
 - `ln -s $PWD/alacritty/alacritty.yml ~/.alacritty.yml`
+- `use gitconfig from your 1TB storage` (private data)
