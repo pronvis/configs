@@ -365,6 +365,9 @@ set listchars=nbsp:¬,extends:»,precedes:«,trail:•
 " ; as :
 nnoremap ; :
 
+" " Reload vimr configuration file
+nnoremap <Leader>vr :source $MYVIMRC<CR>
+
 " Disable useless and annoying keys
 noremap Q <Nop>
 
