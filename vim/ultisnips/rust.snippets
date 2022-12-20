@@ -1,0 +1,411 @@
+snippet _ "force type error"
+let _: () = $0;
+endsnippet
+
+snippet oma "match Option"
+match $1 {
+	Some($2) => {
+		//
+	},
+	None => {
+		//
+	},
+}
+endsnippet
+
+snippet rma "match Result"
+match $1 {
+	Ok($2) => {
+		//
+	},
+	Err($3) => {
+		//
+	},
+}
+endsnippet
+
+snippet ma "match" b
+match $1 {
+	$2 => {
+		//
+	},
+}
+endsnippet
+
+snippet i "impl"
+impl $1 {
+	$2
+}
+endsnippet
+
+snippet it "impl trait"
+impl $1 for $2 {}
+endsnippet
+
+snippet s "struct"
+struct $1 {
+	$2
+}
+endsnippet
+
+snippet t "trait"
+trait $1 {
+	$2
+}
+endsnippet
+
+snippet sd "struct"
+#[derive(Debug, $1)]
+struct $2 {
+	$3
+}
+endsnippet
+
+snippet si "struct and impl"
+struct $1 {
+	$2
+}
+
+impl $1 {
+	$3
+}
+endsnippet
+
+snippet d "debug"
+dbg!(&$0);
+endsnippet
+
+snippet pl "println"
+println!("$0");
+endsnippet
+
+snippet tests "test module"
+#[cfg(test)]
+mod tests {
+    #[allow(unused_imports)]
+    use super::*;
+
+    #[test]
+    fn test_something() {
+        assert_eq!(1, 2);
+    }
+}
+endsnippet
+
+snippet test "a single test"
+#[test]
+fn $1() {
+	$0
+}
+endsnippet
+
+snippet new "new function"
+fn new($1) -> Self {
+	$0
+}
+endsnippet
+
+snippet todo "todo"
+// TODO(david): $0
+endsnippet
+
+snippet td "todo!"
+todo!()
+endsnippet
+
+snippet p "panic!"
+panic!()
+endsnippet
+
+snippet ps "panic!"
+panic!("{:?}", $0)
+endsnippet
+
+snippet main "main function"
+fn main() {
+	$0
+}
+endsnippet
+
+snippet display "display impl"
+use std::fmt;
+
+impl fmt::Display for $1 {
+	fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+		write!(f, "{}", $2)
+	}
+}
+endsnippet
+
+snippet iflet "if let option"
+if let Some($1) = $2 {
+	$3
+} else {
+	$4
+}$5
+endsnippet
+
+snippet e "enum"
+enum $1 {
+	$2
+}
+endsnippet
+
+snippet ed "enum"
+#[derive(Debug, $1)]
+enum $2 {
+	$3
+}
+endsnippet
+
+snippet dr "derive"
+#[derive($0)]
+endsnippet
+
+snippet debug "derive debug"
+#[derive(Debug)]
+endsnippet
+
+snippet atest "async test"
+#[tokio::test]
+async fn $1() {
+	$0
+}
+endsnippet
+
+snippet otest "online test"
+#[online_test]
+async fn $1() {
+	$0
+}
+endsnippet
+
+snippet service "tower service and layer"
+use tower_layer::Layer;
+use tower_service::Service;
+use std::{
+    pin::Pin,
+    task::{Context, Poll},
+};
+
+#[derive(Debug, Clone)]
+pub struct $1Layer {}
+
+impl $1Layer {
+    pub fn new() -> Self {
+        $1Layer {}
+    }
+}
+
+impl<S> Layer<S> for $1Layer {
+    type Service = $1<S>;
+
+    fn layer(&self, inner: S) -> Self::Service {
+        $1::new(inner)
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct $1<S> {
+    inner: S,
+}
+
+impl<S> $1<S> {
+    pub fn new(inner: S) -> Self {
+        Self { inner }
+    }
+
+    define_inner_service_accessors!();
+
+    pub fn layer() -> $1Layer {
+        $1Layer::new()
+    }
+}
+
+impl<S, R> Service<R> for $1<S>
+where
+    S: Service<R>,
+{
+    type Response = S::Response;
+    type Error = S::Error;
+    type Future = S::Future;
+
+    fn poll_ready(&mut self, cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
+        self.inner.poll_ready(cx)
+    }
+
+    fn call(&mut self, req: R) -> Self::Future {
+        self.inner.call(req)
+    }
+}
+endsnippet
+
+snippet future
+use futures_core::ready;
+use pin_project::pin_project;
+use std::future::Future;
+
+#[pin_project]
+pub struct $1<F> {
+    #[pin]
+    inner: F,
+}
+
+impl<F> Future for $1<F>
+where
+    F: Future,
+{
+    type Output = F::Output;
+
+    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+        let this = self.project();
+        let result: F::Output = ready!(this.inner.poll(cx));
+        Poll::Ready(result)
+    }
+}
+endsnippet
+
+snippet body
+use http_body::Body;
+
+#[pin_project]
+pub struct $1<B> {
+    #[pin]
+    inner: B,
+}
+
+impl<B> Body for $1<B>
+where
+    B: Body,
+{
+    type Data = B::Data;
+    type Error = B::Error;
+
+    fn poll_data(
+        self: Pin<&mut Self>,
+        cx: &mut Context<'_>,
+    ) -> Poll<Option<Result<Self::Data, Self::Error>>> {
+        self.project().inner.poll_data(cx)
+    }
+
+    fn poll_trailers(
+        self: Pin<&mut Self>,
+        cx: &mut Context<'_>,
+    ) -> Poll<Result<Option<http::HeaderMap>, Self::Error>> {
+        self.project().inner.poll_trailers(cx)
+    }
+
+    fn is_end_stream(&self) -> bool {
+        self.inner.is_end_stream()
+    }
+
+    fn size_hint(&self) -> http_body::SizeHint {
+        self.inner.size_hint()
+    }
+}
+endsnippet
+
+snippet layer
+use tower::Layer;
+
+#[derive(Debug, Clone)]
+struct $1 {}
+
+impl<S> Layer<S> for $0 {
+    type Service = $2<S>;
+
+    fn layer(&self, service: S) -> Self::Service {
+        $2::new(service)
+    }
+}
+endsnippet
+
+snippet al
+#[allow($0)]
+endsnippet
+
+snippet all
+#![allow($0)]
+endsnippet
+
+snippet <
+<$1>
+</$1>
+endsnippet
+
+snippet </
+<$1 />
+endsnippet
+
+snippet handler
+fn $1() -> Router {
+    async fn handler() -> impl IntoResponse {
+    }
+
+    Router::new().route("/$2", $3(handler))
+}
+endsnippet
+
+snippet send
++ Send + Sync + 'static
+endsnippet
+
+snippet aspect
+#[derive(
+    Debug, Clone, serde::Serialize, serde::Deserialize, speedy::Writable, speedy::Readable,
+	Aspect
+)]
+#[aspect(guid = "`/Users/davidpdrsn/.cargo/bin/cli uuid`")]
+pub struct $1Aspect {
+    $0
+}
+endsnippet
+
+snippet msg
+#[derive(
+    Debug, Clone, serde::Serialize, serde::Deserialize, speedy::Writable, speedy::Readable,
+)]
+pub struct $1Msg {
+    $0
+}
+
+impl Message for $1Msg {
+    const GUID: MessageGuid =
+        MessageGuid::const_new_from_str("`/Users/davidpdrsn/.cargo/bin/cli uuid`");
+}
+endsnippet
+
+snippet cli
+#[cmd("$1")]
+fn $2() -> Result<()> {
+    Ok(())
+}
+endsnippet
+
+snippet uuid
+"`/Users/davidpdrsn/.cargo/bin/cli uuid`"
+endsnippet
+
+snippet ifl
+if let Some($1) = $2 {
+	$3
+}
+endsnippet
+
+snippet l
+let $1 = $2;
+endsnippet
+
+snippet lm
+let mut $1 = $2;
+endsnippet
+
+snippet middleware
+async fn my_middleware<B>(
+	request: Request<B>,
+	next: Next<B>,
+) -> Response {
+	let response = next.run(request).await;
+	response
+}
+endsnippet

@@ -192,3 +192,4 @@ export HISTFILE="$HOME/.zsh_sessions/history_$TMUX_SESSION_ID"
 setopt INC_APPEND_HISTORY
 # For new shells, initialize history with the history of the most recently used shell.
 if [ ! -e $HISTFILE ]; then cp "$HOME/.zsh_sessions/$(ls -Art $HOME/.zsh_sessions | tail -n 1)" "$HISTFILE"; fi
+export PATH="/usr/local/opt/libpq/bin:$PATH"

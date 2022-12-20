@@ -84,6 +84,8 @@ Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-commentary'
 
 Plug 'rhysd/git-messenger.vim'
+
+Plug 'SirVer/ultisnips'
 call plug#end()
 
 let $FZF_DEFAULT_COMMAND = "rg --files --no-ignore-vcs --hidden | rg -v \"(^|/)(target|\.git)/\" | rg -v \".DS_Store\""
@@ -209,6 +211,11 @@ nmap <leader>; :Buffers<CR>
 
 " Quick-save
 nmap <leader>w :w<CR>
+
+" edit snippets
+nnoremap <leader>es :UltiSnipsEdit<cr>
+let g:UltiSnipsEditSplit = 'horizontal'
+let g:UltiSnipsSnippetDirectories = ["ultisnips"]
 
 " racer + rust
 " https://github.com/rust-lang/rust.vim/issues/192

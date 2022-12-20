@@ -15,6 +15,7 @@ First of all install those usefull tools:
 - `git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell`
 - `git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions`
 - `git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting`
+- `pip install pynvim --upgrade`
 
 ## Iterm2
 #### Iterm2 integration with Unix (tmux, ssh, etc.)
@@ -108,6 +109,7 @@ curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
 - `ln -s $PWD/vim/closetag.vim ~/.config/nvim/scripts/closetag.vim`
 - `ln -s $PWD/vim/coc-settings.json ~/.config/nvim/coc-settings.json`
 - `ln -s $PWD/vim/functions.vim ~/.config/nvim/functions.vim`
+- `ln -s $PWD/vim/ultisnips/ ~/.config/nvim/ultisnips`
 - `ln -s $PWD/iterm/zshrc_conf.zshrc ~/.zshrc`
 - `ln -s $PWD/idea/ideavimrc ~/.ideavimrc`
 - `ln -s $PWD/global_gitignore ~/.gitignore`
