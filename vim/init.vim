@@ -214,6 +214,7 @@ nmap <leader>w :w<CR>
 
 " edit snippets
 nnoremap <leader>es :UltiSnipsEdit<cr>
+let g:UltiSnipsExpandTrigger='<C-Space>'
 let g:UltiSnipsEditSplit = 'horizontal'
 let g:UltiSnipsSnippetDirectories = ["ultisnips"]
 
