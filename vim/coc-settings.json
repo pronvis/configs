@@ -1,7 +1,7 @@
 {
     "rust.clippy_preference": "on",
     "coc.preferences.formatOnType":true,
-    "coc.preferences.formatOnSaveFiletypes": ["scala"],
+    "coc.preferences.formatOnSaveFiletypes": ["rust"],
     "sql.lintOnSave": true,
     "rust-analyzer.serverPath": "/usr/local/bin/rust-analyzer-mac",
     "rust-analyzer.cargo.loadOutDirsFromCheck": true,
