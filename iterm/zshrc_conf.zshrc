@@ -86,6 +86,7 @@ export CARGO_TARGET_DIR="$HOME/rust/rust_build_artifacts"
 export GOPATH="$HOME/go"
 export PATH="$GOPATH/bin:$PATH"
 export CARGO_NET_GIT_FETCH_WITH_CLI=true
+export PATH="/Applications/OpenSCAD.app/Contents/MacOS/:$PATH"
 
 # you need to install https://vulkan.lunarg.com/sdk/home first
 export VULKAN_SDK=$HOME/vulkan_sdk/macOS
