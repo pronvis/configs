@@ -98,6 +98,10 @@ curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
 - `:CocInstall coc-go`
 - **for scala** `:CocInstall coc-metals`
 
+#### Add syntax files
+- `cd {this_repo_directory}`
+- `ln -s $PWD/vim/syntax/gcode.vim ~/.config/nvim/syntax/gcode.vim`
+
 # Link Configs
 - `mkdir $HOME/.zsh_sessions`
 - `mkdir $HOME/.zsh_functions`
@@ -115,3 +119,4 @@ curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
 - `ln -s $PWD/global_gitignore ~/.gitignore`
 - `ln -s $PWD/alacritty/alacritty.yml ~/.alacritty.yml`
 - `use gitconfig from your 1TB storage` (private data)
+
