@@ -1,3 +1,5 @@
+vim.g.mapleader = ' '
+
  -- top and bottom gap
 vim.opt.scrolloff = 5
 
@@ -5,7 +7,7 @@ vim.opt.scrolloff = 5
 vim.opt.number = true
 
 vim.opt.relativenumber = true
-vim.opt.autoindent = true 
+vim.opt.autoindent = true
 vim.opt.encoding = 'utf-8'
 vim.opt.colorcolumn = '80'
 vim.opt.cursorline = false
@@ -24,3 +26,8 @@ vim.opt.expandtab = true
 
 -- undo history
 vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
+vim.opt.undofile = true
+
+vim.opt.termguicolors = true
+
+vim.opt.updatetime = 50

@@ -144,6 +144,11 @@ _G.packer_plugins = {
     path = "/Users/pronvis/.local/share/nvim/site/pack/packer/start/rust-tools.nvim",
     url = "https://github.com/simrat39/rust-tools.nvim"
   },
+  securemodelines = {
+    loaded = true,
+    path = "/Users/pronvis/.local/share/nvim/site/pack/packer/start/securemodelines",
+    url = "https://github.com/ciaranm/securemodelines"
+  },
   ["telescope.nvim"] = {
     loaded = true,
     path = "/Users/pronvis/.local/share/nvim/site/pack/packer/start/telescope.nvim",
