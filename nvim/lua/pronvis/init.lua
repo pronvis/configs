@@ -1,6 +1,6 @@
-require("pronvis.remap")
 require("pronvis.set")
 require("pronvis.packer")
+require("pronvis.remap")
 
 -- Colors
 -- Base16
