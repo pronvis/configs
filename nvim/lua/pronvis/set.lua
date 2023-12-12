@@ -31,3 +31,6 @@ vim.opt.undofile = true
 vim.opt.termguicolors = true
 
 vim.opt.updatetime = 50
+
+-- using russian language in Normal mode
+vim.opt.langmap = "ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz"

@@ -65,3 +65,6 @@ vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
 
 -- <leader>s replace text on curent world
 vim.keymap.set("n", "<leader>r", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+
+vim.keymap.set("n", "<leader>;", ':Telescope buffers<CR>')
+

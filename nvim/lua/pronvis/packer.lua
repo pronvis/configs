@@ -50,4 +50,7 @@ return require('packer').startup(function(use)
     use('RyanMillerC/better-vim-tmux-resizer')
 
     use('ciaranm/securemodelines')
+
+    use('nvim-lualine/lualine.nvim')
+
 end)
