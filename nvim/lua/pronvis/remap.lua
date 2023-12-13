@@ -6,6 +6,7 @@ vim.keymap.set('n', '<leader>w', vim.cmd.write, { remap = true })
 
 -- ; as :
 vim.keymap.set('n', ';', ':')
+vim.keymap.set('v', ';', ':')
 
 -- disable useless and annoying keys
 vim.keymap.set('', 'Q', '')

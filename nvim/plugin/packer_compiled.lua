@@ -164,6 +164,11 @@ _G.packer_plugins = {
     path = "/Users/pronvis/.local/share/nvim/site/pack/packer/start/telescope.nvim",
     url = "https://github.com/nvim-telescope/telescope.nvim"
   },
+  ultisnips = {
+    loaded = true,
+    path = "/Users/pronvis/.local/share/nvim/site/pack/packer/start/ultisnips",
+    url = "https://github.com/SirVer/ultisnips"
+  },
   undotree = {
     loaded = true,
     path = "/Users/pronvis/.local/share/nvim/site/pack/packer/start/undotree",
