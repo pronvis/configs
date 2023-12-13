@@ -24,6 +24,7 @@ return require('packer').startup(function(use)
     use('airblade/vim-gitgutter')
     use('rhysd/git-messenger.vim')
 
+    -- Language Server Protocol
     use {
         'VonHeikemen/lsp-zero.nvim',
         branch = 'v3.x',
@@ -69,4 +70,6 @@ return require('packer').startup(function(use)
 
     -- snippets
     use('SirVer/ultisnips')
+
+    use('plasticboy/vim-markdown')
 end)
