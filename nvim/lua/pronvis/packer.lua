@@ -16,11 +16,13 @@ return require('packer').startup(function(use)
     use('RRethy/nvim-base16')
 
     use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
-    use('nvim-treesitter/playground')
 
     use('mbbill/undotree')
 
+    -- git related
     use('tpope/vim-fugitive')
+    use('airblade/vim-gitgutter')
+    use('rhysd/git-messenger.vim')
 
     use {
         'VonHeikemen/lsp-zero.nvim',
@@ -53,4 +55,18 @@ return require('packer').startup(function(use)
 
     use('nvim-lualine/lualine.nvim')
 
+    use('machakann/vim-highlightedyank')
+    use {
+        'andymass/vim-matchup',
+        setup = function()
+            -- may set any options here
+            vim.g.matchup_matchparen_offscreen = { method = "popup" }
+        end
+    }
+    use('airblade/vim-rooter')
+    use('mtdl9/vim-log-highlighting')
+    use('jiangmiao/auto-pairs')
+
+    -- snippets
+    use('SirVer/ultisnips')
 end)
