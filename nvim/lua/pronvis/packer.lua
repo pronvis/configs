@@ -72,4 +72,8 @@ return require('packer').startup(function(use)
     use('SirVer/ultisnips')
 
     use('plasticboy/vim-markdown')
+
+    -- file tree
+    use('nvim-tree/nvim-tree.lua')
+    use('nvim-tree/nvim-web-devicons')
 end)

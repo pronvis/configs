@@ -1,6 +1,3 @@
--- TODO: delete me
-vim.keymap.set('n', '<leader>pv', vim.cmd.Ex, { remap = true })
-
 -- quick save
 vim.keymap.set('n', '<leader>w', vim.cmd.write, { remap = true })
 
@@ -71,3 +68,6 @@ vim.keymap.set("n", "<leader>;", ':Telescope buffers<CR>')
 
 -- show git commit info
 vim.keymap.set("n", "<F3>", ':GitMessenger<CR>')
+
+-- file tree
+vim.keymap.set('n', '<F2>', (require "nvim-tree.api").tree.toggle)
