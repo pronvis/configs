@@ -76,4 +76,6 @@ return require('packer').startup(function(use)
     -- file tree
     use('nvim-tree/nvim-tree.lua')
     use('nvim-tree/nvim-web-devicons')
+
+    use('HiPhish/rainbow-delimiters.nvim')
 end)
