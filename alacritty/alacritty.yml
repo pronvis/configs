@@ -668,6 +668,10 @@ mouse:
 # in the order they were defined in.
 key_bindings:
 - { key: Return, mods: Super, action: ToggleSimpleFullscreen }
+- { key: S,        mods: Alt,     chars: "\es"                       }
+- { key: D,        mods: Alt,     chars: "\ed"                       }
+- { key: F,        mods: Alt,     chars: "\ef"                       }
+
   #- { key: Paste,                                       action: Paste          }
   #- { key: Copy,                                        action: Copy           }
   #- { key: L,         mods: Control,                    action: ClearLogNotice }

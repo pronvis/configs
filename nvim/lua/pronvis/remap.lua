@@ -71,3 +71,9 @@ vim.keymap.set("n", "<F3>", ':GitMessenger<CR>')
 
 -- file tree
 vim.keymap.set('n', '<F2>', (require "nvim-tree.api").tree.toggle)
+
+-- snippets
+vim.keymap.set('n', '<leader>es', function() require("luasnip.loaders").edit_snippet_files() end, { silent = true })
+vim.keymap.set('i', '<A-s>', (require "luasnip").expand, { silent = true })
+vim.keymap.set({ "i", "s" }, "<A-d>", function() (require "luasnip").jump(1) end, { silent = true })
+vim.keymap.set({ "i", "s" }, "<A-f>", function() (require "luasnip").jump(-1) end, { silent = true })

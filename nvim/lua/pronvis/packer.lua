@@ -69,7 +69,7 @@ return require('packer').startup(function(use)
     use('jiangmiao/auto-pairs')
 
     -- snippets
-    use('SirVer/ultisnips')
+    use('L3MON4D3/LuaSnip')
 
     use('plasticboy/vim-markdown')
 
