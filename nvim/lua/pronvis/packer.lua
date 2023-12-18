@@ -78,4 +78,7 @@ return require('packer').startup(function(use)
     use('nvim-tree/nvim-web-devicons')
 
     use('HiPhish/rainbow-delimiters.nvim')
+
+    -- plugin for popup windows
+    use {'stevearc/dressing.nvim'}
 end)
