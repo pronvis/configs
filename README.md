@@ -39,7 +39,7 @@ I place it here: `~/Yandex.Disk.localized/fonts/JetBrainsMono_hacked.zip`
 - `ln -s $PWD/tmux/tmux.conf ~/.tmux.conf`
 - `mkdir -p ~/.config/nvim/scripts/`
 - `ln -s $PWD/nvim ~/.config/nvim`
-- `ln -s $PWD/iterm/zshrc_conf.zshrc ~/.zshrc`
+- `ln -s $PWD/zsh/zshrc_conf.zshrc ~/.zshrc`
 - `ln -s $PWD/global_gitignore ~/.gitignore`
 - `ln -s $PWD/alacritty/alacritty.yml ~/.alacritty.yml`
 - `use gitconfig from your 1TB storage` (private data)
