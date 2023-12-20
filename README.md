@@ -80,27 +80,18 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 ```
 - inside tmux hit `prefix + I` to install plugins from cfg file that you linked
 
-## Vim
-- `coc.nvim` requires Node.js so install it with `curl -sL install-node.now.sh/lts | sh`
-- vim-plug:
-```
-curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-```
-- inside vim `:PlugInstall`
-
-#### Install coc plugins
-- download rust-analyzer: `curl -L https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-mac -o /usr/local/bin/rust-analyzer-mac; chmod +x /usr/local/bin/rust-analyzer-mac`
-- `:CocInstall coc-json`
-- `:CocInstall coc-explorer`
-- `:CocInstall coc-rust-analyzer`
-- `:CocInstall coc-tsserver`
-- `:CocInstall coc-go`
-- **for scala** `:CocInstall coc-metals`
+## Nvim
+- Install packer: `git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim`
+- `:PackerSync` in neovim
 
 #### Add syntax files
 - `cd {this_repo_directory}`
+- `mkdir ~/.config/nvim/syntax/`
 - `ln -s $PWD/vim/syntax/gcode.vim ~/.config/nvim/syntax/gcode.vim`
+
+#### Add special icons
+For `nvim-tree/nvim-web-devicons` to show icons you need to install patched font from: `https://www.nerdfonts.com/`
+I place it here: `~/Yandex.Disk.localized/fonts/JetBrainsMono_hacked.zip`
 
 # Link Configs
 - `mkdir $HOME/.zsh_sessions`

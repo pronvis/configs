@@ -1,3 +1,5 @@
+require("pronvis.functions")
+require("pronvis.autocmd")
 require("pronvis.set")
 require("pronvis.packer")
 require("pronvis.remap")

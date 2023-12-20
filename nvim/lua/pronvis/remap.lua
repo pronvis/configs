@@ -68,6 +68,8 @@ vim.keymap.set("n", "<leader>;", ':Telescope buffers<CR>')
 
 -- show git commit info
 vim.keymap.set("n", "<F3>", ':GitMessenger<CR>')
+-- git show hunk diff
+vim.keymap.set("n", "<leader>hj", ':GitGutterPreviewHunk<CR>')
 
 -- file tree
 vim.keymap.set('n', '<F2>', (require "nvim-tree.api").tree.toggle)
@@ -77,3 +79,30 @@ vim.keymap.set('n', '<leader>es', function() require("luasnip.loaders").edit_sni
 vim.keymap.set('i', '<A-s>', (require "luasnip").expand, { silent = true })
 vim.keymap.set({ "i", "s" }, "<A-d>", function() (require "luasnip").jump(1) end, { silent = true })
 vim.keymap.set({ "i", "s" }, "<A-f>", function() (require "luasnip").jump(-1) end, { silent = true })
+
+-- very magic by defaul
+vim.keymap.set('n', '?', '?\\v')
+vim.keymap.set('n', '/', '/\\v')
+
+-- exit terminal mode
+vim.keymap.set('t', '<F1>', '<C-\\><C-n>')
+
+-- to search for visually selected text
+vim.keymap.set('v', '//', "y/\\V<C-R>=escape(@\",'/\\')<CR><CR>")
+
+vim.keymap.set('n', '<leader>i', ':lua IndentEntireFile()<CR>')
+
+-- open new file adjacent to current file
+vim.keymap.set('n', '<leader>e', ':e <C-R>=expand("%:p:h") . "/" <CR>')
+-- copy full file name to clipboard
+vim.keymap.set('n', '<leader>P', ':let @+ = expand("%:p")<CR>')
+
+-- do Highlighting a search term without moving the cursor https://superuser.com/questions/255023/highlighting-a-search-term-without-moving-the-cursor
+vim.keymap.set('n', '*', ':let @/ = \'\\<\'.expand(\'<cword>\').\'\\>\'|set hlsearch<C-M>')
+
+-- =============================================================================
+-- This allows you to visually select a section and then hit @ to run a macro
+-- on all lines. Only lines which match will change. Without this script the
+-- macro would stop at lines which don’t match the macro.
+-- =============================================================================
+vim.keymap.set('x', '@', ':lua ExecuteMacroOverVisualRange()<CR>')
