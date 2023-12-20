@@ -12,9 +12,9 @@ lsp_zero.on_attach(function(client, bufnr)
 
     vim.keymap.set("n", "<leader>ac", function() vim.lsp.buf.code_action() end, opts)
 
-    vim.keymap.set("n", "<leader>l", function() vim.diagnostic.open_float() end, { silent = true })
-    vim.keymap.set("n", "E", function() vim.diagnostic.goto_next() end, { silent = true })
-    vim.keymap.set("n", "W", function() vim.diagnostic.goto_prev() end, { silent = true })
+    vim.keymap.set("n", "<leader>l", function() vim.diagnostic.open_float() end, opts)
+    vim.keymap.set("n", "E", function() vim.diagnostic.goto_next() end, opts)
+    vim.keymap.set("n", "W", function() vim.diagnostic.goto_prev() end, opts)
 end)
 
 require('mason').setup({})
