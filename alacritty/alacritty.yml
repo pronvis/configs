@@ -668,7 +668,11 @@ mouse:
 # in the order they were defined in.
 key_bindings:
 - { key: Return, mods: Super, action: ToggleSimpleFullscreen }
-- { key: S,        mods: Alt,     chars: "\es"                       }
+- { key: A,        mods: Alt,     chars: "\ea"                       }
+- { key: H,        mods: Alt,     chars: "\eh"                       }
+- { key: J,        mods: Alt,     chars: "\ej"                       }
+- { key: K,        mods: Alt,     chars: "\ek"                       }
+- { key: L,        mods: Alt,     chars: "\el"                       }
 - { key: D,        mods: Alt,     chars: "\ed"                       }
 - { key: F,        mods: Alt,     chars: "\ef"                       }
 

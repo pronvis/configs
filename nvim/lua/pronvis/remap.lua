@@ -106,3 +106,18 @@ vim.keymap.set('n', '*', ':let @/ = \'\\<\'.expand(\'<cword>\').\'\\>\'|set hlse
 -- macro would stop at lines which don’t match the macro.
 -- =============================================================================
 vim.keymap.set('x', '@', ':lua ExecuteMacroOverVisualRange()<CR>')
+
+-- =========================
+--   command line mappings
+-- =========================
+
+vim.keymap.set('c', '<C-a>', '<C-b>') -- back to the beginning of the line
+vim.keymap.set('c', '<A-Left>', '<C-Left>') -- move back a word
+vim.keymap.set('c', '<A-Right>', '<C-Right>') -- move forward a word
+-- very magic by defaul
+vim.keymap.set('c', '%s/', '%sm/')
+
+-- =========================
+-- =========================
+-- =========================
+
