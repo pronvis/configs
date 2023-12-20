@@ -17,25 +17,6 @@ First of all install those usefull tools:
 - `git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting`
 - `pip install pynvim --upgrade`
 
-## Iterm2
-#### Iterm2 integration with Unix (tmux, ssh, etc.)
-```
-curl -L https://iterm2.com/shell_integration/zsh \
--o ~/.iterm2_shell_integration.zsh
-```
-
-#### Themes
-- atelier-savanna
-- bespin
-- darktooth
-- eighties
-- gruvbox-dark-soft
-- hopscotch
-- irblack
-- railscasts
-- woodland
-- **railscasts**
-
 ## Tmux
 - install plugin manager:
 ```
