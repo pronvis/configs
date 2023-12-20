@@ -114,6 +114,8 @@ vim.keymap.set('x', '@', ':lua ExecuteMacroOverVisualRange()<CR>')
 vim.keymap.set('c', '<C-a>', '<C-b>') -- back to the beginning of the line
 vim.keymap.set('c', '<A-Left>', '<C-Left>') -- move back a word
 vim.keymap.set('c', '<A-Right>', '<C-Right>') -- move forward a word
+vim.keymap.set('c', '<A-BS>', '<C-w>') -- remove one word before the cursor
+
 -- very magic by defaul
 vim.keymap.set('c', '%s/', '%sm/')
 
