@@ -35,6 +35,7 @@ I place it here: `~/Yandex.Disk.localized/fonts/JetBrainsMono_hacked.zip`
 # Link Configs
 - `mkdir $HOME/.zsh_sessions`
 - `mkdir $HOME/.zsh_functions`
+- `mkdir $HOME/.vim/undodir`
 - `cd {this_repo_directory}`
 - `ln -s $PWD/tmux/tmux.conf ~/.tmux.conf`
 - `mkdir -p ~/.config/nvim/scripts/`
