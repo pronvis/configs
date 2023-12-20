@@ -10,7 +10,7 @@ vim.api.nvim_create_autocmd({"BufRead"}, {
 vim.api.nvim_create_autocmd({"Filetype"}, {
     pattern = "rust",
     callback = function()
-        vim.cmd(':source ~/.config/nvim/scripts/spacetab.vim')
+        vim.cmd(':source ~/.config/nvim/scripts/rust_spacetab.vim')
         vim.opt.colorcolumn=''
     end
 })
