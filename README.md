@@ -36,43 +36,6 @@ curl -L https://iterm2.com/shell_integration/zsh \
 - woodland
 - **railscasts**
 
-#### How to import profiles
-Just upload your `*.plist` to `~/Library/Preferences`
-
-Notice, that checkbox:
-`Load preferences from a custom folder or URL`
-in `Preferences - General` (at the bottom) must be disabled.
-
-#### How to import profile in json mode
-**(only if your username is 'pronvis')** just try to create link to profile file:
-```
-ln -s iterm/pronvis_profile.json /Users/pronvis/Library/Application\ Support/iTerm2/DynamicProfiles/pronvis_profile.json
-```
-If it will not work then [read this](https://www.iterm2.com/documentation-dynamic-profiles.html)
-the main info is:
-```
-{
-  "Profiles": [
-    {
-      "Name": "Example",
-      "Guid": "ba19744f-6af3-434d-aaa6-0a48e0969958"
-    }
-  ]
-}
-```
-
-When you export profile it creates json with "name" and "guid" field, so just around it with:
-```
-{
-  "Profiles": [
-```
-
-#### How to add Scripts
-```
-cd ~/Library/Application\ Support/iTerm2
-ln -s iterm/Scripts Scripts
-```
-
 ## Tmux
 - install plugin manager:
 ```
@@ -84,11 +47,6 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 - Install packer: `git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim`
 - `:PackerSync` in neovim
 
-#### Add syntax files
-- `cd {this_repo_directory}`
-- `mkdir ~/.config/nvim/syntax/`
-- `ln -s $PWD/vim/syntax/gcode.vim ~/.config/nvim/syntax/gcode.vim`
-
 #### Add special icons
 For `nvim-tree/nvim-web-devicons` to show icons you need to install patched font from: `https://www.nerdfonts.com/`
 I place it here: `~/Yandex.Disk.localized/fonts/JetBrainsMono_hacked.zip`
@@ -99,15 +57,8 @@ I place it here: `~/Yandex.Disk.localized/fonts/JetBrainsMono_hacked.zip`
 - `cd {this_repo_directory}`
 - `ln -s $PWD/tmux/tmux.conf ~/.tmux.conf`
 - `mkdir -p ~/.config/nvim/scripts/`
-- `ln -s $PWD/vim/init.vim ~/.config/nvim/init.vim`
-- `ln -s $PWD/vim/spacetab.vim ~/.config/nvim/scripts/spacetab.vim`
-- `ln -s $PWD/vim/closetag.vim ~/.config/nvim/scripts/closetag.vim`
-- `ln -s $PWD/vim/coc-settings.json ~/.config/nvim/coc-settings.json`
-- `ln -s $PWD/vim/functions.vim ~/.config/nvim/functions.vim`
-- `ln -s $PWD/vim/ultisnips/ ~/.config/nvim/ultisnips`
+- `ln -s $PWD/nvim ~/.config/nvim`
 - `ln -s $PWD/iterm/zshrc_conf.zshrc ~/.zshrc`
-- `ln -s $PWD/idea/ideavimrc ~/.ideavimrc`
 - `ln -s $PWD/global_gitignore ~/.gitignore`
 - `ln -s $PWD/alacritty/alacritty.yml ~/.alacritty.yml`
 - `use gitconfig from your 1TB storage` (private data)
-
