@@ -1,20 +1,31 @@
 local lsp_zero = require('lsp-zero')
 
 lsp_zero.on_attach(function(client, bufnr)
-    local opts = {buffer = bufnr, remap = false}
+    local nmap = function(keys, func, desc)
+        if desc then
+            desc = 'LSP: ' .. desc
+        end
 
-    vim.keymap.set("n", "gd", function() vim.lsp.buf.definition() end, opts)
-    vim.keymap.set("n", "gr", function() vim.lsp.buf.references() end, opts)
-    vim.keymap.set("n", "gy", function() vim.lsp.buf.type_definition() end, opts)
-    vim.keymap.set("n", "gi", function() vim.lsp.buf.implementation() end, opts)
-    vim.keymap.set("n", "<F6>", function() vim.lsp.buf.rename() end, opts)
-    vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
+        vim.keymap.set('n', keys, func, { buffer = bufnr, remap = false, desc = desc })
+    end
 
-    vim.keymap.set("n", "<leader>ac", function() vim.lsp.buf.code_action() end, opts)
+    nmap('<F6>', vim.lsp.buf.rename, 'Rename')
+    nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
-    vim.keymap.set("n", "<leader>l", function() vim.diagnostic.open_float() end, opts)
-    vim.keymap.set("n", "E", function() vim.diagnostic.goto_next() end, opts)
-    vim.keymap.set("n", "W", function() vim.diagnostic.goto_prev() end, opts)
+    nmap('gd', require('telescope.builtin').lsp_definitions, '[G]oto [Definition]')
+    nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eference')
+    nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
+    nmap('gi', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
+    nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
+    nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+
+    nmap('<leader>l', vim.diagnostic.open_float, 'Open diagnostic float window')
+    nmap('E', vim.diagnostic.goto_next, 'Goto next diagnostic')
+    nmap('W', vim.diagnostic.goto_prev, 'Goto prev diagnostic')
+    nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+
+    -- see `:help K` for why this keymap
+    nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
 end)
 
 require('mason').setup({})
@@ -49,9 +60,9 @@ cmp.setup({
 
 local rust_tools = require('rust-tools')
 rust_tools.setup({
-  server = {
-    on_attach = function(client, bufnr)
-      vim.keymap.set('n', '<leader>ac', rust_tools.hover_actions.hover_actions, {buffer = bufnr})
-    end
-  }
+    server = {
+        on_attach = function(client, bufnr)
+            vim.keymap.set('n', '<leader>ac', rust_tools.hover_actions.hover_actions, {buffer = bufnr})
+        end
+    }
 })

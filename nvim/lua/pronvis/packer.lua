@@ -38,7 +38,12 @@ return require('packer').startup(function(use)
             -- Autocompletion
             { 'hrsh7th/nvim-cmp' },
             { 'hrsh7th/cmp-nvim-lsp' },
+            { 'hrsh7th/cmp-path' },
+            -- snippets
             { 'L3MON4D3/LuaSnip' },
+            'saadparwaiz1/cmp_luasnip',
+            -- Adds a number of user-friendly snippets
+            'rafamadriz/friendly-snippets',
             -- Rust
             { 'simrat39/rust-tools.nvim' },
         }
@@ -66,9 +71,6 @@ return require('packer').startup(function(use)
     use('airblade/vim-rooter')
     use('mtdl9/vim-log-highlighting')
     use('jiangmiao/auto-pairs')
-
-    -- snippets
-    use('L3MON4D3/LuaSnip')
 
     use('plasticboy/vim-markdown')
 
