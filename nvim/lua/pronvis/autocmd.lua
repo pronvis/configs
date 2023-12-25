@@ -51,3 +51,11 @@ vim.api.nvim_create_autocmd("BufWritePre", {
         vim.cmd(':write ++p')
     end
 })
+
+-- highlight on yanking
+vim.api.nvim_create_autocmd("TextYankPost", {
+    pattern = "*",
+    callback = function ()
+	    vim.highlight.on_yank{silent = true, higroup = 'IncSearch', timeout = 300}
+    end
+})

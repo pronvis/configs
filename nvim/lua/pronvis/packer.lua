@@ -56,7 +56,6 @@ return require('packer').startup(function(use)
 
     use('nvim-lualine/lualine.nvim')
 
-    use('machakann/vim-highlightedyank')
     use {
         'andymass/vim-matchup',
         setup = function()
