@@ -46,6 +46,8 @@ return require('packer').startup(function(use)
             'rafamadriz/friendly-snippets',
             -- Rust
             { 'simrat39/rust-tools.nvim' },
+            -- full signature help, docs and completion for the nvim lua API
+            { 'folke/neodev.nvim' },
         }
     }
 

@@ -139,6 +139,11 @@ _G.packer_plugins = {
     path = "/Users/pronvis/.local/share/nvim/site/pack/packer/start/mason.nvim",
     url = "https://github.com/williamboman/mason.nvim"
   },
+  ["neodev.nvim"] = {
+    loaded = true,
+    path = "/Users/pronvis/.local/share/nvim/site/pack/packer/start/neodev.nvim",
+    url = "https://github.com/folke/neodev.nvim"
+  },
   ["nvim-base16"] = {
     loaded = true,
     path = "/Users/pronvis/.local/share/nvim/site/pack/packer/start/nvim-base16",

@@ -28,35 +28,93 @@ lsp_zero.on_attach(function(client, bufnr)
     nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
 end)
 
-require('mason').setup({})
-require('mason-lspconfig').setup({
-    ensure_installed = {'lua_ls', 'rust_analyzer'},
-    handlers = {
-        lsp_zero.default_setup,
-        lua_ls = function()
-            local lua_opts = lsp_zero.nvim_lua_ls()
-            require('lspconfig').lua_ls.setup(lua_opts)
-        end,
-    }
-})
+require('mason').setup()
+require('mason-lspconfig').setup()
 
-local cmp = require('cmp')
-local cmp_select = {behavior = cmp.SelectBehavior.Select}
+local servers = {
+    html = { filetypes = { 'html'} },
+    rust_analyzer = {},
 
-cmp.setup({
-    sources = {
-        {name = 'path'},
-        {name = 'nvim_lsp'},
-        {name = 'nvim_lua'},
+    lua_ls = {
+        Lua = {
+            workspace = { checkThirdParty = false },
+            telemetry = { enable = false },
+            -- NOTE: toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+            diagnostics = { disable = { 'missing-fields' } },
+        },
     },
-    formatting = lsp_zero.cmp_format(),
-    mapping = cmp.mapping.preset.insert({
-        ['<TAB>'] = cmp.mapping.select_next_item(cmp_select),
-        ['<S-TAB>'] = cmp.mapping.select_prev_item(cmp_select),
-        ['<Enter>'] = cmp.mapping.confirm({ select = true }),
-        ['<C-Space>'] = cmp.mapping.complete(),
-    }),
-})
+}
 
+-- nvim-cmp supports additional completion capabilities, so broadcast that to servers
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+
+-- Ensure the servers above are installed
+local mason_lspconfig = require('mason-lspconfig')
+mason_lspconfig.setup {
+  ensure_installed = vim.tbl_keys(servers),
+}
+
+mason_lspconfig.setup_handlers {
+  function(server_name)
+    require('lspconfig')[server_name].setup {
+      capabilities = capabilities,
+      on_attach = on_attach,
+      settings = servers[server_name],
+      filetypes = (servers[server_name] or {}).filetypes,
+    }
+  end,
+}
+
+-- [[ Configure nvim-cmp ]]
+-- See `:help cmp`
+local cmp = require('cmp')
+local luasnip = require('luasnip')
+
+cmp.setup {
+  snippet = {
+    expand = function(args)
+      luasnip.lsp_expand(args.body)
+    end,
+  },
+  completion = {
+    completeopt = 'menu,menuone,noinsert',
+  },
+  mapping = cmp.mapping.preset.insert {
+    ['<C-x><C-o>'] = cmp.mapping.complete {}, -- doesnt work for some reason :(
+    ['<CR>'] = cmp.mapping.confirm {
+      behavior = cmp.ConfirmBehavior.Replace,
+      select = true,
+    },
+    ['<Tab>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif luasnip.expand_or_locally_jumpable() then
+        luasnip.expand_or_jump()
+      else
+        fallback()
+      end
+    end, { 'i', 's' }),
+    ['<S-Tab>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif luasnip.locally_jumpable(-1) then
+        luasnip.jump(-1)
+      else
+        fallback()
+      end
+    end, { 'i', 's' }),
+  },
+  sources = {
+    { name = 'nvim_lsp' },
+    { name = 'luasnip' },
+    { name = 'path' },
+    { name = 'nvim_lua' },
+  },
+}
+
+-- rust-tools plugin automatically sets up nvim-lspconfig for rust_analyzer for you, so don't do that manually, as it causes conflicts.
 local rust_tools = require('rust-tools')
 rust_tools.setup()
+
+require('neodev').setup()
