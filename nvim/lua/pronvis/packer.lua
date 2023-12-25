@@ -84,4 +84,12 @@ return require('packer').startup(function(use)
 
     -- plugin for popup windows
     use {'stevearc/dressing.nvim'}
+
+    -- automatically highlighting other uses of the word under the cursor
+    use { 'RRethy/vim-illuminate' }
+
+    -- highlight arguments
+    use { 'm-demare/hlargs.nvim' }
+
+    use { 'tanvirtin/monokai.nvim' }
 end)

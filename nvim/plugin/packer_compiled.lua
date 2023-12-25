@@ -119,6 +119,11 @@ _G.packer_plugins = {
     path = "/Users/pronvis/.local/share/nvim/site/pack/packer/start/git-messenger.vim",
     url = "https://github.com/rhysd/git-messenger.vim"
   },
+  ["hlargs.nvim"] = {
+    loaded = true,
+    path = "/Users/pronvis/.local/share/nvim/site/pack/packer/start/hlargs.nvim",
+    url = "https://github.com/m-demare/hlargs.nvim"
+  },
   ["lsp-zero.nvim"] = {
     loaded = true,
     path = "/Users/pronvis/.local/share/nvim/site/pack/packer/start/lsp-zero.nvim",
@@ -138,6 +143,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/pronvis/.local/share/nvim/site/pack/packer/start/mason.nvim",
     url = "https://github.com/williamboman/mason.nvim"
+  },
+  ["monokai.nvim"] = {
+    loaded = true,
+    path = "/Users/pronvis/.local/share/nvim/site/pack/packer/start/monokai.nvim",
+    url = "https://github.com/tanvirtin/monokai.nvim"
   },
   ["neodev.nvim"] = {
     loaded = true,
@@ -223,6 +233,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/pronvis/.local/share/nvim/site/pack/packer/start/vim-gitgutter",
     url = "https://github.com/airblade/vim-gitgutter"
+  },
+  ["vim-illuminate"] = {
+    loaded = true,
+    path = "/Users/pronvis/.local/share/nvim/site/pack/packer/start/vim-illuminate",
+    url = "https://github.com/RRethy/vim-illuminate"
   },
   ["vim-log-highlighting"] = {
     loaded = true,

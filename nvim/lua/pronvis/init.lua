@@ -11,3 +11,4 @@ require("pronvis.remap")
 -- 3rd: base16-monokai
 -- 4th: base16-woodland
 vim.cmd('colorscheme base16-tomorrow-night-eighties')
+-- vim.cmd('colorscheme monokai')
