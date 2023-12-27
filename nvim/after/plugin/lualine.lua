@@ -5,7 +5,7 @@ end
 require('lualine').setup {
     options = {
         icons_enabled = true,
-        theme = 'nord',
+        theme = 'base16',
         component_separators = { left = '', right = '' },
         section_separators = { left = '', right = '' },
     },

@@ -21,15 +21,15 @@ export ZSH=/Users/$USER_NAME/.oh-my-zsh
 # time that oh-my-zsh is loaded.
 # ZSH_THEME="robbyrussell"
 ZSH_THEME=""
-plugins=(git colored-man pip python brew osx zsh-syntax-highlighting zsh-autosuggestions)
+plugins=(git colored-man pip python brew osx zsh-syntax-highlighting zsh-autosuggestions base16-shell)
 
-# BASE16_SHELL="$HOME/.config/base16-shell/"
-# [ -n "$PS1" ] && \
-# [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
-#      eval "$("$BASE16_SHELL/profile_helper.sh")"
+BASE16_SHELL_PATH="$HOME/.config/base16-shell"
+[ -n "$PS1" ] && \
+  [ -s "$BASE16_SHELL_PATH/profile_helper.sh" ] && \
+    source "$BASE16_SHELL_PATH/profile_helper.sh"
 
 # # SET THEME
-# base16_tomorrow-night-eighties
+base16_tomorrow-night-eighties
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"

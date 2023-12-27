@@ -13,8 +13,6 @@ return require('packer').startup(function(use)
         requires = { { 'nvim-lua/plenary.nvim' } }
     }
 
-    use('RRethy/nvim-base16')
-
     use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
 
     use('mbbill/undotree')
@@ -92,6 +90,8 @@ return require('packer').startup(function(use)
     use { 'm-demare/hlargs.nvim' }
 
     -- color themes
-    use { 'tanvirtin/monokai.nvim' }
-    use { 'arcticicestudio/nord-vim' }
+    -- use { 'tanvirtin/monokai.nvim' }
+    -- use { 'arcticicestudio/nord-vim' }
+    use('RRethy/nvim-base16')
+
 end)

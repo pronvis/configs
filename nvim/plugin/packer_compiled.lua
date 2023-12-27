@@ -144,20 +144,10 @@ _G.packer_plugins = {
     path = "/Users/pronvis/.local/share/nvim/site/pack/packer/start/mason.nvim",
     url = "https://github.com/williamboman/mason.nvim"
   },
-  ["monokai.nvim"] = {
-    loaded = true,
-    path = "/Users/pronvis/.local/share/nvim/site/pack/packer/start/monokai.nvim",
-    url = "https://github.com/tanvirtin/monokai.nvim"
-  },
   ["neodev.nvim"] = {
     loaded = true,
     path = "/Users/pronvis/.local/share/nvim/site/pack/packer/start/neodev.nvim",
     url = "https://github.com/folke/neodev.nvim"
-  },
-  ["nord-vim"] = {
-    loaded = true,
-    path = "/Users/pronvis/.local/share/nvim/site/pack/packer/start/nord-vim",
-    url = "https://github.com/arcticicestudio/nord-vim"
   },
   ["nvim-base16"] = {
     loaded = true,

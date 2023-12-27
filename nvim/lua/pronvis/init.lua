@@ -1,7 +1,7 @@
+require("pronvis.packer")
 require("pronvis.functions")
 require("pronvis.autocmd")
 require("pronvis.set")
-require("pronvis.packer")
 require("pronvis.remap")
 
 -- Colors
@@ -11,5 +11,4 @@ require("pronvis.remap")
 -- 3rd: base16-monokai
 -- 4th: base16-woodland
 -- vim.cmd('colorscheme base16-tomorrow-night-eighties')
-vim.cmd('colorscheme nord')
 -- vim.cmd('colorscheme monokai')
