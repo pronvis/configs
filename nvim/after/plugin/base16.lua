@@ -7,22 +7,22 @@ require('base16-colorscheme').with_config({
 -- colors is default ones, but without them telescope will not be fixed
 require('base16-colorscheme').setup({
     -- default
-    base00 = '#2d2d2d',
-    base01 = '#393939',
-    base02 = '#515151',
-    base03 = '#999999',
-    base04 = '#b4b7b4',
-    base05 = '#cccccc',
-    base06 = '#e0e0e0',
-    base07 = '#ffffff',
-    base08 = '#f2777a',
-    base09 = '#f99157',
-    base0A = '#ffcc66',
-    base0B = '#99cc99',
-    base0C = '#66cccc',
-    base0D = '#6699cc',
-    base0E = '#cc99cc',
-    base0F = '#a3685a'
+    base00 = '#2d2d2d', -- main background (black)
+    base01 = '#393939', -- selected text in nvimtree and colorcolumn (gray)
+    base02 = '#515151', -- selected text in visual mode (gray)
+    base03 = '#999999', -- comments (gray60)
+    base04 = '#b4b7b4', -- line numbers (almost white)
+    base05 = '#cccccc', -- plain text (gray80)
+    base06 = '#e0e0e0', -- ??? (gray88, almost white)
+    base07 = '#ffffff', -- ??? (white)
+    base08 = '#f2777a', -- root var name, for example 'vim' in 'set.lua' (rose red)
+    base09 = '#f99157', -- constant values ->false/true<-, in rust '->Some;self.<-' (orange)
+    base0A = '#ffcc66', -- in rust '->&mut<- self' (yellow)
+    base0B = '#99cc99', -- text constants (green)
+    base0C = '#66cccc', -- rust doc '->/// text<-' (cyan)
+    base0D = '#6699cc', -- '->require<-' in this file (sky blue)
+    base0E = '#cc99cc', -- keywords, in rust '->pub fn<-' (pink)
+    base0F = '#a3685a' -- '->,<-' in this file (brown)
 })
 -- ==============================
 -- ==============================
