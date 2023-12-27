@@ -23,13 +23,13 @@ export ZSH=/Users/$USER_NAME/.oh-my-zsh
 ZSH_THEME=""
 plugins=(git colored-man pip python brew osx zsh-syntax-highlighting zsh-autosuggestions)
 
-BASE16_SHELL="$HOME/.config/base16-shell/"
-[ -n "$PS1" ] && \
-[ -s "$BASE16_SHELL/profile_helper.sh" ] && \
-     eval "$("$BASE16_SHELL/profile_helper.sh")"
+# BASE16_SHELL="$HOME/.config/base16-shell/"
+# [ -n "$PS1" ] && \
+# [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
+#      eval "$("$BASE16_SHELL/profile_helper.sh")"
 
-# SET THEME
-base16_tomorrow-night-eighties
+# # SET THEME
+# base16_tomorrow-night-eighties
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"

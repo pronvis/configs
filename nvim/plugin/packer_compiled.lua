@@ -154,6 +154,11 @@ _G.packer_plugins = {
     path = "/Users/pronvis/.local/share/nvim/site/pack/packer/start/neodev.nvim",
     url = "https://github.com/folke/neodev.nvim"
   },
+  ["nord-vim"] = {
+    loaded = true,
+    path = "/Users/pronvis/.local/share/nvim/site/pack/packer/start/nord-vim",
+    url = "https://github.com/arcticicestudio/nord-vim"
+  },
   ["nvim-base16"] = {
     loaded = true,
     path = "/Users/pronvis/.local/share/nvim/site/pack/packer/start/nvim-base16",

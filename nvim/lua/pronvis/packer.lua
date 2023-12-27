@@ -91,5 +91,7 @@ return require('packer').startup(function(use)
     -- highlight arguments
     use { 'm-demare/hlargs.nvim' }
 
+    -- color themes
     use { 'tanvirtin/monokai.nvim' }
+    use { 'arcticicestudio/nord-vim' }
 end)
