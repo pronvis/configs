@@ -54,3 +54,11 @@ vim.opt.listchars='nbsp:¬,extends:»,precedes:«,trail:•'
 -- the same as connsole: git log -p --all -S 'search string'
 -- for regular expression change to: git log -p --all -G 'match regular expression'
 vim.api.nvim_create_user_command('Gsearch', 'G log -p --all -S <args>', {bang = true, nargs = '*' })
+
+-- This function will show what color groups are being applied.
+vim.api.nvim_create_user_command('GetColors', function()
+  if not vim.fn.exists("*synstack") then
+    return
+  end
+  vim.print(vim.fn.map(vim.fn.synstack(vim.fn.line('.'), vim.fn.col('.')), 'synIDattr(v:val, "name")'))
+end, {})

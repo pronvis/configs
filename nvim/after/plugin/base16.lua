@@ -27,3 +27,4 @@ require('base16-colorscheme').setup({
 -- ==============================
 -- ==============================
 -- ==============================
+-- execute: `:so $VIMRUNTIME/syntax/hitest.vim` to find all groups currently active
