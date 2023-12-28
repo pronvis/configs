@@ -45,4 +45,6 @@ if is_set_theme_file_readable then
   cmd("source " .. set_theme_path)
 end
 
-vim.cmd[[hi CmpItemAbbr guifg=fg guibg=bg]]
+-- both are the same
+-- vim.cmd[[hi CmpItemAbbr guifg=fg guibg=bg]]
+vim.api.nvim_set_hl(0, 'CmpItemAbbr', { bg = "NONE" })
