@@ -72,7 +72,10 @@ local luasnip = require('luasnip')
 
 cmp.setup {
   window = {
-      completion = cmp.config.window.bordered(),
+      completion = {
+           border = 'rounded',
+           winhighlight = 'CursorLine:PmenuSel'
+      },
       documentation = cmp.config.window.bordered(),
   },
   snippet = {

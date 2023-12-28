@@ -30,7 +30,10 @@ require('base16-colorscheme').with_config({
 -- ==============================
 -- ==============================
 -- ==============================
+--
 -- execute: `:so $VIMRUNTIME/syntax/hitest.vim` to find all groups currently active
+-- execute `:echo copy(g:)->filter('v:key =~# "^base16"')` to find all base16 config
+-- execute `:=vim.api.nvim_get_hl(0, {name = 'Pmenu'})` to get group colors
 
 local fn = vim.fn
 local cmd = vim.cmd
@@ -41,3 +44,5 @@ if is_set_theme_file_readable then
   cmd("let base16colorspace=256")
   cmd("source " .. set_theme_path)
 end
+
+vim.cmd[[hi CmpItemAbbr guifg=fg guibg=bg]]
