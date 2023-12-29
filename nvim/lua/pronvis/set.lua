@@ -39,6 +39,7 @@ vim.opt.langmap = "ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGH
 vim.opt.cmdheight = 2
 
 vim.opt.signcolumn = 'yes'
+vim.opt.ignorecase = true
 
 -- new panel right and below
 vim.opt.splitright = true
