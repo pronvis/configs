@@ -36,6 +36,7 @@ require('mason-lspconfig').setup()
 local servers = {
     html = { filetypes = { 'html' } },
     -- rust_analyzer = {}, -- set by 'rust-tools'
+    clangd = {},
 
     lua_ls = {
         Lua = {
