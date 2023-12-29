@@ -1,5 +1,3 @@
-vim.g.mapleader = ' '
-
 -- top and bottom gap
 vim.opt.scrolloff = 5
 

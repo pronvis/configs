@@ -1,32 +1,39 @@
--- This file can be loaded by calling `lua require('plugins')` from your init.vim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
 
--- Only required if you have packer configured as `opt`
-vim.cmd [[packadd packer.nvim]]
+vim.g.mapleader = ' ' -- Make sure to set `mapleader` before lazy so your mappings are correct
 
-return require('packer').startup(function(use)
-    -- Packer can manage itself
-    use('wbthomason/packer.nvim')
-
-    use {
+require('lazy').setup({
+    {
         'nvim-telescope/telescope.nvim', tag = '0.1.5',
         -- or                            , branch = '0.1.x',
-        requires = { { 'nvim-lua/plenary.nvim' } }
-    }
+        dependencies = { { 'nvim-lua/plenary.nvim' } }
+    },
 
-    use('nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' })
+    { 'nvim-treesitter/nvim-treesitter',  build = ':TSUpdate' },
 
-    use('mbbill/undotree')
+    'mbbill/undotree',
 
     -- git related
-    use('tpope/vim-fugitive')
-    use('airblade/vim-gitgutter')
-    use('rhysd/git-messenger.vim')
+    'tpope/vim-fugitive',
+    'airblade/vim-gitgutter',
+    'rhysd/git-messenger.vim',
 
     -- Language Server Protocol
-    use {
+    {
         'VonHeikemen/lsp-zero.nvim',
         branch = 'v3.x',
-        requires = {
+        dependencies = {
             -- managing LSP servers from neovim
             { 'williamboman/mason.nvim' },
             { 'williamboman/mason-lspconfig.nvim' },
@@ -47,51 +54,51 @@ return require('packer').startup(function(use)
             -- full signature help, docs and completion for the nvim lua API
             { 'folke/neodev.nvim' },
         }
-    }
+    },
 
-    use('tpope/vim-commentary')
-    use('tpope/vim-surround')
-    use('tpope/vim-obsession')
+    'tpope/vim-commentary',
+    'tpope/vim-surround',
+    'tpope/vim-obsession',
 
     -- tmux related
-    use('christoomey/vim-tmux-navigator')
-    use('RyanMillerC/better-vim-tmux-resizer')
+    'christoomey/vim-tmux-navigator',
+    'RyanMillerC/better-vim-tmux-resizer',
 
-    use('ciaranm/securemodelines')
+    'ciaranm/securemodelines',
 
-    use('nvim-lualine/lualine.nvim')
+    'nvim-lualine/lualine.nvim',
 
-    use {
+    {
         'andymass/vim-matchup',
-        setup = function()
+        init = function()
             -- may set any options here
             vim.g.matchup_matchparen_offscreen = { method = "popup" }
         end
-    }
-    use('airblade/vim-rooter')
-    use('mtdl9/vim-log-highlighting')
-    use('jiangmiao/auto-pairs')
+    },
+    'airblade/vim-rooter',
+    'mtdl9/vim-log-highlighting',
+    'jiangmiao/auto-pairs',
 
-    use('plasticboy/vim-markdown')
+    'plasticboy/vim-markdown',
 
     -- file tree
-    use('nvim-tree/nvim-tree.lua')
-    use('nvim-tree/nvim-web-devicons')
+    'nvim-tree/nvim-tree.lua',
+    'nvim-tree/nvim-web-devicons',
 
-    use('HiPhish/rainbow-delimiters.nvim')
+    'HiPhish/rainbow-delimiters.nvim',
 
     -- plugin for popup windows
-    use {'stevearc/dressing.nvim'}
+    'stevearc/dressing.nvim',
 
     -- automatically highlighting other uses of the word under the cursor
-    use { 'RRethy/vim-illuminate' }
+    'RRethy/vim-illuminate',
 
     -- highlight arguments
-    use { 'm-demare/hlargs.nvim' }
+    'm-demare/hlargs.nvim',
 
     -- color themes
     -- use { 'tanvirtin/monokai.nvim' }
     -- use { 'arcticicestudio/nord-vim' }
-    use('RRethy/nvim-base16')
+    'RRethy/nvim-base16',
 
-end)
+})

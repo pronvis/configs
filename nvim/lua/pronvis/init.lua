@@ -1,4 +1,4 @@
-require("pronvis.packer")
+require("pronvis.lazyvim")
 require("pronvis.functions")
 require("pronvis.autocmd")
 require("pronvis.set")
