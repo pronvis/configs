@@ -9,6 +9,8 @@ lsp_zero.on_attach(function(client, bufnr)
         vim.keymap.set('n', keys, func, { buffer = bufnr, remap = false, desc = desc })
     end
 
+    require("lsp-format").on_attach(client, bufnr)
+
     nmap('<F6>', vim.lsp.buf.rename, 'Rename')
     nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
@@ -32,7 +34,7 @@ require('mason').setup()
 require('mason-lspconfig').setup()
 
 local servers = {
-    html = { filetypes = { 'html'} },
+    html = { filetypes = { 'html' } },
     -- rust_analyzer = {}, -- set by 'rust-tools'
 
     lua_ls = {
@@ -52,17 +54,17 @@ capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 -- Ensure the servers above are installed
 local mason_lspconfig = require('mason-lspconfig')
 mason_lspconfig.setup {
-  ensure_installed = vim.tbl_keys(servers),
+    ensure_installed = vim.tbl_keys(servers),
 }
 
 mason_lspconfig.setup_handlers {
-  function(server_name)
-    require('lspconfig')[server_name].setup {
-      capabilities = capabilities,
-      settings = servers[server_name],
-      filetypes = (servers[server_name] or {}).filetypes,
-    }
-  end,
+    function(server_name)
+        require('lspconfig')[server_name].setup {
+            capabilities = capabilities,
+            settings = servers[server_name],
+            filetypes = (servers[server_name] or {}).filetypes,
+        }
+    end,
 }
 
 -- [[ Configure nvim-cmp ]]
@@ -71,52 +73,52 @@ local cmp = require('cmp')
 local luasnip = require('luasnip')
 
 cmp.setup {
-  window = {
-      completion = {
-           border = 'rounded',
-           winhighlight = 'CursorLine:PmenuSel'
-      },
-      documentation = cmp.config.window.bordered(),
-  },
-  snippet = {
-    expand = function(args)
-      luasnip.lsp_expand(args.body)
-    end,
-  },
-  completion = {
-    completeopt = 'menu,menuone,noinsert',
-  },
-  mapping = cmp.mapping.preset.insert {
-    ['<C-x><C-o>'] = cmp.mapping.complete {}, -- doesnt work for some reason :(
-    ['<CR>'] = cmp.mapping.confirm {
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
+    window = {
+        completion = {
+            border = 'rounded',
+            winhighlight = 'CursorLine:PmenuSel'
+        },
+        documentation = cmp.config.window.bordered(),
     },
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_locally_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.locally_jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-  },
-  sources = {
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
-    { name = 'path' },
-    { name = 'nvim_lua' },
-  },
+    snippet = {
+        expand = function(args)
+            luasnip.lsp_expand(args.body)
+        end,
+    },
+    completion = {
+        completeopt = 'menu,menuone,noinsert',
+    },
+    mapping = cmp.mapping.preset.insert {
+        ['<C-x><C-o>'] = cmp.mapping.complete {}, -- doesnt work for some reason :(
+        ['<CR>'] = cmp.mapping.confirm {
+            behavior = cmp.ConfirmBehavior.Replace,
+            select = true,
+        },
+        ['<Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+                cmp.select_next_item()
+            elseif luasnip.expand_or_locally_jumpable() then
+                luasnip.expand_or_jump()
+            else
+                fallback()
+            end
+        end, { 'i', 's' }),
+        ['<S-Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+                cmp.select_prev_item()
+            elseif luasnip.locally_jumpable(-1) then
+                luasnip.jump(-1)
+            else
+                fallback()
+            end
+        end, { 'i', 's' }),
+    },
+    sources = {
+        { name = 'nvim_lsp' },
+        { name = 'luasnip' },
+        { name = 'path' },
+        { name = 'nvim_lua' },
+    },
 }
 
 -- rust-tools plugin automatically sets up nvim-lspconfig for rust_analyzer for you, so don't do that manually, as it causes conflicts.
@@ -127,5 +129,5 @@ require('neodev').setup()
 
 -- Hide all semantic highlights
 for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
- vim.api.nvim_set_hl(0, group, {})
+    vim.api.nvim_set_hl(0, group, {})
 end
