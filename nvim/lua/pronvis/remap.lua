@@ -1,125 +1,139 @@
+local map = function(mode, keys, func, desc, opt)
+    if opt ~= nil and desc ~= nil then
+        opt['desc'] = desc;
+    elseif opt == nil and desc ~= nil then
+        opt = { desc = desc }
+    end
+    vim.keymap.set(mode, keys, func, opt)
+end
+
+------------------------------------------------
+-- ':Telescope keymaps' to search on all keymaps
+------------------------------------------------
+
 -- quick save
-vim.keymap.set('n', '<leader>w', vim.cmd.write, { remap = true })
+map('n', '<leader>w', vim.cmd.write, 'Save file', { remap = true })
 
 -- ; as :
-vim.keymap.set('n', ';', ':')
-vim.keymap.set('v', ';', ':')
+map('n', ';', ':')
+map('v', ';', ':')
 
 -- disable useless and annoying keys
-vim.keymap.set('', 'Q', '')
+map('', 'Q', '')
 
 -- quickly insert an empy line without entering insert mode
-vim.keymap.set('n', '<leader>o', 'o<Esc>')
-vim.keymap.set('n', '<leader>O', 'O<Esc>')
+map('n', '<leader>o', 'o<Esc>', 'Insert new line below')
+map('n', '<leader>O', 'O<Esc>', 'Insert new line above')
 
--- toggle between buffers
-vim.keymap.set('n', '<leader><leader>', '<c-^>')
+map('n', '<leader><leader>', '<c-^>', 'Toggle between buffers')
 
--- toggle between buffers
-vim.keymap.set('n', '<leader>,', ':set invlist<cr>')
+map('n', '<leader>,', ':set invlist<cr>', 'Show invisible characters')
 
--- keymap for replacing up to next _
-vim.keymap.set('', '<leader>m', 'ct_')
+map('', '<leader>m', 'ct_', 'Replace up to next \'_\'')
 
--- Ctrl+s to stop searching
-vim.keymap.set('v', '<C-s>', ':nohlsearch<CR>')
-vim.keymap.set('n', '<C-s>', ':nohlsearch<CR>')
+map('v', '<C-s>', ':nohlsearch<CR>', 'Stop searching')
+map('n', '<C-s>', ':nohlsearch<CR>', 'Stop searching')
 
 -- Suspend with Ctrl+f, wake up with 'fg' command
-vim.keymap.set('i', '<C-f>', ':sus<CR>')
-vim.keymap.set('v', '<C-f>', ':sus<CR>')
-vim.keymap.set('n', '<C-f>', ':sus<CR>')
+map('i', '<C-f>', ':sus<CR>', 'Suspend vim')
+map('v', '<C-f>', ':sus<CR>', 'Suspend vim')
+map('n', '<C-f>', ':sus<CR>', 'Suspend vim')
 
 -- Jump to start and end of line using home row keys
-vim.keymap.set('', 'H', '^', { remap = true })
-vim.keymap.set('', 'L', '$', { remap = true })
+map('', 'H', '^', 'Jump to start of line', { remap = true })
+map('', 'L', '$', 'Jump to end of line', { remap = true })
 
 -- increment/Decrement the next number on this line
-vim.keymap.set('n', '+', '<C-a>')
-vim.keymap.set('n', '-', '<C-x>')
+map('n', '+', '<C-a>', 'Increment next number on this line')
+map('n', '-', '<C-x>', 'Decrement next number on this line')
 
 -- move highlighted text
-vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
-vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+map('v', 'J', ":m '>+1<CR>gv=gv", 'Move highlighted text below')
+map('v', 'K', ":m '<-2<CR>gv=gv", 'Move highlighted text above')
 
 -- cursor stay in place when 'J'
-vim.keymap.set('n', 'J', "mzJ`z")
+map('n', 'J', "mzJ`z", 'Join with next line')
 
 -- cursor at center on <C-d> / <C-u>
-vim.keymap.set('n', '<C-d>', '<C-d>zz')
-vim.keymap.set('n', '<C-u>', '<C-u>zz')
+map('n', '<C-d>', '<C-d>zz', 'Jump to half of page below')
+map('n', '<C-u>', '<C-u>zz', 'Jump to half of page above')
 
 -- search result at center
-vim.keymap.set('n', 'n', 'nzz', { silent = true })
-vim.keymap.set('n', 'N', 'Nzz', { silent = true })
-vim.keymap.set('n', '*', '*zz', { silent = true })
-vim.keymap.set('n', '#', '#zz', { silent = true })
-vim.keymap.set('n', 'g*', 'g*zz', { silent = true })
+map('n', 'n', 'nzz', 'Jump to next search result', { silent = true })
+map('n', 'N', 'Nzz', 'Jump to prev search result', { silent = true })
+map('n', '#', '#zz', 'Search for current word and jump to prev', { silent = true })
+map('n', 'g*', 'g*zz', 'Search for current word and jump to next', { silent = true })
 
 -- <leader>p for paste without yanking
-vim.keymap.set('v', '<leader>p', '\"_dp')
+map('v', '<leader>p', '\"_dp', 'Paste without yanking')
 
-vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
+map("n", "<leader>f", vim.lsp.buf.format, 'Format file')
 
--- <leader>s replace text on curent world
-vim.keymap.set("n", "<leader>r", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+-- <leader>s replace text on curent word
+map("n", "<leader>r", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], 'Replace text on curent word')
 
-vim.keymap.set("n", "<leader>;", ':Telescope buffers<CR>')
+map("n", "<leader>;", ':Telescope buffers<CR>', 'Telesope buffers')
 
 -- show git commit info
-vim.keymap.set("n", "<F3>", ':GitMessenger<CR>')
+map("n", "<F3>", ':GitMessenger<CR>', 'Show git commit info for current line')
 -- git show hunk diff
-vim.keymap.set("n", "<leader>hj", ':GitGutterPreviewHunk<CR>')
+map("n", "<leader>hj", ':GitGutterPreviewHunk<CR>', 'Show git differece for current hunk')
+
+map("n", "<leader>gp", ':GitGutterPrevHunk<CR>', 'Jump to previous git hunk')
+map("n", "<leader>gn", ':GitGutterNextHunk<CR>', 'Jump to next git hunk')
 
 -- file tree
-vim.keymap.set('n', '<F2>', (require "nvim-tree.api").tree.toggle)
+map('n', '<F2>', (require "nvim-tree.api").tree.toggle, 'Show file tree')
 
 -- snippets
-vim.keymap.set('n', '<leader>es', function() require("luasnip.loaders").edit_snippet_files() end, { silent = true })
-vim.keymap.set('i', '<A-s>', (require "luasnip").expand, { silent = true })
-vim.keymap.set({ "i", "s" }, "<A-d>", function() (require "luasnip").jump(1) end, { silent = true })
-vim.keymap.set({ "i", "s" }, "<A-f>", function() (require "luasnip").jump(-1) end, { silent = true })
+map('n', '<leader>es', function() require("luasnip.loaders").edit_snippet_files() end, 'Edit Snippet Files',
+    { silent = true })
+
+-- dont need that anymore, cause I have same behavior with <Tab>, which is configured in 'lsp.lua'
+-- map('i', '<A-s>', (require "luasnip").expand, 'Expand snippet' { silent = true })
+-- map({ "i", "s" }, "<A-d>", function() (require "luasnip").jump(1) end, 'Jump to next snippet edit position', { silent = true })
+-- map({ "i", "s" }, "<A-f>", function() (require "luasnip").jump(-1) end, 'Jump to prev snippet edit position', { silent = true })
 
 -- very magic by defaul
-vim.keymap.set('n', '?', '?\\v')
-vim.keymap.set('n', '/', '/\\v')
+map('n', '?', '?\\v', 'Search prev')
+map('n', '/', '/\\v', 'Uearch next')
 
 -- exit terminal mode
-vim.keymap.set('t', '<F1>', '<C-\\><C-n>')
+map('t', '<F1>', '<C-\\><C-n>', 'Exit terminal mode')
 
 -- to search for visually selected text
-vim.keymap.set('v', '//', "y/\\V<C-R>=escape(@\",'/\\')<CR><CR>")
+map('v', '//', "y/\\V<C-R>=escape(@\",'/\\')<CR><CR>", 'Search for visually selected text')
 
-vim.keymap.set('n', '<leader>i', ':lua IndentEntireFile()<CR>')
+map('n', '<leader>i', ':lua IndentEntireFile()<CR>', 'Indent entire file')
 
 -- open new file adjacent to current file
-vim.keymap.set('n', '<leader>e', ':e <C-R>=expand("%:p:h") . "/" <CR>')
+map('n', '<leader>e', ':e <C-R>=expand("%:p:h") . "/" <CR>', 'Open new file adjacent to current file')
 -- copy full file name to clipboard
-vim.keymap.set('n', '<leader>P', ':let @+ = expand("%:p")<CR>')
+map('n', '<leader>P', ':let @+ = expand("%:p")<CR>', 'Copy full file name to clipboard')
 
 -- do Highlighting a search term without moving the cursor https://superuser.com/questions/255023/highlighting-a-search-term-without-moving-the-cursor
-vim.keymap.set('n', '*', ':let @/ = \'\\<\'.expand(\'<cword>\').\'\\>\'|set hlsearch<C-M>')
+map('n', '*', ':let @/ = \'\\<\'.expand(\'<cword>\').\'\\>\'|set hlsearch<C-M>', 'Search for current word')
 
 -- =============================================================================
 -- This allows you to visually select a section and then hit @ to run a macro
 -- on all lines. Only lines which match will change. Without this script the
 -- macro would stop at lines which don’t match the macro.
 -- =============================================================================
-vim.keymap.set('x', '@', ':lua ExecuteMacroOverVisualRange()<CR>')
+map('x', '@', ':lua ExecuteMacroOverVisualRange()<CR>',
+    'Visually select a section and then hit @ to run a macro on all lines')
 
 -- =========================
 --   command line mappings
 -- =========================
 
-vim.keymap.set('c', '<C-a>', '<C-b>') -- back to the beginning of the line
-vim.keymap.set('c', '<A-Left>', '<C-Left>') -- move back a word
-vim.keymap.set('c', '<A-Right>', '<C-Right>') -- move forward a word
-vim.keymap.set('c', '<A-BS>', '<C-w>') -- remove one word before the cursor
+map('c', '<C-a>', '<C-b>', 'Back to the beginning of the line')
+map('c', '<A-Left>', '<C-Left>', 'Move back a word')
+map('c', '<A-Right>', '<C-Right>', 'Move forward a word')
+map('c', '<A-BS>', '<C-w>', 'Remove one word before the cursor')
 
 -- very magic by defaul
-vim.keymap.set('c', '%s/', '%sm/')
+map('c', '%s/', '%sm/')
 
 -- =========================
 -- =========================
 -- =========================
-
