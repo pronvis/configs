@@ -4,6 +4,17 @@
 require('base16-colorscheme').with_config({
     telescope = false,
 })
+
+-- Colors
+-- personal voting:
+-- 1st: base16_tomorrow-night-eighties
+-- 2nd: base16_gruvbox-dark-soft
+-- 3rd: base16_monokai
+-- 4th: base16_woodland
+-- 5th: base16_3024
+-- vim.cmd('colorscheme base16-tomorrow-night-eighties')
+-- vim.cmd('colorscheme monokai')
+
 --------------------------------------------------------
 ------ FOR SOME REASON I DONT NEED THAT ANYMORE!!! -----
 --------------------------------------------------------
