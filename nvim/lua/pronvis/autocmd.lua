@@ -1,7 +1,7 @@
 -- prevent accidental writes to buffers that shouldn't be edited
 local readonly_group = vim.api.nvim_create_augroup("readonly_group ", { clear = true })
-vim.api.nvim_create_autocmd({"BufRead"}, {
-    pattern = {"*.orig", "*.pacnew"},
+vim.api.nvim_create_autocmd({ "BufRead" }, {
+    pattern = { "*.orig", "*.pacnew" },
     group = readonly_group,
     callback = function()
         vim.opt.readonly = true
@@ -10,18 +10,18 @@ vim.api.nvim_create_autocmd({"BufRead"}, {
 
 -- follow Rust code style rules
 local rust_spacetabs = vim.api.nvim_create_augroup("rust_spacetabs", { clear = true })
-vim.api.nvim_create_autocmd({"Filetype"}, {
+vim.api.nvim_create_autocmd({ "Filetype" }, {
     pattern = "rust",
     group = rust_spacetabs,
     callback = function()
         vim.cmd(':source ~/.config/nvim/scripts/rust_spacetab.vim')
-        vim.opt.colorcolumn=''
+        vim.opt.colorcolumn = ''
     end
 })
 
 -- help filetype detection
 local gnuplot_syntax = vim.api.nvim_create_augroup("gnuplot_syntax", { clear = true })
-vim.api.nvim_create_autocmd({"BufRead"}, {
+vim.api.nvim_create_autocmd({ "BufRead" }, {
     pattern = "*.plot",
     group = gnuplot_syntax,
     callback = function()
@@ -29,7 +29,7 @@ vim.api.nvim_create_autocmd({"BufRead"}, {
     end
 })
 local markdown_syntax = vim.api.nvim_create_augroup("markdown_syntax", { clear = true })
-vim.api.nvim_create_autocmd({"BufRead"}, {
+vim.api.nvim_create_autocmd({ "BufRead" }, {
     pattern = "*.md",
     group = markdown_syntax,
     callback = function()
@@ -39,8 +39,8 @@ vim.api.nvim_create_autocmd({"BufRead"}, {
 
 -- add gcode syntax
 local gcode_group = vim.api.nvim_create_augroup("gcode_group", { clear = true })
-vim.api.nvim_create_autocmd({"BufRead", "BufNewFile"}, {
-    pattern = {"*.gcode", "*.g", "*.nc"},
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+    pattern = { "*.gcode", "*.g", "*.nc" },
     group = gcode_group,
     callback = function()
         vim.opt.filetype = 'gcode'
@@ -49,7 +49,7 @@ vim.api.nvim_create_autocmd({"BufRead", "BufNewFile"}, {
 
 local closetag_group = vim.api.nvim_create_augroup("closetag_group", { clear = true })
 vim.api.nvim_create_autocmd("Filetype", {
-    pattern = {"html","xml","xsl","php"},
+    pattern = { "html", "xml", "xsl", "php" },
     group = closetag_group,
     callback = function()
         vim.cmd(':source ~/.config/nvim/scripts/closetag.vim')
@@ -71,8 +71,15 @@ local highlight_yank = vim.api.nvim_create_augroup("highlight_yank", { clear = t
 vim.api.nvim_create_autocmd("TextYankPost", {
     pattern = "*",
     group = highlight_yank,
-    callback = function ()
-	    vim.highlight.on_yank{silent = true, higroup = 'IncSearch', timeout = 300}
+    callback = function()
+        vim.highlight.on_yank { silent = true, higroup = 'IncSearch', timeout = 300 }
     end
 })
 
+-- listen lsp-progress event and refresh lualine
+vim.api.nvim_create_augroup("lualine_augroup", { clear = true })
+vim.api.nvim_create_autocmd("User", {
+    group = "lualine_augroup",
+    pattern = "LspProgressStatusUpdated",
+    callback = require("lualine").refresh,
+})

@@ -18,7 +18,7 @@ require('lualine').setup {
                 shorting_target = 100
             },
             'diff', 'diagnostics' },
-        lualine_c = { 'branch' },
+        lualine_c = { 'branch', require('lsp-progress').progress },
         lualine_x = { ObsStatus, 'encoding', 'fileformat', 'filetype' },
         lualine_y = { 'progress' },
         lualine_z = { 'location' }

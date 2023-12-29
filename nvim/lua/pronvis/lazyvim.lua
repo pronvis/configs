@@ -102,5 +102,13 @@ require('lazy').setup({
     -- use { 'arcticicestudio/nord-vim' }
     'RRethy/nvim-base16',
 
-    "lukas-reineke/lsp-format.nvim"
+    "lukas-reineke/lsp-format.nvim",
+    {
+        'linrongbin16/lsp-progress.nvim',
+        dependencies = { 'nvim-tree/nvim-web-devicons' },
+        config = function()
+            require('lsp-progress').setup()
+        end
+    }
+
 })
