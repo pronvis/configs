@@ -24,10 +24,6 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 ```
 - inside tmux hit `prefix + I` to install plugins from cfg file that you linked
 
-## Nvim
-- Install packer: `git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim`
-- `:PackerSync` in neovim
-
 #### Add special icons
 For `nvim-tree/nvim-web-devicons` to show icons you need to install patched font from: `https://www.nerdfonts.com/`
 I place it here: `~/Yandex.Disk.localized/fonts/JetBrainsMono_hacked.zip`

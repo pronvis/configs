@@ -101,4 +101,5 @@ require('lazy').setup({
     -- use { 'arcticicestudio/nord-vim' }
     'RRethy/nvim-base16',
 
+{ "miikanissi/modus-themes.nvim", priority = 1000 },
 })
