@@ -69,7 +69,7 @@ map('v', '<leader>p', '\"_dp', 'Paste without yanking')
 
 map("n", "<leader>f", vim.lsp.buf.format, 'Format file')
 
--- <leader>s replace text on curent word
+-- <leader>r replace text on curent word
 map("n", "<leader>r", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], 'Replace text on curent word')
 
 map("n", "<leader>;", ':Telescope buffers<CR>', 'Telesope buffers')
