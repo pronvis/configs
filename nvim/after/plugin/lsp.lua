@@ -90,7 +90,7 @@ cmp.setup {
         completeopt = 'menu,menuone,noinsert',
     },
     mapping = cmp.mapping.preset.insert {
-        ['<C-x><C-o>'] = cmp.mapping.complete {}, -- doesnt work for some reason :(
+        ['<C-x><C-o>'] = cmp.mapping.complete {},
         ['<CR>'] = cmp.mapping.confirm {
             behavior = cmp.ConfirmBehavior.Replace,
             select = true,

@@ -29,7 +29,7 @@ BASE16_SHELL_PATH="$HOME/.config/base16-shell"
     source "$BASE16_SHELL_PATH/profile_helper.sh"
 
 # # SET THEME
-base16_blueforest
+base16_blueish
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -79,9 +79,7 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="/usr/local/opt/nss/bin:$PATH"
 export PATH="/usr/local/opt/llvm/bin:$PATH"
 export PATH="/usr/local/php5/bin:$PATH"
-export PATH="$HOME/.fluence/bin:$PATH"
 export PATH="/opt/local/bin:$PATH"
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export CARGO_TARGET_DIR="$HOME/rust/rust_build_artifacts"
 export GOPATH="$HOME/go"
 export PATH="$GOPATH/bin:$PATH"

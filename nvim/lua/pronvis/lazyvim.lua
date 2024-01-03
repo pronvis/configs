@@ -109,6 +109,8 @@ require('lazy').setup({
         config = function()
             require('lsp-progress').setup()
         end
-    }
+    },
+
+    'github/copilot.vim'
 
 })
