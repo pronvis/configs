@@ -674,6 +674,7 @@ key_bindings:
 - { key: D,        mods: Alt,     chars: "\ed"                       }
 - { key: F,        mods: Alt,     chars: "\ef"                       }
 - { key: S,        mods: Alt,     chars: "\es"                       }
+- { key: B,        mods: Alt,     chars: "\eb"                       }
 
   #- { key: Paste,                                       action: Paste          }
   #- { key: Copy,                                        action: Copy           }

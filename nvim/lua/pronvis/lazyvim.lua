@@ -111,6 +111,6 @@ require('lazy').setup({
         end
     },
 
-    'github/copilot.vim'
+    'zbirenbaum/copilot.lua'
 
 })
