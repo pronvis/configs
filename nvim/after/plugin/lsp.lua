@@ -31,11 +31,16 @@ lsp_zero.on_attach(function(client, bufnr)
 end)
 
 require('mason').setup()
-require('mason-lspconfig').setup()
+require('mason-lspconfig').setup({
+    handlers = {
+        lsp_zero.default_setup,
+        rust_analyzer = lsp_zero.noop
+    }
+})
 
 local servers = {
     html = { filetypes = { 'html' } },
-    -- rust_analyzer = {}, -- set by 'rust-tools'
+    -- rust_analyzer = {}, -- 'rustaceanvim' have its own rust-analyzer config
     clangd = {},
 
     lua_ls = {
@@ -66,6 +71,12 @@ mason_lspconfig.setup_handlers {
             filetypes = (servers[server_name] or {}).filetypes,
         }
     end,
+}
+
+vim.g.rustaceanvim = {
+    server = {
+        capabilities = lsp_zero.get_capabilities()
+    },
 }
 
 -- [[ Configure nvim-cmp ]]
@@ -121,10 +132,6 @@ cmp.setup {
         { name = 'nvim_lua' },
     },
 }
-
--- rust-tools plugin automatically sets up nvim-lspconfig for rust_analyzer for you, so don't do that manually, as it causes conflicts.
-local rust_tools = require('rust-tools')
-rust_tools.setup()
 
 require('neodev').setup()
 

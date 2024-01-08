@@ -15,6 +15,8 @@ require('base16-colorscheme').with_config({
 -- 6th: base16_ayu-dark
 -- 7th: base16_blueforest
 -- 8th: base16_blueish
+-- 9th: base16_chalk
+-- 10th: base16_catppuccin
 -- vim.cmd('colorscheme base16-tomorrow-night-eighties')
 -- vim.cmd('colorscheme monokai')
 

@@ -50,11 +50,15 @@ require('lazy').setup({
             'saadparwaiz1/cmp_luasnip',
             -- Adds a number of user-friendly snippets
             'rafamadriz/friendly-snippets',
-            -- Rust
-            { 'simrat39/rust-tools.nvim' },
             -- full signature help, docs and completion for the nvim lua API
             { 'folke/neodev.nvim' },
         }
+    },
+    -- rust
+    {
+        'mrcjkb/rustaceanvim',
+        version = '^3', -- Recommended
+        ft = { 'rust' },
     },
 
     'tpope/vim-commentary',
