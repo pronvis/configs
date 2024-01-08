@@ -29,7 +29,7 @@ BASE16_SHELL_PATH="$HOME/.config/base16-shell"
     source "$BASE16_SHELL_PATH/profile_helper.sh"
 
 # # SET THEME
-base16_blueish
+base16_tomorrow-night-eighties
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
