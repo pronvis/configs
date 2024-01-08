@@ -31,12 +31,7 @@ lsp_zero.on_attach(function(client, bufnr)
 end)
 
 require('mason').setup()
-require('mason-lspconfig').setup({
-    handlers = {
-        lsp_zero.default_setup,
-        rust_analyzer = lsp_zero.noop
-    }
-})
+require('mason-lspconfig').setup()
 
 local servers = {
     html = { filetypes = { 'html' } },
@@ -73,8 +68,16 @@ mason_lspconfig.setup_handlers {
     end,
 }
 
+require("lspconfig").clangd.setup {
+    cmd = {
+        "clangd",
+        "--offset-encoding=utf-16",
+    },
+}
+
 vim.g.rustaceanvim = {
     server = {
+        cmd = { "/usr/local/bin/rust-analyzer-mac" },
         capabilities = lsp_zero.get_capabilities()
     },
 }
