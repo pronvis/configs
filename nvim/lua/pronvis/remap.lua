@@ -15,8 +15,8 @@ end
 map('n', '<leader>w', vim.cmd.write, 'Save file', { remap = true })
 
 -- ; as :
-map('n', ';', ':')
-map('v', ';', ':')
+-- map('n', ';', ':')
+-- map('v', ';', ':')
 
 -- disable useless and annoying keys
 map('', 'Q', '')
@@ -57,6 +57,10 @@ map('n', 'J', "mzJ`z", 'Join with next line')
 -- cursor at center on <C-d> / <C-u>
 map('n', '<C-d>', '<C-d>zz', 'Jump to half of page below')
 map('n', '<C-u>', '<C-u>zz', 'Jump to half of page above')
+
+-- cursor at center on <C-o> / <C-i>
+map('n', '<C-o>', '<C-o>zz', 'Jump to prev cursor location')
+map('n', '<C-i>', '<C-i>zz', 'Jump to next cursor location')
 
 -- search result at center
 map('n', 'n', 'nzz', 'Jump to next search result', { silent = true })
