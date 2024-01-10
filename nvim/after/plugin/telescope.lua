@@ -12,7 +12,7 @@ require('telescope').setup {
         },
 
         file_ignore_patterns = {
-            "node_modules", "build", "dist", "yarn.lock", ".idea", ".git", ".vscode", "package-lock.json"
+            "^build/", "^dist/", "yarn.lock", "^.idea/", "^.git/", "^.vscode/", "package-lock.json"
         },
     },
 
@@ -25,7 +25,7 @@ require('telescope').setup {
                 "--files",
                 "--hidden",
             },
-        },
+        }
     },
 }
 

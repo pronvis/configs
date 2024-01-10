@@ -37,7 +37,7 @@ local servers = {
     html = { filetypes = { 'html' } },
     -- rust_analyzer = {}, -- 'rustaceanvim' have its own rust-analyzer config
     clangd = {},
-
+    tsserver = {},
     lua_ls = {
         Lua = {
             workspace = { checkThirdParty = false },
