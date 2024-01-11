@@ -188,9 +188,6 @@ function setjdk() {
 # setjdk "1.7.0_80"
  setjdk "1.8.0_192"
 
-### zsh-autosuggestions ###
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-
 local ret_status="%(?:%{$fg_bold[green]%}%~ ➜ :%{$fg_bold[red]%}%~ ➜ )"
 PROMPT='${ret_status}%{$reset_color%}$(git_prompt_info)'
 
