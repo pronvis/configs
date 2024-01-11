@@ -21,7 +21,7 @@ export ZSH=/Users/$USER_NAME/.oh-my-zsh
 # time that oh-my-zsh is loaded.
 # ZSH_THEME="robbyrussell"
 ZSH_THEME=""
-plugins=(git colored-man pip python brew osx zsh-syntax-highlighting zsh-autosuggestions base16-shell)
+plugins=(git colored-man-pages pip python brew macos zsh-syntax-highlighting zsh-autosuggestions)
 
 BASE16_SHELL_PATH="$HOME/.config/base16-shell"
 [ -n "$PS1" ] && \
