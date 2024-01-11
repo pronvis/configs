@@ -31,10 +31,10 @@ I place it here: `~/Yandex.Disk.localized/fonts/JetBrainsMono_hacked.zip`
 # Link Configs
 - `mkdir $HOME/.zsh_sessions`
 - `mkdir $HOME/.zsh_functions`
-- `mkdir $HOME/.vim/undodir`
+- `mkdir -p $HOME/.vim/undodir`
+- `mkdir -p $HOME/.config/nvim/scripts/`
 - `cd {this_repo_directory}`
 - `ln -s $PWD/tmux/tmux.conf ~/.tmux.conf`
-- `mkdir -p ~/.config/nvim/scripts/`
 - `ln -s $PWD/nvim ~/.config/nvim`
 - `ln -s $PWD/zsh/zshrc_conf.zshrc ~/.zshrc`
 - `ln -s $PWD/global_gitignore ~/.gitignore`
