@@ -115,6 +115,8 @@ require('lazy').setup({
         end
     },
 
-    'zbirenbaum/copilot.lua'
+    'zbirenbaum/copilot.lua',
+
+    'jjshoots/betterf.nvim'
 
 })

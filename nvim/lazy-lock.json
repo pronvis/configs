@@ -2,6 +2,7 @@
   "LuaSnip": { "branch": "master", "commit": "82108e7e31cc6fc223cc5df5cae6d89f70bb199f" },
   "auto-pairs": { "branch": "master", "commit": "39f06b873a8449af8ff6a3eee716d3da14d63a76" },
   "better-vim-tmux-resizer": { "branch": "master", "commit": "a791fe5b4433ac43a4dad921e94b7b5f88751048" },
+  "betterf.nvim": { "branch": "main", "commit": "1e8f2fd8f3c234c93a7207c2b4924b9bbdd5200b" },
   "cmp-nvim-lsp": { "branch": "main", "commit": "5af77f54de1b16c34b23cba810150689a3a90312" },
   "cmp-path": { "branch": "main", "commit": "91ff86cd9c29299a64f968ebb45846c485725f23" },
   "cmp_luasnip": { "branch": "master", "commit": "05a9ab28b53f71d1aece421ef32fee2cb857a843" },
