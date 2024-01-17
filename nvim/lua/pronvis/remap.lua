@@ -141,8 +141,12 @@ map('c', '<A-BS>', '<C-w>', 'Remove one word before the cursor')
 -- very magic by defaul
 map('c', '%s/', '%sm/')
 
-map({ 'n', 'o' }, 'f', [[:lua betterF(true)<CR>]], { noremap = true, silent = true })
-map({ 'n', 'o' }, 'F', [[:lua betterF(false)<CR>]], { noremap = true, silent = true })
+-- keymaps for betterF plugin
+-- change to:
+-- `map({ 'n', 'o' }, 'f', [[:lua betterF(true)<CR>]], { noremap = true, silent = true })`
+-- and it will work for `cf` & `cF` too.
+map('n', 'f', [[:lua betterF(true)<CR>]], { noremap = true, silent = true })
+map('n', 'F', [[:lua betterF(false)<CR>]], { noremap = true, silent = true })
 -- =========================
 -- =========================
 -- =========================
