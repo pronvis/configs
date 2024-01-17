@@ -117,6 +117,12 @@ require('lazy').setup({
 
     'zbirenbaum/copilot.lua',
 
-    'jjshoots/betterf.nvim'
+    'jjshoots/betterf.nvim',
+
+    {
+        "folke/todo-comments.nvim",
+        dependencies = { "nvim-lua/plenary.nvim" },
+        opts = {}
+    }
 
 })

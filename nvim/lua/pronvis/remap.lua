@@ -15,8 +15,8 @@ end
 map('n', '<leader>w', vim.cmd.write, 'Save file', { remap = true })
 
 -- ; as :
--- map('n', ';', ':')
--- map('v', ';', ':')
+map('n', ';', ':')
+map('v', ';', ':')
 
 -- disable useless and annoying keys
 map('', 'Q', '')
@@ -141,6 +141,8 @@ map('c', '<A-BS>', '<C-w>', 'Remove one word before the cursor')
 -- very magic by defaul
 map('c', '%s/', '%sm/')
 
+map({ 'n', 'o' }, 'f', [[:lua betterF(true)<CR>]], { noremap = true, silent = true })
+map({ 'n', 'o' }, 'F', [[:lua betterF(false)<CR>]], { noremap = true, silent = true })
 -- =========================
 -- =========================
 -- =========================
