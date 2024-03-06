@@ -41,7 +41,7 @@ I place it here: `~/Yandex.Disk.localized/fonts/JetBrainsMono_hacked.zip`
 - `ln -s $PWD/nvim ~/.config/nvim`
 - `ln -s $PWD/zsh/zshrc_conf.zshrc ~/.zshrc`
 - `ln -s $PWD/global_gitignore ~/.gitignore`
-- `ln -s $PWD/alacritty/alacritty.yml ~/.alacritty.yml`
+- `ln -s $PWD/alacritty/alacritty.toml ~/.alacritty.toml`
 - `use gitconfig from your 1TB storage` (private data)
 
 # GPG
@@ -51,6 +51,11 @@ I place it here: `~/Yandex.Disk.localized/fonts/JetBrainsMono_hacked.zip`
 
 Now `gcsm "commit message"` should work fine, test it with: `echo "test" | gpg --clearsign`
 
-# SSh
+# SSH
 
 Encrypted main key is located in "your 1TB storage". To decrypt it use: `gpg -d ${path_to_gpg_key} > ~/.ssh/id_rsa`
+
+# VPN
+
+- `brew install openvpn`
+- `sudo openvpn --config ${path_to_yandex_disk}/VPN/nexus.ovpn`
