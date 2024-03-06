@@ -10,6 +10,7 @@ First of all install those usefull tools:
 - `brew install rg`
 - `brew install go`
 - `brew install autojump`
+- `brew install fzf`
 - `cargo install proximity-sort`
 - `cargo install cargo-add`
 - `cargo install cargo-whatfeatures`
