@@ -50,3 +50,7 @@ I place it here: `~/Yandex.Disk.localized/fonts/JetBrainsMono_hacked.zip`
 2. `export GPG_TTY=$(tty)`
 
 Now `gcsm "commit message"` should work fine, test it with: `echo "test" | gpg --clearsign`
+
+# SSh
+
+Encrypted main key is located in "your 1TB storage". To decrypt it use: `gpg -d ${path_to_gpg_key} > ~/.ssh/id_rsa`
