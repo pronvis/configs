@@ -72,13 +72,10 @@ base16_tomorrow-night-eighties
 # User configuration
 
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-export PATH="$HOME/programs/liquibase:$PATH"
-export PATH="$HOME/programs/activator:$PATH"
 export PATH="$HOME/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="/usr/local/opt/nss/bin:$PATH"
 export PATH="/usr/local/opt/llvm/bin:$PATH"
-export PATH="/usr/local/php5/bin:$PATH"
 export PATH="/opt/local/bin:$PATH"
 export CARGO_TARGET_DIR="$HOME/rust/rust_build_artifacts"
 export GOPATH="$HOME/go"
