@@ -44,6 +44,16 @@ I place it here: `~/Yandex.Disk.localized/fonts/JetBrainsMono_hacked.zip`
 - `ln -s $PWD/alacritty/alacritty.toml ~/.alacritty.toml`
 - `use gitconfig from your 1TB storage` (private data)
 
+# NeoVim
+
+In Mason (`:Mason`) install:
+- marksman
+- clangd
+- lua-language-server
+- html-lsp
+- typescript-language-server
+- codelldb
+
 # GPG
 
 1. Import private key: `gpg --import ${path_to_priv_key}`
