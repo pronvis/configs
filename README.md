@@ -1,7 +1,9 @@
 # Installation steps
 First of all install those usefull tools:
+- install [brew](https://brew.sh/)
+- install [nvm](https://github.com/nvm-sh) and rust
+- `nvm install node`
 - `sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`
-- `rustup component add clippy`
 - `brew install tmux`
 - `brew install neovim`
 - `brew install fd`
@@ -12,10 +14,10 @@ First of all install those usefull tools:
 - `cargo install cargo-add`
 - `cargo install cargo-whatfeatures`
 - `cargo install --git https://github.com/davidpdrsn/cargo-docserver.git`
+- `rustup component add clippy`
 - `git clone https://github.com/tinted-theming/base16-shell.git $HOME/.config/base16-shell`
 - `git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions`
 - `git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting`
-- `pip install pynvim --upgrade`
 
 ## Tmux
 - install plugin manager:
@@ -40,3 +42,10 @@ I place it here: `~/Yandex.Disk.localized/fonts/JetBrainsMono_hacked.zip`
 - `ln -s $PWD/global_gitignore ~/.gitignore`
 - `ln -s $PWD/alacritty/alacritty.yml ~/.alacritty.yml`
 - `use gitconfig from your 1TB storage` (private data)
+
+# GPG
+
+1. Import private key: `gpg --import ${path_to_priv_key}`
+2. `export GPG_TTY=$(tty)`
+
+Now `gcsm "commit message"` should work fine, test it with: `echo "test" | gpg --clearsign`
