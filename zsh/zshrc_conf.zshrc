@@ -9,9 +9,6 @@ bindkey "^[[1;5D" backward-word
 bindkey "^[[H"    beginning-of-line
 bindkey "^[[F"    end-of-line
 
-# For autojump
-[[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
-
 # Path to your oh-my-zsh installation.
 export ZSH=/Users/$USER_NAME/.oh-my-zsh
 
@@ -94,6 +91,9 @@ export VK_LAYER_PATH=$VULKAN_SDK/etc/vulkan/explicit_layer.d
 source $ZSH/oh-my-zsh.sh
 
 fpath+=$HOME/.zsh_functions
+
+# For autojump
+[[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -228,3 +228,8 @@ export HISTFILE="$HOME/.zsh_sessions/history_$TMUX_SESSION_ID"
 setopt INC_APPEND_HISTORY
 # For new shells, initialize history with the history of the most recently used shell.
 if [ ! -e $HISTFILE ]; then cp "$HOME/.zsh_sessions/$(ls -Art $HOME/.zsh_sessions | tail -n 1)" "$HISTFILE"; fi
+
+
+# If git commit fail cause of 'gpg failed to sign the data'
+# to fix: 'export GPG_TTY=$(tty)'
+# found here: https://gist.github.com/paolocarrasco/18ca8fe6e63490ae1be23e84a7039374?permalink_comment_id=3767413#gistcomment-3767413
