@@ -230,6 +230,6 @@ setopt INC_APPEND_HISTORY
 if [ ! -e $HISTFILE ]; then cp "$HOME/.zsh_sessions/$(ls -Art $HOME/.zsh_sessions | tail -n 1)" "$HISTFILE"; fi
 
 
-# If git commit fail cause of 'gpg failed to sign the data'
-# to fix: 'export GPG_TTY=$(tty)'
-# found here: https://gist.github.com/paolocarrasco/18ca8fe6e63490ae1be23e84a7039374?permalink_comment_id=3767413#gistcomment-3767413
+# from 'man gpg-agent'
+GPG_TTY=$(tty)
+export GPG_TTY
