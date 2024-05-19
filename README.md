@@ -41,8 +41,9 @@ I place it here: `~/Yandex.Disk.localized/fonts/JetBrainsMono_hacked.zip`
 - `ln -s $PWD/nvim ~/.config/nvim`
 - `ln -s $PWD/zsh/zshrc_conf.zshrc ~/.zshrc`
 - `ln -s $PWD/global_gitignore ~/.gitignore`
+- `ln -s $PWD/gpg-agent.conf ~/.gnupg/gpg-agent.conf`
 - `ln -s $PWD/alacritty/alacritty.toml ~/.alacritty.toml`
-- `use gitconfig from your 1TB storage` (private data)
+- `ln -s ~/${private_1TB_storage_dir}/git/gitconfig ~/.gitconfig`
 
 # NeoVim
 
