@@ -15,7 +15,7 @@ require('lualine').setup {
             {
                 'filename',
                 path = 1,
-                shorting_target = 100
+                shorting_target = 60
             },
             'diff', 'diagnostics' },
         lualine_c = { 'branch', require('lsp-progress').progress },
