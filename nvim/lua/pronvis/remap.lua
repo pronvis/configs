@@ -71,6 +71,9 @@ map('n', 'g*', 'g*zz', 'Search for current word and jump to next', { silent = tr
 -- <leader>p for paste without yanking
 map('v', '<leader>p', '\"_dp', 'Paste without yanking')
 
+-- close buffer without closing the window
+map('n', '<leader>q', ':bp<bar>sp<bar>bn<bar>bd<CR>')
+
 -- this mapping used in `betterF` plugin
 -- map("n", "<leader>f", vim.lsp.buf.format, 'Format file')
 

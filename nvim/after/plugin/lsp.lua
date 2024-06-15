@@ -15,7 +15,9 @@ lsp_zero.on_attach(function(client, bufnr)
     nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
     nmap('gd', require('telescope.builtin').lsp_definitions, '[G]oto [Definition]')
-    nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eference')
+    nmap('gr',
+        function() require('telescope.builtin').lsp_references({ include_declaration = false, show_line = false }) end,
+        '[G]oto [R]eference')
     nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
     nmap('gi', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
     nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
