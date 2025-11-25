@@ -39,7 +39,6 @@ local servers = {
     html = { filetypes = { 'html' } },
     -- rust_analyzer = {}, -- 'rustaceanvim' have its own rust-analyzer config
     clangd = {},
-    tsserver = {},
     lua_ls = {
         Lua = {
             workspace = { checkThirdParty = false },
@@ -60,7 +59,7 @@ mason_lspconfig.setup {
     ensure_installed = vim.tbl_keys(servers),
 }
 
-mason_lspconfig.setup_handlers {
+mason_lspconfig.setup {
     function(server_name)
         require('lspconfig')[server_name].setup {
             capabilities = capabilities,
@@ -70,12 +69,12 @@ mason_lspconfig.setup_handlers {
     end,
 }
 
-require("lspconfig").clangd.setup {
+vim.lsp.config("clang", {
     cmd = {
         "clangd",
         "--offset-encoding=utf-16",
     },
-}
+})
 
 vim.g.rustaceanvim = {
     server = {

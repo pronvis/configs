@@ -74,9 +74,6 @@ map('v', '<leader>p', '\"_dp', 'Paste without yanking')
 -- close buffer without closing the window
 map('n', '<leader>q', ':bp<bar>sp<bar>bn<bar>bd<CR>')
 
--- this mapping used in `betterF` plugin
--- map("n", "<leader>f", vim.lsp.buf.format, 'Format file')
-
 -- <leader>r replace text on curent word
 map("n", "<leader>r", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], 'Replace text on curent word')
 
@@ -146,12 +143,6 @@ map('c', '<A-BS>', '<C-w>', 'Remove one word before the cursor')
 -- very magic by defaul
 map('c', '%s/', '%sm/')
 
--- keymaps for betterF plugin
--- change to:
--- `map({ 'n', 'o' }, 'f', [[:lua betterF(true)<CR>]], { noremap = true, silent = true })`
--- and it will work for `cf` & `cF` too.
-map('n', 'f', [[:lua betterF(true)<CR>]], { noremap = true, silent = true })
-map('n', 'F', [[:lua betterF(false)<CR>]], { noremap = true, silent = true })
 -- =========================
 -- =========================
 -- =========================
