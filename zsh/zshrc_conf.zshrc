@@ -81,6 +81,7 @@ export CARGO_NET_GIT_FETCH_WITH_CLI=true
 export PATH="/Applications/OpenSCAD.app/Contents/MacOS/:$PATH"
 export PATH="/Applications/Alacritty.app/Contents/MacOS:$PATH"
 export PATH="/usr/local/share/dotnet:$PATH"
+export PATH="/Users/pronvis/.dotnet/tools:$PATH"
 
 # you need to install https://vulkan.lunarg.com/sdk/home first
 export VULKAN_SDK=$HOME/vulkan_sdk/macOS
