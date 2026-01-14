@@ -9,7 +9,9 @@ lsp_zero.on_attach(function(client, bufnr)
         vim.keymap.set('n', keys, func, { buffer = bufnr, remap = false, desc = desc })
     end
 
-    require("lsp-format").on_attach(client, bufnr)
+    if client.name ~= "csharp-ls" then
+        require("lsp-format").on_attach(client, bufnr)
+    end
 
     nmap('<F6>', vim.lsp.buf.rename, 'Rename')
     nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
@@ -138,6 +140,18 @@ cmp.setup {
 }
 
 require('neodev').setup()
+
+vim.lsp.config(
+    'csharp-ls',
+    {
+        cmd = { 'csharp-ls' },
+        filetypes = { 'cs', 'razor', 'csproj' },
+        root_markers = { '*.sln', '*.csproj', 'packages.config', '.git' },
+    }
+)
+
+vim.lsp.enable('csharp-ls', false)
+vim.lsp.enable('csharp-ls', true)
 
 -- Hide all semantic highlights
 for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
