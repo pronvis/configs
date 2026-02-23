@@ -1,36 +1,39 @@
-local lsp_zero = require('lsp-zero')
+vim.api.nvim_create_autocmd('LspAttach', {
+    callback = function(event)
+        local bufnr = event.buf;
 
-lsp_zero.on_attach(function(client, bufnr)
-    local nmap = function(keys, func, desc)
-        if desc then
-            desc = 'LSP: ' .. desc
+        local nmap = function(keys, func, desc)
+            if desc then
+                desc = 'LSP: ' .. desc
+            end
+
+            vim.keymap.set('n', keys, func, { buffer = bufnr, remap = false, desc = desc })
         end
 
-        vim.keymap.set('n', keys, func, { buffer = bufnr, remap = false, desc = desc })
-    end
+        local client = assert(vim.lsp.get_client_by_id(event.data.client_id))
+        require("lsp-format").on_attach(client, bufnr)
 
-    require("lsp-format").on_attach(client, bufnr)
+        nmap('<F6>', vim.lsp.buf.rename, 'Rename')
+        nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
-    nmap('<F6>', vim.lsp.buf.rename, 'Rename')
-    nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+        nmap('gd', require('telescope.builtin').lsp_definitions, '[G]oto [Definition]')
+        nmap('gr',
+            function() require('telescope.builtin').lsp_references({ include_declaration = false, show_line = false }) end,
+            '[G]oto [R]eference')
+        nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
+        nmap('gi', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
+        nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
+        nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
-    nmap('gd', require('telescope.builtin').lsp_definitions, '[G]oto [Definition]')
-    nmap('gr',
-        function() require('telescope.builtin').lsp_references({ include_declaration = false, show_line = false }) end,
-        '[G]oto [R]eference')
-    nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
-    nmap('gi', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-    nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-    nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+        nmap('<leader>l', vim.diagnostic.open_float, 'Open diagnostic float window')
+        nmap('E', vim.diagnostic.goto_next, 'Goto next diagnostic')
+        nmap('W', vim.diagnostic.goto_prev, 'Goto prev diagnostic')
+        nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 
-    nmap('<leader>l', vim.diagnostic.open_float, 'Open diagnostic float window')
-    nmap('E', vim.diagnostic.goto_next, 'Goto next diagnostic')
-    nmap('W', vim.diagnostic.goto_prev, 'Goto prev diagnostic')
-    nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-
-    -- see `:help K` for why this keymap
-    nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-end)
+        -- see `:help K` for why this keymap
+        nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
+    end,
+})
 
 require('mason').setup()
 require('mason-lspconfig').setup()
@@ -79,7 +82,8 @@ vim.lsp.config("clang", {
 vim.g.rustaceanvim = {
     server = {
         cmd = { "/usr/local/bin/rust-analyzer-mac" },
-        capabilities = lsp_zero.get_capabilities()
+        capabilities = capabilities
+
     },
 }
 

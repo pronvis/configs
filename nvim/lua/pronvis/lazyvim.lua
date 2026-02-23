@@ -31,33 +31,27 @@ require('lazy').setup({
     'rhysd/git-messenger.vim',
 
     -- Language Server Protocol
-    {
-        'VonHeikemen/lsp-zero.nvim',
-        branch = 'v3.x',
-        dependencies = {
-            -- managing LSP servers from neovim
-            { 'williamboman/mason.nvim' },
-            { 'williamboman/mason-lspconfig.nvim' },
+    'williamboman/mason.nvim',
+    'williamboman/mason-lspconfig.nvim',
 
-            -- LSP Support
-            { 'neovim/nvim-lspconfig' },
-            -- Autocompletion
-            { 'hrsh7th/nvim-cmp' },
-            { 'hrsh7th/cmp-nvim-lsp' },
-            { 'hrsh7th/cmp-path' },
-            -- snippets
-            { 'L3MON4D3/LuaSnip' },
-            'saadparwaiz1/cmp_luasnip',
-            -- Adds a number of user-friendly snippets
-            'rafamadriz/friendly-snippets',
-            -- full signature help, docs and completion for the nvim lua API
-            { 'folke/neodev.nvim' },
-        }
-    },
+    -- LSP Support
+    'neovim/nvim-lspconfig',
+    -- Autocompletion
+    'hrsh7th/nvim-cmp',
+    'hrsh7th/cmp-nvim-lsp',
+    'hrsh7th/cmp-path',
+    -- snippets
+    'L3MON4D3/LuaSnip',
+    'saadparwaiz1/cmp_luasnip',
+    -- Adds a number of user-friendly snippets
+    'rafamadriz/friendly-snippets',
+    -- full signature help, docs and completion for the nvim lua API
+    'folke/neodev.nvim',
     -- rust
     {
         'mrcjkb/rustaceanvim',
-        version = '^3', -- Recommended
+        version = '^8', -- Recommended
+        lazy = false,   -- This plugin is already lazy
         ft = { 'rust' },
     },
 
