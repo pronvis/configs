@@ -25,7 +25,7 @@ require("nvim-tree").setup({
         sorter = "name",
     },
     view = {
-        width = 30,
+        width = 80,
     },
     renderer = {
         group_empty = true,

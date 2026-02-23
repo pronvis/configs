@@ -27,7 +27,7 @@
   "rainbow-delimiters.nvim": { "branch": "master", "commit": "e2858c43caafec291f915ef25fbed27bbe78abbd" },
   "rustaceanvim": { "branch": "master", "commit": "13f7f5c46d2db0b8daee64a842d8faebfe9064c0" },
   "securemodelines": { "branch": "master", "commit": "9751f29699186a47743ff6c06e689f483058d77a" },
-  "telescope.nvim": { "branch": "master", "commit": "d90956833d7c27e73c621a61f20b29fdb7122709" },
+  "telescope.nvim": { "branch": "master", "commit": "5255aa27c422de944791318024167ad5d40aad20" },
   "todo-comments.nvim": { "branch": "main", "commit": "31e3c38ce9b29781e4422fc0322eb0a21f4e8668" },
   "undotree": { "branch": "master", "commit": "d8f99084d98c32f651860eb0baaf89759f91debc" },
   "vim-commentary": { "branch": "master", "commit": "64a654ef4a20db1727938338310209b6a63f60c9" },
