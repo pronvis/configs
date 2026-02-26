@@ -17,7 +17,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
         nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
         nmap('gd', require('telescope.builtin').lsp_definitions, '[G]oto [Definition]')
-        nmap('gr',
+        nmap('grr',
             function() require('telescope.builtin').lsp_references({ include_declaration = false, show_line = false }) end,
             '[G]oto [R]eference')
         nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')

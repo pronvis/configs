@@ -7,6 +7,9 @@ local map = function(mode, keys, func, desc, opt)
     vim.keymap.set(mode, keys, func, opt)
 end
 
+-- remove default GoToReference from NeoVim
+vim.keymap.del('n', 'grr')
+
 ------------------------------------------------
 -- ':Telescope keymaps' to search on all keymaps
 ------------------------------------------------
