@@ -81,7 +81,7 @@ map('n', '<leader>q', ':bp<bar>sp<bar>bn<bar>bd<CR>')
 map("n", "<leader>r", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], 'Replace text on curent word')
 
 map("n", "<leader>;",
-    function() require('telescope.builtin').buffers({ sort_lastused = true, ignore_current_buffer = true }) end,
+    function() require('telescope.builtin').buffers({ sort_mru = true, ignore_current_buffer = true }) end,
     'Telesope buffers')
 
 -- show git commit info
