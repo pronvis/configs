@@ -1,0 +1,1 @@
+ps aux | grep nvim | awk '{print $2}' | xargs -I{} lsof -p {} | grep cwd | awk '{print "pid: ", $2, "path: ",  $9}'

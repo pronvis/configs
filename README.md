@@ -44,6 +44,7 @@ I place it here: `~/Yandex.Disk.localized/fonts/JetBrainsMono_hacked.zip`
 - `ln -s $PWD/gpg-agent.conf ~/.gnupg/gpg-agent.conf`
 - `ln -s $PWD/alacritty/alacritty.toml ~/.alacritty.toml`
 - `ln -s ~/${private_1TB_storage_dir}/git/gitconfig ~/.gitconfig`
+- `ln -s $PWD/scripts/ ~/bin/scripts`
 
 # NeoVim
 
