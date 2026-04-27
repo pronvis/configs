@@ -256,11 +256,21 @@ export NVM_DIR="$HOME/.nvm"
 mkdir -p "$HOME/.zsh_sessions"
 TMUX_SESSION_ID=""
 if [[ -n "$TMUX" && -n "$TMUX_PANE" ]] && command -v tmux >/dev/null 2>&1; then
-	TMUX_SESSION_ID="$(tmux display -pt "$TMUX_PANE" '#S:#I.#P' 2>/dev/null)"
+	TMUX_SESSION_UID="$(tmux display-message -p -t "$TMUX_PANE" '#{session_id}_#{window_id}_#{pane_id}' 2>/dev/null)"
+	if [[ "$TMUX_SESSION_UID" == \$<->_@<->_%<-> ]]; then
+		TMUX_SESSION_ID="$(tmux display-message -p -t "$TMUX_PANE" '#{session_name}:#{window_index}.#{pane_index}' 2>/dev/null)"
+	fi
+fi
+if [[ -z "$TMUX_SESSION_ID" && -n "$TMUX_PANE" ]]; then
+	TMUX_SESSION_ID="pane_${TMUX_PANE#%}"
 fi
 if [[ -z "$TMUX_SESSION_ID" ]]; then
 	TMUX_SESSION_ID="${HOST%%.*}:$$"
 fi
+TMUX_SESSION_ID="${TMUX_SESSION_ID//$'\n'/_}"
+TMUX_SESSION_ID="${TMUX_SESSION_ID//$'\r'/_}"
+TMUX_SESSION_ID="${TMUX_SESSION_ID//\//_}"
+TMUX_SESSION_ID="${TMUX_SESSION_ID//[^A-Za-z0-9 .:_-]/_}"
 export HISTFILE="$HOME/.zsh_sessions/history_$TMUX_SESSION_ID"
 setopt INC_APPEND_HISTORY
 # For new shells, initialize history with the history of the most recently used shell.
