@@ -92,6 +92,9 @@ export DYLD_LIBRARY_PATH=$VULKAN_SDK/lib:$DYLD_LIBRARY_PATH
 export VK_ICD_FILENAMES=$VULKAN_SDK/etc/vulkan/icd.d/MoltenVK_icd.json
 export VK_LAYER_PATH=$VULKAN_SDK/etc/vulkan/explicit_layer.d
 
+# Keep PATH entries unique when helpers prepend toolchains repeatedly.
+typeset -gU path PATH
+
 source $ZSH/oh-my-zsh.sh
 
 fpath+=$HOME/.zsh_functions
@@ -134,20 +137,20 @@ export JAVA_OPTS="-Xmx4096m $JAVA_OPTS"
 #Commands to fast create/open archives.
 #extract myfile.tar to extract archive. pk tar myfile - to create archive
 extract () {
- if [ -f $1 ] ; then
- case $1 in
- *.tar.bz2)   tar xjf $1        ;;
- *.tar.gz)    tar xzf $1     ;;
- *.bz2)       bunzip2 $1       ;;
- *.rar)       unrar x $1     ;;
- *.gz)        gunzip $1     ;;
- *.tar)       tar xf $1        ;;
- *.tbz2)      tar xjf $1      ;;
- *.tbz)       tar -xjvf $1    ;;
- *.tgz)       tar xzf $1       ;;
- *.zip)       unzip $1     ;;
- *.Z)         uncompress $1  ;;
- *.7z)        7z x $1    ;;
+ if [[ -f "$1" ]]; then
+ case "$1" in
+ *.tar.bz2)   tar xjf "$1"      ;;
+ *.tar.gz)    tar xzf "$1"      ;;
+ *.bz2)       bunzip2 "$1"      ;;
+ *.rar)       unrar x "$1"      ;;
+ *.gz)        gunzip "$1"       ;;
+ *.tar)       tar xf "$1"       ;;
+ *.tbz2)      tar xjf "$1"      ;;
+ *.tbz)       tar -xjvf "$1"    ;;
+ *.tgz)       tar xzf "$1"      ;;
+ *.zip)       unzip "$1"        ;;
+ *.Z)         uncompress "$1"   ;;
+ *.7z)        7z x "$1"         ;;
  *)           echo "I don't know how to extract '$1'..." ;;
  esac
  else
@@ -156,36 +159,59 @@ extract () {
 }
 
 pk () {
- if [ $1 ] ; then
- case $1 in
- tbz)       tar cjvf $2.tar.bz2 $2      ;;
- tgz)       tar czvf $2.tar.gz  $2       ;;
- tar)      tar cpvf $2.tar  $2       ;;
- bz2)    bzip $2 ;;
- gz)        gzip -c -9 -n $2 > $2.gz ;;
- zip)       zip -r $2.zip $2   ;;
- 7z)        7z a $2.7z $2    ;;
+ if [[ -n "$1" && -n "$2" ]]; then
+ if [[ ! -e "$2" ]]; then
+ echo "'$2' does not exist"
+ return 1
+ fi
+ case "$1" in
+ tbz)       tar cjvf "$2.tar.bz2" "$2"       ;;
+ tgz)       tar czvf "$2.tar.gz" "$2"        ;;
+ tar)       tar cpvf "$2.tar" "$2"           ;;
+ bz2)       if [[ -d "$2" ]]; then
+             tar cjvf "$2.tar.bz2" "$2"
+            else
+             bzip2 -c -9 -- "$2" > "$2.bz2"
+            fi ;;
+ gz)        if [[ -d "$2" ]]; then
+             tar czvf "$2.tar.gz" "$2"
+            else
+             gzip -c -9 -n -- "$2" > "$2.gz"
+            fi ;;
+ zip)       zip -r "$2.zip" "$2"             ;;
+ 7z)        7z a "$2.7z" "$2"                ;;
  *)         echo "'$1' cannot be packed via pk()" ;;
  esac
  else
- echo "'$1' is not a valid file"
+ echo "Usage: pk <tbz|tgz|tar|bz2|gz|zip|7z> <path>"
  fi
 }
 
 function setjdk() {
-  if [ $# -ne 0 ]; then
-   removeFromPath '/System/Library/Frameworks/JavaVM.framework/Home/bin'
-   if [ -n "${JAVA_HOME+x}" ]; then
-    removeFromPath $JAVA_HOME
-   fi
-   export JAVA_HOME=`/usr/libexec/java_home -v $@`
-   export PATH=$JAVA_HOME/bin:$PATH
-  fi
- }
+  local new_java_home
 
- function removeFromPath() {
-  export PATH=$(echo $PATH | sed -E -e "s;:$1;;" -e "s;$1:?;;")
- }
+  if (( $# == 0 )); then
+   return 0
+  fi
+
+  if ! new_java_home="$(/usr/libexec/java_home -v "$@" 2>/dev/null)"; then
+   echo "Unable to find JDK version: $*" >&2
+   return 1
+  fi
+
+  removeFromPath '/System/Library/Frameworks/JavaVM.framework/Home/bin'
+  if [[ -n "${JAVA_HOME:-}" ]]; then
+   removeFromPath "$JAVA_HOME/bin"
+  fi
+
+  export JAVA_HOME="$new_java_home"
+  path=("$JAVA_HOME/bin" "${path[@]}")
+}
+
+function removeFromPath() {
+  local target="$1"
+  path=("${(@)path:#$target}")
+}
 
 # setjdk "1.7.0_80"
  setjdk "1.8.0_192"
@@ -227,11 +253,25 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Use a different histfile per shell, and write to it immediately after each command.
-TMUX_SESSION_ID=$(tmux display -pt $TMUX_PANE '#S:#I.#P')
+mkdir -p "$HOME/.zsh_sessions"
+TMUX_SESSION_ID=""
+if [[ -n "$TMUX" && -n "$TMUX_PANE" ]] && command -v tmux >/dev/null 2>&1; then
+	TMUX_SESSION_ID="$(tmux display -pt "$TMUX_PANE" '#S:#I.#P' 2>/dev/null)"
+fi
+if [[ -z "$TMUX_SESSION_ID" ]]; then
+	TMUX_SESSION_ID="${HOST%%.*}:$$"
+fi
 export HISTFILE="$HOME/.zsh_sessions/history_$TMUX_SESSION_ID"
 setopt INC_APPEND_HISTORY
 # For new shells, initialize history with the history of the most recently used shell.
-if [ ! -e $HISTFILE ]; then cp "$HOME/.zsh_sessions/$(ls -Art $HOME/.zsh_sessions | tail -n 1)" "$HISTFILE"; fi
+if [[ ! -e "$HISTFILE" ]]; then
+	latest_history="$(ls -Art "$HOME/.zsh_sessions" 2>/dev/null | tail -n 1)"
+	if [[ -n "$latest_history" ]]; then
+		cp "$HOME/.zsh_sessions/$latest_history" "$HISTFILE" 2>/dev/null || :
+	else
+		: > "$HISTFILE"
+	fi
+fi
 
 
 # from 'man gpg-agent'
