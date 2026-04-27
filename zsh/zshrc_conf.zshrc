@@ -70,6 +70,7 @@ base16_tomorrow-night-eighties
 
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 export PATH="$HOME/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/bin/scripts:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="/usr/local/opt/nss/bin:$PATH"
