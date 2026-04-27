@@ -1,16 +1,13 @@
-export LC_ALL=en_US.UTF-8
-export USER_NAME=`whoami`
+export LANG=en_US.UTF-8
+export LC_CTYPE="$LANG"
 
 bindkey "^[[1;3C" forward-word
 bindkey "^[[1;3D" backward-word
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
-# don't know why those 2 do not works :(
-bindkey "^[[H"    beginning-of-line
-bindkey "^[[F"    end-of-line
 
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/$USER_NAME/.oh-my-zsh
+export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -27,6 +24,19 @@ BASE16_SHELL_PATH="$HOME/.config/base16-shell"
 
 # # SET THEME
 base16_tomorrow-night-eighties
+
+# ================================================================ 
+# ================================================================ 
+# ================================================================ 
+# Codex suggested this, but for some reason I have `command not found: base16_tomorrow-night-eighties` on `omz update`.
+# Ask Codex again at 29 april
+###### if [[ -o interactive && -s "$BASE16_SHELL_PATH/profile_helper.sh" ]]; then
+###### 	source "$BASE16_SHELL_PATH/profile_helper.sh"
+###### 	command -v base16_tomorrow-night-eighties >/dev/null 2>&1 && base16_tomorrow-night-eighties
+###### fi
+# ================================================================ 
+# ================================================================ 
+# ================================================================ 
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -67,45 +77,54 @@ base16_tomorrow-night-eighties
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
 # User configuration
-
-export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-export PATH="$HOME/bin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
-export PATH="$HOME/bin/scripts:$PATH"
-export PATH="$HOME/.cargo/bin:$PATH"
-export PATH="/usr/local/opt/nss/bin:$PATH"
-export PATH="/usr/local/opt/llvm/bin:$PATH"
-export PATH="/opt/local/bin:$PATH"
 export CARGO_TARGET_DIR="$HOME/rust/rust_build_artifacts"
 export GOPATH="$HOME/go"
-export PATH="$GOPATH/bin:$PATH"
 export CARGO_NET_GIT_FETCH_WITH_CLI=true
-export PATH="/Applications/OpenSCAD.app/Contents/MacOS/:$PATH"
-export PATH="/Applications/Alacritty.app/Contents/MacOS:$PATH"
-export PATH="/usr/local/share/dotnet:$PATH"
-export PATH="/Users/pronvis/.dotnet/tools:$PATH"
 
 # you need to install https://vulkan.lunarg.com/sdk/home first
 export VULKAN_SDK=$HOME/vulkan_sdk/macOS
-export PATH=$VULKAN_SDK/bin:$PATH
 export DYLD_LIBRARY_PATH=$VULKAN_SDK/lib:$DYLD_LIBRARY_PATH
 export VK_ICD_FILENAMES=$VULKAN_SDK/etc/vulkan/icd.d/MoltenVK_icd.json
 export VK_LAYER_PATH=$VULKAN_SDK/etc/vulkan/explicit_layer.d
 
-# Keep PATH entries unique when helpers prepend toolchains repeatedly.
+# Keep PATH entries unique and only add directories that actually exist.
 typeset -gU path PATH
+path=()
+for dir in \
+	"$HOME/.dotnet/tools" \
+	/usr/local/share/dotnet \
+	/Applications/Alacritty.app/Contents/MacOS \
+	/Applications/OpenSCAD.app/Contents/MacOS \
+	"$VULKAN_SDK/bin" \
+	"$GOPATH/bin" \
+	"$HOME/.cargo/bin" \
+	"$HOME/bin/scripts" \
+	"$HOME/.local/bin" \
+	"$HOME/bin" \
+	/usr/local/opt/llvm/bin \
+	/usr/local/opt/nss/bin \
+	/opt/local/bin \
+	/opt/homebrew/bin \
+	/opt/homebrew/sbin \
+	/usr/local/bin \
+	/usr/bin \
+	/bin \
+	/usr/sbin \
+	/sbin \
+	/Library/Apple/usr/bin
+do
+	[[ -d "$dir" ]] && path+=("$dir")
+done
 
-source $ZSH/oh-my-zsh.sh
+source "$ZSH/oh-my-zsh.sh"
 
-fpath+=$HOME/.zsh_functions
+fpath+=("$HOME/.zsh_functions")
 
 # For autojump
-[[ -s `brew --prefix`/etc/autojump.sh ]] && . `brew --prefix`/etc/autojump.sh
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-LC_CTYPE=en_US.UTF-8
-LC_ALL=en_US.UTF-8
+if [[ -o interactive ]] && command -v brew >/dev/null 2>&1; then
+	BREW_PREFIX="$(brew --prefix 2>/dev/null)"
+	[[ -n "$BREW_PREFIX" && -s "$BREW_PREFIX/etc/autojump.sh" ]] && source "$BREW_PREFIX/etc/autojump.sh"
+fi
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
@@ -187,47 +206,22 @@ pk () {
  fi
 }
 
-function setjdk() {
-  local new_java_home
-
-  if (( $# == 0 )); then
-   return 0
-  fi
-
-  if ! new_java_home="$(/usr/libexec/java_home -v "$@" 2>/dev/null)"; then
-   echo "Unable to find JDK version: $*" >&2
-   return 1
-  fi
-
-  removeFromPath '/System/Library/Frameworks/JavaVM.framework/Home/bin'
-  if [[ -n "${JAVA_HOME:-}" ]]; then
-   removeFromPath "$JAVA_HOME/bin"
-  fi
-
-  export JAVA_HOME="$new_java_home"
-  path=("$JAVA_HOME/bin" "${path[@]}")
-}
-
-function removeFromPath() {
-  local target="$1"
-  path=("${(@)path:#$target}")
-}
-
-# setjdk "1.7.0_80"
- setjdk "1.8.0_192"
-
 local ret_status="%(?:%{$fg_bold[green]%}%~ ➜ :%{$fg_bold[red]%}%~ ➜ )"
 PROMPT='${ret_status}%{$reset_color%}$(git_prompt_info)'
 
 # Don't share history across tabs
 # https://superuser.com/questions/1245273/iterm2-version-3-individual-history-per-tab
-unsetopt inc_append_history
 unsetopt share_history
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_COMMAND='rg --hidden --files'
 
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh" || true
+if [[ -o interactive && -f "$HOME/.fzf.zsh" ]]; then
+	source "$HOME/.fzf.zsh"
+fi
+
+if [[ -o interactive && -e "${HOME}/.iterm2_shell_integration.zsh" ]]; then
+	source "${HOME}/.iterm2_shell_integration.zsh"
+fi
 
 # Fix 'less' italic highlighting in tmux (reason why it is italic is `tmux-256color`)
 # https://unix.stackexchange.com/questions/179173/make-less-highlight-search-patterns-instead-of-italicizing-them
@@ -248,9 +242,19 @@ if command -v pyenv 1>/dev/null 2>&1; then
 	eval "$(pyenv init -)"
 fi
 
+# Lazy loading
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+load_nvm() {
+	unset -f nvm node npm npx pnpm yarn corepack
+	[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+	[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
+}
+
+if [[ -o interactive && -s "$NVM_DIR/nvm.sh" ]]; then
+	for cmd in nvm node npm npx pnpm yarn corepack; do
+		eval "$cmd() { load_nvm; $cmd \"\$@\"; }"
+	done
+fi
 
 # Use a different histfile per shell, and write to it immediately after each command.
 mkdir -p "$HOME/.zsh_sessions"
@@ -272,14 +276,21 @@ TMUX_SESSION_ID="${TMUX_SESSION_ID//$'\r'/_}"
 TMUX_SESSION_ID="${TMUX_SESSION_ID//\//_}"
 TMUX_SESSION_ID="${TMUX_SESSION_ID//[^A-Za-z0-9 .:_-]/_}"
 export HISTFILE="$HOME/.zsh_sessions/history_$TMUX_SESSION_ID"
-setopt INC_APPEND_HISTORY
-# For new shells, initialize history with the history of the most recently used shell.
-if [[ ! -e "$HISTFILE" ]]; then
-	latest_history="$(ls -Art "$HOME/.zsh_sessions" 2>/dev/null | tail -n 1)"
-	if [[ -n "$latest_history" ]]; then
-		cp "$HOME/.zsh_sessions/$latest_history" "$HISTFILE" 2>/dev/null || :
+HISTSIZE=50000
+SAVEHIST=50000
+setopt APPEND_HISTORY INC_APPEND_HISTORY
+if [[ -z "${ZSH_HISTORY_SESSION_INITIALIZED:-}" ]]; then
+	export ZSH_HISTORY_SESSION_INITIALIZED=1
+	fc -p "$HISTFILE" "$HISTSIZE" "$SAVEHIST"
+	if [[ -r "$HISTFILE" ]]; then
+		fc -R "$HISTFILE"
 	else
-		: > "$HISTFILE"
+		latest_history="$(ls -Art "$HOME/.zsh_sessions" 2>/dev/null | tail -n 1)"
+		if [[ -n "$latest_history" ]]; then
+			fc -R "$HOME/.zsh_sessions/$latest_history"
+		else
+			: > "$HISTFILE"
+		fi
 	fi
 fi
 
