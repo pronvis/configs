@@ -18,25 +18,10 @@ ZSH_THEME=""
 plugins=(git colored-man-pages pip python brew macos zsh-syntax-highlighting zsh-autosuggestions)
 
 BASE16_SHELL_PATH="$HOME/.config/base16-shell"
-[ -n "$PS1" ] && \
-  [ -s "$BASE16_SHELL_PATH/profile_helper.sh" ] && \
+if [[ -o interactive && -s "$BASE16_SHELL_PATH/profile_helper.sh" ]]; then
     source "$BASE16_SHELL_PATH/profile_helper.sh"
-
-# # SET THEME
-base16_tomorrow-night-eighties
-
-# ================================================================ 
-# ================================================================ 
-# ================================================================ 
-# Codex suggested this, but for some reason I have `command not found: base16_tomorrow-night-eighties` on `omz update`.
-# Ask Codex again at 29 april
-###### if [[ -o interactive && -s "$BASE16_SHELL_PATH/profile_helper.sh" ]]; then
-###### 	source "$BASE16_SHELL_PATH/profile_helper.sh"
-###### 	command -v base16_tomorrow-night-eighties >/dev/null 2>&1 && base16_tomorrow-night-eighties
-###### fi
-# ================================================================ 
-# ================================================================ 
-# ================================================================ 
+    (( $+functions[set_theme] )) && set_theme tomorrow-night-eighties
+fi
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
