@@ -77,7 +77,7 @@ require('lazy').setup({
     'mtdl9/vim-log-highlighting',
     'jiangmiao/auto-pairs',
 
-    'plasticboy/vim-markdown',
+    'preservim/vim-markdown',
 
     -- file tree
     'nvim-tree/nvim-tree.lua',
