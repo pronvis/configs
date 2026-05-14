@@ -89,3 +89,15 @@ ssh ec2_host 'bash ~/install-remote.sh'
 
 #### execute
 `./lite/dot-push.sh`
+
+## SSH config
+
+add smth like that to `~/.ssh/config`
+```
+Host ec2_how-tmux
+    HostName hostname_or_ip_address
+    User ec2-user
+    IdentityFile ~/.ssh/id_rsa
+    RemoteCommand tmux -u new-session -A -s main
+    RequestTTY yes
+```
