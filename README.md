@@ -66,8 +66,26 @@ Now `gcsm "commit message"` should work fine, test it with: `echo "test" | gpg -
 # SSH
 
 Encrypted main key is located in "your 1TB storage". To decrypt it use: `gpg -d ${path_to_gpg_key} > ~/.ssh/id_rsa`
+Or in 1password `Rsa main`
 
 # VPN
 
 - `brew install openvpn`
 - `sudo openvpn --config ${path_to_yandex_disk}/VPN/nexus.ovpn`
+
+# Remote Servers
+
+### First time on the server (install missing tools):
+```
+scp ./lite/install-remote.sh ec2_host:~/
+ssh ec2_host 'bash ~/install-remote.sh'
+./lite/dot-push.sh ec2_host
+```
+
+### Push configs (run any time):
+
+#### dry run
+`DRY_RUN=1 ./lite/dot-push.sh`
+
+#### execute
+`./lite/dot-push.sh`

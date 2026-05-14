@@ -1,0 +1,134 @@
+# Lightweight zshrc for remote servers — pure zsh, no oh-my-zsh.
+#
+# Differences vs the full local config:
+#   - No oh-my-zsh framework (just the bits we actually use)
+#   - No macOS-specific paths (brew, vulkan_sdk, alacritty.app, etc.)
+#   - No iTerm2 / autojump / pyenv / nvm integrations
+#   - No per-tmux-pane HISTFILE — single shared history is fine on a server
+#   - Aliases, prompt, history settings, key bindings all preserved
+
+export LANG=en_US.UTF-8
+export LC_CTYPE="$LANG"
+
+# Word-jump bindings (alt-arrow, ctrl-arrow). Same codes as the laptop.
+bindkey "^[[1;3C" forward-word
+bindkey "^[[1;3D" backward-word
+bindkey "^[[1;5C" forward-word
+bindkey "^[[1;5D" backward-word
+
+# ── PATH ─────────────────────────────────────────────────────────────────
+# Keep PATH entries unique; only prepend dirs that exist.
+typeset -gU path PATH
+for dir in \
+    "$HOME/.cargo/bin" \
+    "$GOPATH/bin" \
+    "$HOME/.local/bin" \
+    "$HOME/bin" \
+    /usr/local/bin
+do
+    [[ -d "$dir" ]] && path=("$dir" $path)
+done
+
+# ── Completion ───────────────────────────────────────────────────────────
+autoload -Uz compinit
+compinit -d "$HOME/.cache/.zcompdump"
+# Case-insensitive, partial-word, substring completion
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*' menu select
+
+# ── History ──────────────────────────────────────────────────────────────
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=50000
+SAVEHIST=50000
+setopt APPEND_HISTORY INC_APPEND_HISTORY HIST_IGNORE_DUPS HIST_REDUCE_BLANKS
+unsetopt share_history
+
+# ── Prompt ───────────────────────────────────────────────────────────────
+# Minimal hand-rolled prompt with git branch — same shape as the laptop
+# prompt, without needing oh-my-zsh's git_prompt_info.
+autoload -Uz colors && colors
+autoload -Uz vcs_info
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:git:*' formats '%F{blue}(%F{red}%b%F{blue}) '
+zstyle ':vcs_info:git:*' actionformats '%F{blue}(%F{red}%b|%a%F{blue}) '
+setopt PROMPT_SUBST
+precmd() { vcs_info }
+PROMPT='%F{green}%~%f %F{yellow}➜%f ${vcs_info_msg_0_}'
+
+# ── Aliases ──────────────────────────────────────────────────────────────
+alias ll='ls -la'
+alias la='ls -A'
+alias l='ls -CF'
+alias mydate="date '+DATE: %m/%d/%y%nTIME: %H:%M:%S'"
+
+# ── Editor / Pager ───────────────────────────────────────────────────────
+export EDITOR=nvim
+export VISUAL=nvim
+export PAGER=less
+
+# Fix `less` italic highlighting when running inside tmux
+export LESS_TERMCAP_so=$'\E[30;43m'
+export LESS_TERMCAP_se=$'\E[39;49m'
+
+# ── fzf ──────────────────────────────────────────────────────────────────
+# Two install paths are common: (1) distro package, files in /usr/share/fzf;
+# (2) junegunn's installer, files in ~/.fzf/shell. Source whichever exists.
+if [[ -o interactive ]]; then
+    for f in \
+        /usr/share/fzf/key-bindings.zsh \
+        /usr/share/fzf/completion.zsh \
+        "$HOME/.fzf/shell/key-bindings.zsh" \
+        "$HOME/.fzf/shell/completion.zsh"
+    do
+        [[ -f "$f" ]] && source "$f"
+    done
+    [[ -d "$HOME/.fzf/bin" ]] && path=("$HOME/.fzf/bin" $path)
+fi
+export FZF_DEFAULT_COMMAND='rg --hidden --files 2>/dev/null || find . -type f'
+
+# ── Functions: extract / pk ──────────────────────────────────────────────
+# Same as the laptop config — too useful to drop.
+extract() {
+    if [[ -f "$1" ]]; then
+        case "$1" in
+            *.tar.bz2)   tar xjf "$1"    ;;
+            *.tar.gz)    tar xzf "$1"    ;;
+            *.bz2)       bunzip2 "$1"    ;;
+            *.gz)        gunzip "$1"     ;;
+            *.tar)       tar xf "$1"     ;;
+            *.tbz2)      tar xjf "$1"    ;;
+            *.tgz)       tar xzf "$1"    ;;
+            *.zip)       unzip "$1"      ;;
+            *.Z)         uncompress "$1" ;;
+            *.7z)        7z x "$1"       ;;
+            *)           echo "I don't know how to extract '$1'..." ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
+
+pk() {
+    if [[ -n "$1" && -n "$2" ]]; then
+        if [[ ! -e "$2" ]]; then
+            echo "'$2' does not exist"
+            return 1
+        fi
+        case "$1" in
+            tbz)  tar cjvf "$2.tar.bz2" "$2" ;;
+            tgz)  tar czvf "$2.tar.gz"  "$2" ;;
+            tar)  tar cpvf "$2.tar"     "$2" ;;
+            zip)  zip -r   "$2.zip"     "$2" ;;
+            7z)   7z a     "$2.7z"      "$2" ;;
+            *)    echo "'$1' cannot be packed via pk()" ;;
+        esac
+    else
+        echo "Usage: pk <tbz|tgz|tar|zip|7z> <path>"
+    fi
+}
+
+# ── GPG (only if installed) ──────────────────────────────────────────────
+if command -v gpg >/dev/null 2>&1; then
+    GPG_TTY=$(tty)
+    export GPG_TTY
+fi
