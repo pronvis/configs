@@ -66,12 +66,6 @@ export CARGO_TARGET_DIR="$HOME/rust/rust_build_artifacts"
 export GOPATH="$HOME/go"
 export CARGO_NET_GIT_FETCH_WITH_CLI=true
 
-# you need to install https://vulkan.lunarg.com/sdk/home first
-export VULKAN_SDK=$HOME/vulkan_sdk/macOS
-export DYLD_LIBRARY_PATH=$VULKAN_SDK/lib:$DYLD_LIBRARY_PATH
-export VK_ICD_FILENAMES=$VULKAN_SDK/etc/vulkan/icd.d/MoltenVK_icd.json
-export VK_LAYER_PATH=$VULKAN_SDK/etc/vulkan/explicit_layer.d
-
 # Keep PATH entries unique and only add directories that actually exist.
 typeset -gU path PATH
 path=()
@@ -80,7 +74,6 @@ for dir in \
 	/usr/local/share/dotnet \
 	/Applications/Alacritty.app/Contents/MacOS \
 	/Applications/OpenSCAD.app/Contents/MacOS \
-	"$VULKAN_SDK/bin" \
 	"$GOPATH/bin" \
 	"$HOME/.cargo/bin" \
 	"$HOME/bin/scripts" \
