@@ -113,6 +113,18 @@ require("lazy").setup({
 
     -- seamless C-h/j/k/l between vim splits and tmux panes
     'christoomey/vim-tmux-navigator',
+
+    -- colorscheme — same family the laptop uses (RRethy/nvim-base16 ships
+    -- ~200 base16 palettes). Loaded via a config hook so it runs *after*
+    -- the plugin is on rtp.
+    {
+        'RRethy/nvim-base16',
+        lazy = false,
+        priority = 1000,
+        config = function()
+            vim.cmd.colorscheme('base16-tomorrow-night-eighties')
+        end,
+    },
 })
 
 --------------------------------------------------------------------------
