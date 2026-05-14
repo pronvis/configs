@@ -1,0 +1,1 @@
+TZ=UTC date -j -f "%Y-%m-%d %H:%M:%S" "$1 $2" "+%s"
