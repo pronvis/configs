@@ -51,6 +51,19 @@ if [[ ! -d "$HOME/.fzf" ]]; then
     "$HOME/.fzf/install" --key-bindings --completion --no-update-rc
 fi
 
+# ── zsh plugins (autosuggestions + syntax highlighting) ─────────────────
+# Standalone clones — no oh-my-zsh needed; sourced from lite/zshrc.
+if [[ ! -d "$HOME/.zsh/zsh-autosuggestions" ]]; then
+    echo "==> Installing zsh-autosuggestions"
+    git clone --depth 1 https://github.com/zsh-users/zsh-autosuggestions \
+        "$HOME/.zsh/zsh-autosuggestions"
+fi
+if [[ ! -d "$HOME/.zsh/zsh-syntax-highlighting" ]]; then
+    echo "==> Installing zsh-syntax-highlighting"
+    git clone --depth 1 https://github.com/zsh-users/zsh-syntax-highlighting \
+        "$HOME/.zsh/zsh-syntax-highlighting"
+fi
+
 # ── default shell ───────────────────────────────────────────────────────
 # `chsh` isn't installed on AL2023 by default (lives in util-linux-user).
 # `usermod` is in shadow-utils, which is preinstalled — same effect.

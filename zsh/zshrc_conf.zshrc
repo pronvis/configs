@@ -192,9 +192,10 @@ PROMPT='${ret_status}%{$reset_color%}$(git_prompt_info)'
 unsetopt share_history
 
 export FZF_DEFAULT_COMMAND='rg --hidden --files'
-
-if [[ -o interactive && -f "$HOME/.fzf.zsh" ]]; then
-	source "$HOME/.fzf.zsh"
+if [[ -o interactive ]] && command -v brew >/dev/null 2>&1; then
+    FZF_SHELL="$(brew --prefix)/opt/fzf/shell"
+    [[ -f "$FZF_SHELL/key-bindings.zsh" ]] && source "$FZF_SHELL/key-bindings.zsh"
+    [[ -f "$FZF_SHELL/completion.zsh"   ]] && source "$FZF_SHELL/completion.zsh"
 fi
 
 if [[ -o interactive && -e "${HOME}/.iterm2_shell_integration.zsh" ]]; then
