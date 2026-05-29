@@ -235,6 +235,36 @@ if [[ -o interactive && -s "$NVM_DIR/nvm.sh" ]]; then
 	done
 fi
 
+# Put nvm's `default`-aliased Node bin on PATH at startup so global CLIs
+# (openspec, openclaw, …) are found in every terminal without first invoking
+# node/npm. The lazy-load above still handles `nvm use`. Resolves the `default`
+# alias precisely — concrete/partial version, `node`/`stable`, or `lts/*` alias
+# chains — and falls back to the highest installed version if it can't resolve
+# (or resolves to a version that isn't installed).
+if [ -d "$NVM_DIR/versions/node" ]; then
+	__nvm_highest() { /bin/ls -d "$NVM_DIR"/versions/node/"$1"*/bin 2>/dev/null | sort -V | tail -1; }
+
+	__nvm_tok=""
+	[ -f "$NVM_DIR/alias/default" ] && __nvm_tok="$(cat "$NVM_DIR/alias/default" 2>/dev/null)"
+
+	# Follow alias-file chains, e.g. lts/* -> lts/krypton -> v24.x (max 8 hops).
+	__nvm_hops=0
+	while [ -n "$__nvm_tok" ] && [ -f "$NVM_DIR/alias/$__nvm_tok" ] && [ "$__nvm_hops" -lt 8 ]; do
+		__nvm_tok="$(cat "$NVM_DIR/alias/$__nvm_tok" 2>/dev/null)"
+		__nvm_hops=$((__nvm_hops + 1))
+	done
+
+	case "$__nvm_tok" in
+		v[0-9]*|[0-9]*) __nvm_default_bin="$(__nvm_highest "v${__nvm_tok#v}")" ;; # concrete/partial version
+		*)              __nvm_default_bin="" ;;                                   # node/stable/etc -> fall through
+	esac
+	[ -z "$__nvm_default_bin" ] && __nvm_default_bin="$(__nvm_highest v)"         # fallback: highest installed
+	[ -n "$__nvm_default_bin" ] && export PATH="$__nvm_default_bin:$PATH"
+
+	unset -f __nvm_highest 2>/dev/null
+	unset __nvm_tok __nvm_hops __nvm_default_bin
+fi
+
 # Use a different histfile per shell, and write to it immediately after each command.
 mkdir -p "$HOME/.zsh_sessions"
 TMUX_SESSION_ID=""
