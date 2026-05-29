@@ -25,12 +25,12 @@ badd +44 nvim/lua/pronvis/remap.lua
 badd +8 nvim/lua/pronvis/set.lua
 badd +1 nvim/after/plugin/betterf.lua
 badd +2 tmux/tmux.conf
-badd +227 zsh/zshrc_conf.zshrc
+badd +309 zsh/zshrc_conf.zshrc
 badd +98 vim_legacy_cfg/init.vim
 badd +1 nvim/lua/pronvis/init.lua
 badd +1 nvim/init.lua
 badd +1 nvim/snippets/rust.snippets
-badd +13 README.md
+badd +58 README.md
 badd +1 tmux-client-60936.log
 badd +11 vim_legacy_cfg/coc-settings.json
 badd +223 ~/.local/state/nvim/mason.log
@@ -51,18 +51,19 @@ badd +24 alacritty/alacritty_legacy.yml
 badd +4 ~/.local/share/nvim/mason/packages/lua-language-server/libexec/meta/Lua\ 5.4\ en-us\ utf8/package.lua
 badd +2 nvim/syntax/gcode.vim
 badd +58 lite/tmux.conf
-badd +6 lite/zshrc
+badd +1 lite/zshrc
 badd +203 lite/nvim/init.lua
 badd +15 lite/dot-push.sh
 badd +58 lite/install-remote.sh
-badd +1 global_gitignore
+badd +2 global_gitignore
 badd +2 gpg-agent.conf
 badd +4 claude/settings.json
 badd +111 claude/statusline-command.sh
+badd +1 scripts/remind
 argglobal
 %argdel
 $argadd ~/it/configs
-edit zsh/zshrc_conf.zshrc
+edit scripts/remind
 let s:save_splitbelow = &splitbelow
 let s:save_splitright = &splitright
 set splitbelow splitright
@@ -76,7 +77,7 @@ set winheight=1
 set winminwidth=0
 set winwidth=1
 argglobal
-balt claude/statusline-command.sh
+balt scripts/ps-aux-nvim
 setlocal foldmethod=manual
 setlocal foldexpr=0
 setlocal foldmarker={{{,}}}
@@ -87,7 +88,7 @@ setlocal foldnestmax=20
 setlocal foldenable
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 1 - ((0 * winheight(0) + 33) / 67)
+let s:l = 1 - ((0 * winheight(0) + 23) / 46)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
@@ -108,6 +109,7 @@ if filereadable(s:sx)
 endif
 let &g:so = s:so_save | let &g:siso = s:siso_save
 set hlsearch
+nohlsearch
 let g:this_session = v:this_session
 let g:this_obsession = v:this_session
 doautoall SessionLoadPost

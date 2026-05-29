@@ -1,0 +1,67 @@
+#!/bin/sh
+# remind — add a reminder to the macOS Reminders app from the terminal.
+#   remind "Buy milk"
+#   remind "Call dentist" "2026-06-01 09:00"   # date + time
+#   remind "Pay rent"     "2026-06-01"         # date only -> defaults to 09:00
+#
+# The due date is parsed by BSD `date` and passed to AppleScript as numeric
+# components, because AppleScript's `date "string"` coercion is locale-dependent
+# and silently mangles ISO strings (e.g. 2026-05-30 -> 2035-11-16).
+
+if [ -z "$1" ]; then
+	echo 'usage: remind <text> [due: "YYYY-MM-DD" or "YYYY-MM-DD HH:MM"]' >&2
+	exit 1
+fi
+
+# No due date: create a plain reminder.
+if [ -z "$2" ]; then
+	osascript - "$1" <<'APPLESCRIPT'
+on run argv
+	tell application "Reminders" to make new reminder with properties {name:(item 1 of argv)}
+end run
+APPLESCRIPT
+	status=$?
+	[ "$status" -eq 0 ] && echo "Reminder added: $1"
+	exit "$status"
+fi
+
+# Normalize: add a default time if only a date was given.
+due="$2"
+case "$due" in
+	*:*) ;;                 # already has HH:MM
+	*)   due="$due 09:00" ;;
+esac
+
+# Parse + validate via BSD date; emit numeric components.
+comps="$(date -j -f "%Y-%m-%d %H:%M" "$due" +"%Y %m %d %H %M" 2>/dev/null)"
+if [ -z "$comps" ]; then
+	echo "remind: could not parse date '$2' (use \"YYYY-MM-DD\" or \"YYYY-MM-DD HH:MM\")" >&2
+	exit 1
+fi
+
+# Split components into positional params: $2=Y $3=mo $4=d $5=h $6=mi ($1 stays text).
+# shellcheck disable=SC2086
+set -- "$1" $comps
+
+osascript - "$1" "$2" "$3" "$4" "$5" "$6" <<'APPLESCRIPT'
+on run argv
+	set theText to item 1 of argv
+	set y to (item 2 of argv) as integer
+	set mo to (item 3 of argv) as integer
+	set d to (item 4 of argv) as integer
+	set h to (item 5 of argv) as integer
+	set mi to (item 6 of argv) as integer
+	set theDate to current date
+	set day of theDate to 1   -- avoid month-end rollover before setting month
+	set year of theDate to y
+	set month of theDate to mo
+	set day of theDate to d
+	set hours of theDate to h
+	set minutes of theDate to mi
+	set seconds of theDate to 0
+	tell application "Reminders" to make new reminder with properties {name:theText, due date:theDate}
+end run
+APPLESCRIPT
+status=$?
+[ "$status" -eq 0 ] && echo "Reminder added: $1 (due $due)"
+exit "$status"
