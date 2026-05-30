@@ -7,6 +7,7 @@ First of all install those usefull tools:
 - `brew install tmux`
 - `brew install neovim`
 - `brew install fd`
+- `brew install python3`
 - `brew install rg`
 - `brew install go`
 - `brew install autojump`
