@@ -48,6 +48,9 @@ I place it here: `~/Yandex.Disk.localized/fonts/JetBrainsMono_hacked.zip`
 - `ln -s $PWD/alacritty/alacritty.toml ~/.alacritty.toml`
 - `ln -s ~/${private_1TB_storage_dir}/git/gitconfig ~/.gitconfig`
 - `ln -s $PWD/scripts/ ~/bin/scripts`
+- `ln -s $PWD/claude/settings.json ~/.claude/settings.json`
+- `ln -s $PWD/claude/statusline-command.sh ~/.claude/statusline-command.sh`
+- `ln -s $PWD/claude/hooks/rustfmt.sh ~/.claude/hooks/rustfmt.sh`
 
 # NeoVim
 
