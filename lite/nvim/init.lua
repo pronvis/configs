@@ -12,69 +12,98 @@
 -- underlying plugin/feature is still available. References to luasnip /
 -- nvim-tree are dropped or rerouted to builtins.
 
-vim.g.mapleader = ' '
+vim.g.mapleader      = ' '
 vim.g.maplocalleader = ' '
 
+-- Remote-friendly clipboard: send OSC 52 to alacritty, double-wrapped in
+-- tmux DCS passthrough so it survives both the remote tmux (3.2a) and
+-- the local mac tmux (3.4) without depending on their set-clipboard paths.
+local function dcs_wrap(seq)
+    return '\027Ptmux;' .. (seq:gsub('\027', '\027\027')) .. '\027\\'
+end
+
+local function osc52_copy(lines)
+    local b64 = vim.base64.encode(table.concat(lines, '\n'))
+    local seq = string.format('\027]52;c;%s\027\\', b64)
+    if vim.env.TMUX then
+        -- Double-wrap: outer wrap for the remote tmux, inner wrap for the
+        -- local mac tmux. Each tmux layer strips exactly one DCS wrapper;
+        -- alacritty sees clean OSC 52.
+        seq = dcs_wrap(dcs_wrap(seq))
+    end
+    io.stdout:write(seq)
+    io.stdout:flush()
+end
+
+local function noop_paste()
+    return { vim.fn.split(vim.fn.getreg('"'), '\n'), vim.fn.getregtype('"') }
+end
+
+vim.g.clipboard      = {
+    name  = 'osc52-dcs',
+    copy  = { ['+'] = osc52_copy, ['*'] = osc52_copy },
+    paste = { ['+'] = noop_paste, ['*'] = noop_paste },
+}
 --------------------------------------------------------------------------
 -- options (cherry-picked from set.lua)
 --------------------------------------------------------------------------
-local opt = vim.opt
+local opt            = vim.opt
 
-opt.scrolloff       = 5
-opt.number          = true
-opt.relativenumber  = true
-opt.autoindent      = true
-opt.encoding        = 'utf-8'
-opt.colorcolumn     = '120'
-opt.textwidth       = 120
-opt.cursorline      = false
-opt.wrap            = false
-opt.linebreak       = true
-opt.mouse           = 'a'
+opt.scrolloff        = 5
+opt.number           = true
+opt.relativenumber   = true
+opt.autoindent       = true
+opt.encoding         = 'utf-8'
+opt.colorcolumn      = '120'
+opt.textwidth        = 120
+opt.cursorline       = false
+opt.wrap             = false
+opt.linebreak        = true
+opt.mouse            = 'a'
 
-opt.tabstop         = 4
-opt.softtabstop     = 4
-opt.shiftwidth      = 4
-opt.expandtab       = true
+opt.tabstop          = 4
+opt.softtabstop      = 4
+opt.shiftwidth       = 4
+opt.expandtab        = true
 
-opt.undodir         = os.getenv("HOME") .. "/.vim/undodir"
-opt.undofile        = true
+opt.undodir          = os.getenv("HOME") .. "/.vim/undodir"
+opt.undofile         = true
 
-opt.termguicolors   = true
-opt.updatetime      = 50
-opt.timeoutlen      = 500
+opt.termguicolors    = true
+opt.updatetime       = 50
+opt.timeoutlen       = 500
 
-opt.langmap =
-  "ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz"
+opt.langmap          =
+"ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz"
 
-opt.cmdheight    = 2
-opt.signcolumn   = 'yes'
-opt.ignorecase   = true
-opt.splitright   = true
-opt.splitbelow   = true
-opt.listchars    = 'nbsp:¬,extends:»,precedes:«,trail:•'
+opt.cmdheight        = 2
+opt.signcolumn       = 'yes'
+opt.ignorecase       = true
+opt.splitright       = true
+opt.splitbelow       = true
+opt.listchars        = 'nbsp:¬,extends:»,precedes:«,trail:•'
 
 --------------------------------------------------------------------------
 -- autocmds (cherry-picked; dropped the lsp/lualine one)
 --------------------------------------------------------------------------
-local au = vim.api.nvim_create_autocmd
-local grp = function(n) return vim.api.nvim_create_augroup(n, { clear = true }) end
+local au             = vim.api.nvim_create_autocmd
+local grp            = function(n) return vim.api.nvim_create_augroup(n, { clear = true }) end
 
 au("BufRead", {
-    pattern = { "*.orig", "*.pacnew" },
-    group   = grp("readonly_group"),
+    pattern  = { "*.orig", "*.pacnew" },
+    group    = grp("readonly_group"),
     callback = function() vim.opt.readonly = true end,
 })
 
 au("BufWritePre", {
-    pattern = "*",
-    group   = grp("create_dir"),
+    pattern  = "*",
+    group    = grp("create_dir"),
     callback = function() vim.cmd(':write ++p') end,
 })
 
 au("TextYankPost", {
-    pattern = "*",
-    group   = grp("highlight_yank"),
+    pattern  = "*",
+    group    = grp("highlight_yank"),
     callback = function()
         vim.highlight.on_yank { silent = true, higroup = 'IncSearch', timeout = 300 }
     end,
@@ -139,14 +168,14 @@ end
 map('n', '<leader>w', vim.cmd.write, 'Save file', { remap = true })
 map('n', ';', ':')
 map('v', ';', ':')
-map('',  'Q', '')
+map('', 'Q', '')
 
 map('n', '<leader>o', 'o<Esc>', 'Insert new line below')
 map('n', '<leader>O', 'O<Esc>', 'Insert new line above')
 
 map('n', '<leader><leader>', '<c-^>', 'Toggle between buffers')
 map('n', '<leader>,', ':set invlist<cr>', 'Show invisible characters')
-map('',  '<leader>m', 'ct_', "Replace up to next '_'")
+map('', '<leader>m', 'ct_', "Replace up to next '_'")
 map('v', '<C-s>', ':nohlsearch<CR>', 'Stop searching')
 map('n', '<C-s>', ':nohlsearch<CR>', 'Stop searching')
 
@@ -155,7 +184,7 @@ map('v', '<C-f>', ':sus<CR>', 'Suspend vim')
 map('n', '<C-f>', ':sus<CR>', 'Suspend vim')
 
 map('', 'H', '^', 'Jump to start of line', { remap = true })
-map('', 'L', '$', 'Jump to end of line',   { remap = true })
+map('', 'L', '$', 'Jump to end of line', { remap = true })
 
 map('n', '+', '<C-a>', 'Increment next number on this line')
 map('n', '-', '<C-x>', 'Decrement next number on this line')
@@ -184,10 +213,10 @@ map('n', '<leader>;',
     function() require('telescope.builtin').buffers({ sort_mru = true, ignore_current_buffer = true }) end,
     'Telescope buffers')
 
-map('n', '<F3>',         ':GitMessenger<CR>',        'Show git commit info for current line')
-map('n', '<leader>hj',   ':GitGutterPreviewHunk<CR>', 'Show git diff for current hunk')
-map('n', '<leader>gp',   ':GitGutterPrevHunk<CR>',    'Jump to previous git hunk')
-map('n', '<leader>gn',   ':GitGutterNextHunk<CR>',    'Jump to next git hunk')
+map('n', '<F3>', ':GitMessenger<CR>', 'Show git commit info for current line')
+map('n', '<leader>hj', ':GitGutterPreviewHunk<CR>', 'Show git diff for current hunk')
+map('n', '<leader>gp', ':GitGutterPrevHunk<CR>', 'Jump to previous git hunk')
+map('n', '<leader>gn', ':GitGutterNextHunk<CR>', 'Jump to next git hunk')
 
 -- F2 → netrw file explorer (replaces nvim-tree in the full config)
 map('n', '<F2>', ':Lexplore<CR>', 'Toggle netrw side panel')
@@ -196,7 +225,7 @@ map('n', '?', '?\\v')
 map('n', '/', '/\\v')
 
 map('t', '<F1>', '<C-\\><C-n>', 'Exit terminal mode')
-map('v', '//',   "y/\\V<C-R>=escape(@\",'/\\')<CR><CR>", 'Search for visually selected text')
+map('v', '//', "y/\\V<C-R>=escape(@\",'/\\')<CR><CR>", 'Search for visually selected text')
 
 map('n', '<leader>e', ':e <C-R>=expand("%:p:h") . "/" <CR>',
     'Open new file adjacent to current file')
@@ -208,8 +237,8 @@ map('n', '*',
     'Search for current word')
 
 -- command-line bindings
-map('c', '<C-a>',      '<C-b>',     'Back to the beginning of the line')
-map('c', '<A-Left>',   '<C-Left>',  'Move back a word')
-map('c', '<A-Right>',  '<C-Right>', 'Move forward a word')
-map('c', '<A-BS>',     '<C-w>',     'Remove one word before the cursor')
-map('c', '%s/',        '%sm/',      'Very magic substitute')
+map('c', '<C-a>', '<C-b>', 'Back to the beginning of the line')
+map('c', '<A-Left>', '<C-Left>', 'Move back a word')
+map('c', '<A-Right>', '<C-Right>', 'Move forward a word')
+map('c', '<A-BS>', '<C-w>', 'Remove one word before the cursor')
+map('c', '%s/', '%sm/', 'Very magic substitute')
