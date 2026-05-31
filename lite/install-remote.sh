@@ -64,6 +64,36 @@ if [[ ! -d "$HOME/.zsh/zsh-syntax-highlighting" ]]; then
         "$HOME/.zsh/zsh-syntax-highlighting"
 fi
 
+# ── docker ──────────────────────────────────────────────────────────────
+if ! command -v docker >/dev/null 2>&1; then
+    echo "==> Installing docker engine"
+    sudo dnf install -y docker
+fi
+# Always ensure the daemon is enabled at boot and currently running.
+# `enable --now` is a no-op if both are already true, so re-runs are safe.
+sudo systemctl enable --now docker
+# Add current user to docker group (idempotent — `usermod -aG` is a no-op
+# if the user is already in the group). Takes effect after re-login.
+if ! id -nG "$USER" | tr ' ' '\n' | grep -qx docker; then
+    echo "==> Adding $USER to docker group (needs re-login)"
+    sudo usermod -aG docker "$USER"
+fi
+
+# ── docker compose plugin (v2) ──────────────────────────────────────────
+# AL2023 doesn't ship the compose plugin. Drop the binary into the
+# user-scope CLI plugins dir so `docker compose ...` works.
+COMPOSE_PLUGIN="$HOME/.docker/cli-plugins/docker-compose"
+if [[ ! -x "$COMPOSE_PLUGIN" ]]; then
+    echo "==> Installing docker compose plugin (arm64 prebuilt)"
+    COMPOSE_VER=$(curl -fsSL https://api.github.com/repos/docker/compose/releases/latest \
+                 | grep -oP '"tag_name":\s*"\K[^"]+')
+    mkdir -p "$(dirname "$COMPOSE_PLUGIN")"
+    curl -fSL \
+        "https://github.com/docker/compose/releases/download/${COMPOSE_VER}/docker-compose-linux-${ARCH}" \
+        -o "$COMPOSE_PLUGIN"
+    chmod +x "$COMPOSE_PLUGIN"
+fi
+
 # ── default shell ───────────────────────────────────────────────────────
 # `chsh` isn't installed on AL2023 by default (lives in util-linux-user).
 # `usermod` is in shadow-utils, which is preinstalled — same effect.
@@ -77,5 +107,10 @@ echo "==> Done. Versions:"
 nvim --version | head -1
 rg --version | head -1
 "$HOME/.fzf/bin/fzf" --version
+docker --version
+# `docker compose version` would need the docker group to be active, which
+# only happens after re-login. Inspect the plugin directly instead.
+"$COMPOSE_PLUGIN" version
 echo
-echo "Log out and back in so zsh becomes the default shell."
+echo "Log out and back in so zsh becomes the default shell"
+echo "AND so your user picks up the docker group (needed for non-sudo 'docker ...')."
