@@ -10,9 +10,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
             vim.keymap.set('n', keys, func, { buffer = bufnr, remap = false, desc = desc })
         end
 
-        local client = assert(vim.lsp.get_client_by_id(event.data.client_id))
-        require("lsp-format").on_attach(client, bufnr)
-
         nmap('<F6>', vim.lsp.buf.rename, 'Rename')
         nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
