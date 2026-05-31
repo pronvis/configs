@@ -20,7 +20,12 @@ require('lazy').setup({
         dependencies = { { 'nvim-lua/plenary.nvim' } }
     },
 
-    { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate' },
+    {
+        'nvim-treesitter/nvim-treesitter',
+        branch = 'main',
+        lazy = false,
+        build = ':TSUpdate',
+    },
 
     'mbbill/undotree',
 
