@@ -16,6 +16,8 @@ First of all install those usefull tools:
 - `cargo install cargo-add`
 - `cargo install cargo-whatfeatures`
 - `cargo install --git https://github.com/davidpdrsn/cargo-docserver.git`
+- `brew install cargo-binstall`
+- `cargo binstall tree-sitter-cli`
 - `rustup component add clippy`
 - `git clone https://github.com/tinted-theming/base16-shell.git $HOME/.config/base16-shell`
 - `git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions`
