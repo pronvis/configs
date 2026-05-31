@@ -16,6 +16,12 @@ bindkey "^[[1;3D" backward-word
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
 
+# Forward-delete keys. Without these, zsh drops a literal "~" for Del because
+# the "^[[3~" escape sequence is unbound. Home/End fixed for good measure.
+bindkey "^[[3~" delete-char
+bindkey "^[[H"  beginning-of-line
+bindkey "^[[F"  end-of-line
+
 # ── PATH ─────────────────────────────────────────────────────────────────
 # Keep PATH entries unique; only prepend dirs that exist.
 typeset -gU path PATH
