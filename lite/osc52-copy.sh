@@ -5,11 +5,14 @@
 # This mirrors the working nvim path in lite/nvim/init.lua and deliberately does
 # NOT rely on tmux's `set-clipboard`, which doesn't work on this setup.
 #
+# The double wrap works whether or not a local tmux is wrapping the SSH session:
+# with a local tmux, each layer strips one wrapper and alacritty gets clean
+# OSC 52; without one, the remote tmux strips the outer wrapper and alacritty's
+# lenient parser still extracts the OSC 52 from the leftover (verified in use).
+#
 # Called from tmux copy-mode:  copy-pipe-and-cancel "bash ~/.tmux-osc52.sh #{pane_tty}"
 #   - stdin : the copied selection
 #   - $1    : the pane's tty to write the escape sequence to
-#
-# Each tmux layer strips exactly one DCS wrapper; alacritty receives clean OSC 52.
 
 set -euo pipefail
 
