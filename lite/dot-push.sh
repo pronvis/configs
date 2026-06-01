@@ -8,9 +8,10 @@
 #   DRY_RUN=1 ./dot-push.sh user@host        # show what would change
 #
 # Files pushed:
-#   tmux.conf    → $HOME/.tmux.conf
-#   zshrc        → $HOME/.zshrc
-#   nvim/        → $HOME/.config/nvim/   (directory mirror, --delete)
+#   tmux.conf      → $HOME/.tmux.conf
+#   zshrc          → $HOME/.zshrc
+#   osc52-copy.sh  → $HOME/.tmux-osc52.sh
+#   nvim/          → $HOME/.config/nvim/   (directory mirror, --delete)
 #
 # Remote prerequisites (one-time, e.g. on Amazon Linux 2023):
 #   sudo dnf install -y zsh git tmux neovim ripgrep fzf
@@ -47,6 +48,9 @@ rsync "${RSYNC_OPTS[@]}" \
 
 rsync "${RSYNC_OPTS[@]}" \
     "${HERE}/zshrc" "${HOST}:.zshrc"
+
+rsync "${RSYNC_OPTS[@]}" \
+    "${HERE}/osc52-copy.sh" "${HOST}:.tmux-osc52.sh"
 
 # Directory mirror with --delete so removed plugin configs don't linger
 # on the remote. Trailing slash on the src matters: it copies the *contents*
