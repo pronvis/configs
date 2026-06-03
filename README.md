@@ -67,16 +67,11 @@ In Mason (`:Mason`) install:
 
 Key encrypted with:
 ```bash
-gpg -c \
-    --cipher-algo AES256 \
-    --s2k-mode 3 \
-    --s2k-digest-algo SHA512 \
-    --s2k-count 65011712 \
-    ~/Yandex.Disk.localized/PGP/stanislav.pirx_pgp_private_key_4096.key
+gpg --export-secret-keys "$FINGERPRINT" | gpg -c --cipher-algo AES256 --s2k-mode 3 --s2k-digest-algo SHA512 --s2k-count 65011712 -o ~/Yandex.Disk.localized/PGP/ed25519_key.gpg
 ```
 To  decrypt it execute:
 ```bash
-gpg -d ~/Yandex.Disk.localized/PGP/stanislav.pirx_pgp_private_key_4096.key.gpg | gpg --import
+gpg -d ~/Yandex.Disk.localized/PGP/id_ed25519.gpg | gpg --import
 ```
 
 1. Import private key: `gpg --import ${path_to_priv_key}`
