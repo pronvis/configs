@@ -46,11 +46,12 @@ I place it here: `~/Yandex.Disk.localized/fonts/JetBrainsMono_hacked.zip`
 - `ln -s $PWD/global_gitignore ~/.gitignore`
 - `ln -s $PWD/gpg-agent.conf ~/.gnupg/gpg-agent.conf`
 - `ln -s $PWD/alacritty/alacritty.toml ~/.alacritty.toml`
-- `ln -s ~/${private_1TB_storage_dir}/git/gitconfig ~/.gitconfig`
 - `ln -s $PWD/scripts/ ~/bin/scripts`
 - `ln -s $PWD/claude/settings.json ~/.claude/settings.json`
 - `ln -s $PWD/claude/statusline-command.sh ~/.claude/statusline-command.sh`
 - `ln -s $PWD/claude/hooks/rustfmt.sh ~/.claude/hooks/rustfmt.sh`
+- `ln -s ~/Yandex.Disk.localized/ssh/config ~/.ssh/config`
+- `ln -s ~/Yandex.Disk.localized/git/gitconfig ~/.gitconfig`
 
 # NeoVim
 
@@ -63,6 +64,20 @@ In Mason (`:Mason`) install:
 - codelldb
 
 # GPG
+
+Key encrypted with:
+```bash
+gpg -c \
+    --cipher-algo AES256 \
+    --s2k-mode 3 \
+    --s2k-digest-algo SHA512 \
+    --s2k-count 65011712 \
+    ~/Yandex.Disk.localized/PGP/stanislav.pirx_pgp_private_key_4096.key
+```
+To  decrypt it execute:
+```bash
+gpg -d ~/Yandex.Disk.localized/PGP/stanislav.pirx_pgp_private_key_4096.key.gpg | gpg --import
+```
 
 1. Import private key: `gpg --import ${path_to_priv_key}`
 2. `export GPG_TTY=$(tty)`
