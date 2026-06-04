@@ -1,88 +1,65 @@
-# Installation steps
-First of all install those usefull tools:
-- install [brew](https://brew.sh/)
-- install [nvm](https://github.com/nvm-sh) and rust
-- `nvm install node`
-- `sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"`
-- `brew install tmux`
-- `brew install neovim`
-- `brew install fd`
-- `brew install python3`
-- `brew install rg`
-- `brew install go`
-- `brew install autojump`
-- `brew install fzf`
-- `cargo install proximity-sort`
-- `cargo install cargo-add`
-- `cargo install cargo-whatfeatures`
-- `cargo install --git https://github.com/davidpdrsn/cargo-docserver.git`
-- `brew install cargo-binstall`
-- `cargo binstall tree-sitter-cli`
-- `rustup component add clippy`
-- `git clone https://github.com/tinted-theming/base16-shell.git $HOME/.config/base16-shell`
-- `git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions`
-- `git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting`
+# dotfiles
 
-## Tmux
-- install plugin manager:
+macOS configuration, managed as symlinks and bootstrapped by `./install.sh`.
+
+## Bootstrap
+
+```sh
+./install.sh             # everything: tools + links + keys
+./install.sh links       # just the config symlinks
+./install.sh links keys  # symlinks + GPG/SSH key
+./install.sh tools       # CLI tools + app bootstrap (Mason, tmux plugins)
+DRY_RUN=1 ./install.sh   # preview every action, change nothing
 ```
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-```
-- inside tmux hit `prefix + I` to install plugins from cfg file that you linked
 
-#### Add special icons
-For `nvim-tree/nvim-web-devicons` to show icons you need to install patched font from: `https://www.nerdfonts.com/`
-I place it here: `~/Yandex.Disk.localized/fonts/JetBrainsMono_hacked.zip`
+Phases run in a dependency-safe order regardless of how they're passed:
 
-# Link Configs
-- `mkdir $HOME/.zsh_sessions`
-- `mkdir $HOME/.zsh_functions`
-- `mkdir -p $HOME/.vim/undodir`
-- `mkdir -p $HOME/.config/nvim/scripts/`
-- `cd {this_repo_directory}`
-- `ln -s $PWD/tmux/tmux.conf ~/.tmux.conf`
-- `ln -s $PWD/nvim ~/.config/nvim`
-- `ln -s $PWD/zsh/zshrc_conf.zshrc ~/.zshrc`
-- `ln -s $PWD/global_gitignore ~/.gitignore`
-- `ln -s $PWD/gpg-agent.conf ~/.gnupg/gpg-agent.conf`
-- `ln -s $PWD/alacritty/alacritty.toml ~/.alacritty.toml`
-- `ln -s $PWD/scripts/ ~/bin/scripts`
-- `ln -s $PWD/claude/settings.json ~/.claude/settings.json`
-- `ln -s $PWD/claude/statusline-command.sh ~/.claude/statusline-command.sh`
-- `ln -s $PWD/claude/hooks/rustfmt.sh ~/.claude/hooks/rustfmt.sh`
-- `ln -s ~/Yandex.Disk.localized/ssh/config ~/.ssh/config`
-- `ln -s ~/Yandex.Disk.localized/git/gitconfig ~/.gitconfig`
+- **tools** — Homebrew, rustup, nvm + node, oh-my-zsh, the brew & cargo
+  packages, and the zsh / base16 / tmux plugin clones. Then app-internal
+  bootstrap: headless Mason LSP install and tmux (TPM) plugin install.
+- **links** — symlinks every config into place. Any existing target is moved to
+  `<name>.bak` (timestamped if a `.bak` already exists) before linking, so
+  nothing is ever destroyed.
+- **keys** — decrypts + imports the GPG key from its encrypted backup and
+  registers its authentication subkey with gpg-agent so it also serves SSH.
 
-# NeoVim
+The script is idempotent — safe to re-run. Tool installs are best-effort: a
+single failed install warns and continues.
 
-In Mason (`:Mason`) install:
-- marksman
-- clangd
-- lua-language-server
-- html-lsp
-- typescript-language-server
-- codelldb
+## Manual steps (not automated)
 
-# GPG
+- **Nerd Font** (for icons in nvim-tree): install a patched font from
+  <https://www.nerdfonts.com/>. Backup: `~/Yandex.Disk.localized/fonts/JetBrainsMono_hacked.zip`.
+- **SSH cutover**: `./install.sh keys` prints your SSH public key — add it to
+  each server's `~/.ssh/authorized_keys`, verify login, then retire the old key.
 
-Key encrypted with:
+## Keys
+
+A single **Ed25519 GPG key** serves both signing/encryption **and** SSH (through
+its authentication subkey + gpg-agent — `enable-ssh-support` is set in
+`gpg-agent.conf`, and `zsh/zshrc_conf.zshrc` points `SSH_AUTH_SOCK` at the
+agent). `./install.sh keys` restores it from the encrypted backup and wires SSH.
+
+The key is backed up passphrase-encrypted (`gpg -c`); the passphrase is in 1Password.
+
 ```bash
-gpg --export-secret-keys "$FINGERPRINT" | gpg -c --cipher-algo AES256 --s2k-mode 3 --s2k-digest-algo SHA512 --s2k-count 65011712 -o ~/Yandex.Disk.localized/PGP/ed25519_key.gpg
+# create the encrypted backup
+gpg --export-secret-keys "$FINGERPRINT" \
+  | gpg -c --cipher-algo AES256 --s2k-mode 3 --s2k-digest-algo SHA512 --s2k-count 65011712 \
+      -o ~/Yandex.Disk.localized/PGP/ed25519_key.gpg
+
+# restore it (what `./install.sh keys` does)
+gpg -d ~/Yandex.Disk.localized/PGP/ed25519_key.gpg | gpg --import
 ```
-To  decrypt it execute:
-```bash
-gpg -d ~/Yandex.Disk.localized/PGP/id_ed25519.gpg | gpg --import
-```
 
-1. Import private key: `gpg --import ${path_to_priv_key}`
-2. `export GPG_TTY=$(tty)`
+- Test signing: `echo "test" | gpg --clearsign`
+- Test SSH identity: `ssh-add -L` (should list the Ed25519 auth subkey)
 
-Now `gcsm "commit message"` should work fine, test it with: `echo "test" | gpg --clearsign`
+## NeoVim
 
-# SSH
-
-Encrypted main key is located in "your 1TB storage". To decrypt it use: `gpg -d ${path_to_gpg_key} > ~/.ssh/id_rsa`
-Or in 1password `Rsa main`
+LSP servers are installed automatically via Mason during `./install.sh tools`:
+marksman, clangd, lua-language-server, html-lsp, typescript-language-server,
+codelldb.
 
 # Remote Servers
 
@@ -108,7 +85,8 @@ add smth like that to `~/.ssh/config`
 Host ec2_how-tmux
     HostName hostname_or_ip_address
     User ec2-user
-    IdentityFile ~/.ssh/id_rsa
     RemoteCommand tmux -u new-session -A -s main
     RequestTTY yes
 ```
+The GPG auth subkey is offered automatically by gpg-agent, so no `IdentityFile`
+line is needed.

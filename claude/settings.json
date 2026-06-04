@@ -38,5 +38,6 @@
       }
     }
   },
+  "effortLevel": "low",
   "tui": "fullscreen"
 }

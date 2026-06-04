@@ -307,3 +307,12 @@ fi
 # from 'man gpg-agent'
 GPG_TTY=$(tty)
 export GPG_TTY
+
+# Use gpg-agent as the SSH agent so the GPG authentication subkey serves SSH
+# (one key for GPG signing/encryption AND SSH). gpg-agent.conf already has
+# `enable-ssh-support`; this points SSH at its socket and keeps pinentry on the
+# current terminal.
+unset SSH_AGENT_PID
+export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+gpgconf --launch gpg-agent
+gpg-connect-agent updatestartuptty /bye >/dev/null
