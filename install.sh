@@ -219,8 +219,8 @@ mason_install() {
         warn "  nvim or ~/.config/nvim missing — run './install.sh links' first, then re-run"
         return
     fi
-    info "  nvim: syncing plugins + installing LSP servers (headless)"
-    try nvim --headless "+Lazy! sync" +qa
+    info "  nvim: restoring plugins (locked versions) + installing LSP servers (headless)"
+    try nvim --headless "+Lazy! restore" +qa
     try nvim --headless "+MasonInstall $*" +qa
 }
 
