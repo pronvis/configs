@@ -92,7 +92,7 @@ LINKS=(
 )
 
 # Encrypted GPG key backup to import.
-GPG_KEY_BACKUP="PGP/ed25519_key.gpg"
+GPG_KEY_BACKUP="GPG/ed25519_key.gpg"
 
 # ═════════════════════════════════════════════════════════════════════════
 # Pure helpers — compute or query only, no side effects.
