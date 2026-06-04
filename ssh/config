@@ -1,0 +1,57 @@
+# =================================================================================
+# ================================ RASPBERRY_PI ===================================
+# =================================================================================
+Host raspb
+    HostName raspberrypi
+    User pronvis
+
+# =================================================================================
+# ==================================== ARGUS  =====================================
+# =================================================================================
+Host argus
+    HostName 134.0.107.47
+    Port 10022
+    User pronvis
+
+# =================================================================================
+# =================================== WHOOTALE ====================================
+# =================================================================================
+Host whootale
+    HostName ec2-54-78-80-96.eu-west-1.compute.amazonaws.com
+    User ec2-user
+    ServerAliveInterval 60
+    ServerAliveCountMax 10
+    RemoteCommand cd ~/whootale && exec $SHELL -l
+    RequestTTY yes
+
+Host whootale-tmux
+    HostName ec2-54-78-80-96.eu-west-1.compute.amazonaws.com
+    User ec2-user
+    RemoteCommand tmux -u new-session -A -s whootale
+    RequestTTY yes
+
+Host whootale-waitlist
+    HostName ec2-63-33-22-236.eu-west-1.compute.amazonaws.com
+    User ec2-user
+    ServerAliveInterval 60
+    ServerAliveCountMax 10
+    RemoteCommand exec $SHELL -l
+    RequestTTY yes
+
+Host whootale-waitlist-tmux
+    HostName ec2-63-33-22-236.eu-west-1.compute.amazonaws.com
+    User ec2-user
+    RemoteCommand tmux -u new-session -A -s waitlist
+    RequestTTY yes
+
+# =================================================================================
+# ==================================== VEESP ======================================
+# =================================================================================
+Host my-vpn
+    HostName 94.242.59.70
+    User root
+
+# =============== Flying Bear Orange Pi ===============
+Host flying_bear
+  HostName 192.168.0.124
+  User orangepi

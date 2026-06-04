@@ -24,7 +24,6 @@
 set -euo pipefail
 
 REPO="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-STORAGE="$HOME/Yandex.Disk.localized" # the "1TB storage" referenced in README
 DRY_RUN="${DRY_RUN:-0}"               # DRY_RUN=1 ./install.sh — preview, change nothing
 
 # ═════════════════════════════════════════════════════════════════════════
@@ -76,24 +75,24 @@ SECURE_DIRS=(
 )
 
 # Config symlinks, as "source | destination". A relative source is resolved
-# against the repo; an absolute source (e.g. in $STORAGE) is used as-is.
+# against the repo; an absolute source is used as-is.
 LINKS=(
     "tmux/tmux.conf|$HOME/.tmux.conf"
     "nvim|$HOME/.config/nvim"
     "zsh/zshrc_conf.zshrc|$HOME/.zshrc"
-    "global_gitignore|$HOME/.gitignore"
+    "git/global_gitignore|$HOME/.gitignore"
+    "git/gitconfig|$HOME/.gitconfig"
     "gpg-agent.conf|$HOME/.gnupg/gpg-agent.conf"
     "alacritty/alacritty.toml|$HOME/.alacritty.toml"
     "scripts|$HOME/bin/scripts"
     "claude/settings.json|$HOME/.claude/settings.json"
     "claude/statusline-command.sh|$HOME/.claude/statusline-command.sh"
     "claude/hooks/rustfmt.sh|$HOME/.claude/hooks/rustfmt.sh"
-    "$STORAGE/git/gitconfig|$HOME/.gitconfig"
-    "$STORAGE/ssh/config|$HOME/.ssh/config"
+    "ssh/config|$HOME/.ssh/config"
 )
 
 # Encrypted GPG key backup to import.
-GPG_KEY_BACKUP="$STORAGE/PGP/ed25519_key.gpg"
+GPG_KEY_BACKUP="PGP/ed25519_key.gpg"
 
 # ═════════════════════════════════════════════════════════════════════════
 # Pure helpers — compute or query only, no side effects.
@@ -334,16 +333,19 @@ phase_links() {
 
 phase_keys() {
     info "Keys: import GPG key + wire SSH"
-    if [[ ! -f "$GPG_KEY_BACKUP" ]]; then
-        warn "encrypted key not found: $GPG_KEY_BACKUP — skipping keys"
+    # Resolve against the repo so it works regardless of the current directory.
+    local enc
+    enc="$(resolve_src "$GPG_KEY_BACKUP")"
+    if [[ ! -f "$enc" ]]; then
+        warn "encrypted key not found: $enc — skipping keys"
         return
     fi
     ensure_secure_dirs "$HOME/.gnupg"
 
     info "Decrypting + importing key (enter the backup passphrase when prompted)"
     if [[ "$DRY_RUN" == 1 ]]; then
-        dry "gpg --decrypt '$GPG_KEY_BACKUP' | gpg --import"
-    elif gpg --decrypt "$GPG_KEY_BACKUP" | gpg --import; then
+        dry "gpg --decrypt '$enc' | gpg --import"
+    elif gpg --decrypt "$enc" | gpg --import; then
         ok "GPG key imported"
     else
         warn "import failed (wrong passphrase?) — re-run: ./install.sh keys"

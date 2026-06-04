@@ -1,0 +1,36 @@
+[alias]
+lg1 = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all --no-merges
+lg2 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all --no-merges
+lg3 = log --graph --abbrev-commit --decorate --all --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(dim white) - %an%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n %C(white)%s%C(reset)'
+lg = !"git lg1"
+st = status
+please = push --force-with-lease
+[user]
+	name = pronvis
+	email = stanislav.pirx@gmail.com
+	signingkey = 1C4550749F86516E
+[pull]
+        rebase = true
+[rebase]
+        autoStash = true
+[merge]
+	tool = p4merge
+[mergetool "p4merge"]
+	path=/Applications/p4merge.app/Contents/MacOS/p4merge
+[push]
+	default = simple
+[core]
+	editor = nvim
+	autocrlf = input
+	excludesfile = ~/.gitignore
+[diff]
+	tool = nvim
+[push]
+        default = simple
+[commit]
+	gpgsign = true
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
