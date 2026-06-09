@@ -32,7 +32,7 @@ DRY_RUN="${DRY_RUN:-0}"               # DRY_RUN=1 ./install.sh — preview, chan
 
 # Homebrew formulae.
 BREW_PACKAGES=(
-    tmux neovim fd ripgrep go autojump fzf cargo-binstall python3
+    tmux neovim fd ripgrep go autojump fzf cargo-binstall python3 awscli
 )
 
 # Cargo installs, as "binary-to-check | cargo subcommand and args".

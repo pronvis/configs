@@ -2,7 +2,7 @@
   "env": {
     "ECC_DISABLED_HOOKS": "pre:bash:gateguard-fact-force,pre:edit-write:gateguard-fact-force"
   },
-  "model": "opus",
+  "model": "claude-fable-5[1m]",
   "hooks": {
     "PostToolUse": [
       {
@@ -22,7 +22,8 @@
   },
   "enabledPlugins": {
     "everything-claude-code@everything-claude-code": true,
-    "revdiff@revdiff": true
+    "revdiff@revdiff": true,
+    "compound-engineering@compound-engineering-plugin": true
   },
   "extraKnownMarketplaces": {
     "everything-claude-code": {
@@ -35,6 +36,12 @@
       "source": {
         "source": "github",
         "repo": "umputun/revdiff"
+      }
+    },
+    "compound-engineering-plugin": {
+      "source": {
+        "source": "github",
+        "repo": "EveryInc/compound-engineering-plugin"
       }
     }
   },

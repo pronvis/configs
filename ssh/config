@@ -45,6 +45,24 @@ Host whootale-waitlist-tmux
     RequestTTY yes
 
 # =================================================================================
+# =================================== ROUTES MAP ====================================
+# =================================================================================
+
+Host routes-map
+    HostName ec2-54-216-128-188.eu-west-1.compute.amazonaws.com
+    User ec2-user
+    ServerAliveInterval 60
+    ServerAliveCountMax 10
+    RemoteCommand cd ~/ && exec $SHELL -l
+    RequestTTY yes
+
+Host routes-map-tmux
+    HostName ec2-54-216-128-188.eu-west-1.compute.amazonaws.com
+    User ec2-user
+    RemoteCommand tmux -u new-session -A -s waitlist
+    RequestTTY yes
+
+# =================================================================================
 # ==================================== VEESP ======================================
 # =================================================================================
 Host my-vpn
