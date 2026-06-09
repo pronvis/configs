@@ -69,6 +69,12 @@ Host my-vpn
     HostName 94.242.59.70
     User root
 
+Host my-vpn-tmux
+    HostName 94.242.59.70
+    User root
+    RemoteCommand tmux -u new-session -A -s vpn
+    RequestTTY yes
+
 # =============== Flying Bear Orange Pi ===============
 Host flying_bear
   HostName 192.168.0.124
