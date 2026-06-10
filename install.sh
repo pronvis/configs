@@ -32,7 +32,7 @@ DRY_RUN="${DRY_RUN:-0}"               # DRY_RUN=1 ./install.sh — preview, chan
 
 # Homebrew formulae.
 BREW_PACKAGES=(
-    tmux neovim fd ripgrep go autojump fzf cargo-binstall python3 awscli
+    tmux neovim fd ripgrep go autojump fzf cargo-binstall python3 awscli gnupg
 )
 
 # Cargo installs, as "binary-to-check | cargo subcommand and args".
@@ -192,6 +192,11 @@ link_one() { # $1 = source spec, $2 = destination
     src="$(resolve_src "$1")"
     dst="$2"
     [[ -e "$src" ]] || { warn "link source missing, skipping: $src"; return; }
+    # SSH refuses a config that is group/world-writable; enforce strict perms
+    # on the real file (the symlink target) so `git pull` over SSH works.
+    case "$dst" in
+        "$HOME/.ssh/"*) [[ -e "$src" ]] && run chmod 600 "$src" ;;
+    esac
     is_linked "$src" "$dst" && { ok "linked: $dst"; return; }
     run mkdir -p "$(dirname "$dst")"
     if [[ -e "$dst" || -L "$dst" ]]; then
