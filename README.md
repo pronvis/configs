@@ -64,10 +64,14 @@ codelldb.
 # Remote Servers
 
 ### First time on the server (install missing tools):
+Pick the script matching the server's architecture (`uname -m`):
+- `aarch64` (e.g. AWS Graviton, Amazon Linux 2023 / dnf) → `install-remote-aarch64.sh`
+- `x86_64` (e.g. Ubuntu 24.04 / apt) → `install-remote-x86_64.sh`
+
 ```
-scp ./lite/install-remote.sh ec2_host:~/
-ssh ec2_host 'bash ~/install-remote.sh'
-./lite/dot-push.sh ec2_host
+scp ./lite/install-remote-x86_64.sh host:~/
+ssh host 'bash ~/install-remote-x86_64.sh'
+./lite/dot-push.sh host
 ```
 
 ### Push configs (run any time):

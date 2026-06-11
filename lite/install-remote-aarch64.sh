@@ -5,7 +5,7 @@
 #
 # Usage (run ON THE REMOTE, not the laptop):
 #   curl -fsSL https://… | bash         # or:
-#   scp install-remote.sh ec2_host:~/  && ssh ec2_host 'bash ~/install-remote.sh'
+#   scp install-remote-aarch64.sh ec2_host:~/ && ssh ec2_host 'bash ~/install-remote-aarch64.sh'
 
 set -euo pipefail
 
@@ -18,7 +18,7 @@ echo "==> dnf packages"
 # AL2023 ships curl-minimal preinstalled; installing the full `curl` package
 # triggers a conflict that requires --allowerasing. curl-minimal supports
 # everything we use (-fSL, redirect-follow), so just skip it.
-sudo dnf install -y zsh git tmux tar gzip
+sudo dnf install -y zsh git tmux tar gzip rsync
 
 # ── neovim ──────────────────────────────────────────────────────────────
 if ! command -v nvim >/dev/null 2>&1; then

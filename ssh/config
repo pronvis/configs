@@ -63,6 +63,20 @@ Host routes-map-tmux
     RequestTTY yes
 
 # =================================================================================
+# ===================================== VPN =======================================
+# =================================================================================
+
+Host vpn-sub-service
+    HostName 157.22.184.1
+    User root
+
+Host vpn-sub-service-tmux
+    HostName 157.22.184.1
+    User root
+    RemoteCommand tmux -u new-session -A -s vpn
+    RequestTTY yes
+
+# =================================================================================
 # ==================================== VEESP ======================================
 # =================================================================================
 Host my-vpn
@@ -71,6 +85,16 @@ Host my-vpn
 
 Host my-vpn-tmux
     HostName 94.242.59.70
+    User root
+    RemoteCommand tmux -u new-session -A -s vpn
+    RequestTTY yes
+
+Host my-vpn-2
+    HostName 13.140.9.64
+    User root
+
+Host my-vpn-2-tmux
+    HostName 13.140.9.64
     User root
     RemoteCommand tmux -u new-session -A -s vpn
     RequestTTY yes
