@@ -49,7 +49,7 @@ Host whootale-waitlist-tmux
 # =================================================================================
 
 Host routes-map
-    HostName ec2-54-216-128-188.eu-west-1.compute.amazonaws.com
+    HostName ec2-34-255-191-79.eu-west-1.compute.amazonaws.com
     User ec2-user
     ServerAliveInterval 60
     ServerAliveCountMax 10
@@ -57,7 +57,7 @@ Host routes-map
     RequestTTY yes
 
 Host routes-map-tmux
-    HostName ec2-54-216-128-188.eu-west-1.compute.amazonaws.com
+    HostName ec2-34-255-191-79.eu-west-1.compute.amazonaws.com
     User ec2-user
     RemoteCommand tmux -u new-session -A -s waitlist
     RequestTTY yes
@@ -76,30 +76,30 @@ Host vpn-sub-service-tmux
     RemoteCommand tmux -u new-session -A -s vpn
     RequestTTY yes
 
-# =================================================================================
+Host vps-aws-test-6
+    HostName 108.131.104.79
+    User ec2-user
+
 # ==================================== VEESP ======================================
+
+Host vpn-veesp
+    HostName 13.140.9.64
+    User root
+
+Host vpn-veesp-tmux
+    HostName 13.140.9.64
+    User root
+    RemoteCommand tmux -u new-session -A -s vpn
+    RequestTTY yes
+
 # =================================================================================
-Host my-vpn
-    HostName 94.242.59.70
-    User root
-
-Host my-vpn-tmux
-    HostName 94.242.59.70
-    User root
-    RemoteCommand tmux -u new-session -A -s vpn
-    RequestTTY yes
-
-Host my-vpn-2
-    HostName 13.140.9.64
-    User root
-
-Host my-vpn-2-tmux
-    HostName 13.140.9.64
-    User root
-    RemoteCommand tmux -u new-session -A -s vpn
-    RequestTTY yes
-
-# =============== Flying Bear Orange Pi ===============
+# ========================== Flying Bear Orange Pi ================================
+# =================================================================================
+#
 Host flying_bear
   HostName 192.168.0.124
   User orangepi
+
+# =================================================================================
+# =================================================================================
+# =================================================================================
