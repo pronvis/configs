@@ -80,13 +80,34 @@ Host vps-aws-test-6
     HostName 108.131.104.79
     User ec2-user
 
+
+Host vpn-vds-0
+    HostName 92.63.100.194
+    User root
+
+Host vpn-vds-0-tmux
+    HostName 92.63.100.194
+    User root
+    RemoteCommand tmux -u new-session -A -s vpn
+    RequestTTY yes
+
 # ==================================== VEESP ======================================
 
-Host vpn-veesp
+Host vpn-veesp-0
+    HostName 94.242.59.70
+    User root
+
+Host vpn-veesp-0-tmux
+    HostName 94.242.59.70
+    User root
+    RemoteCommand tmux -u new-session -A -s vpn
+    RequestTTY yes
+
+Host vpn-veesp-1
     HostName 13.140.9.64
     User root
 
-Host vpn-veesp-tmux
+Host vpn-veesp-1-tmux
     HostName 13.140.9.64
     User root
     RemoteCommand tmux -u new-session -A -s vpn
