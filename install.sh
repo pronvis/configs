@@ -66,6 +66,8 @@ LINK_DIRS=(
     "$HOME/.config"
     "$HOME/bin"
     "$HOME/.claude/hooks"
+    "$HOME/.claude/commands"
+    "$HOME/.claude/skills"
 )
 
 # Directories that must be mode 0700.
@@ -88,6 +90,8 @@ LINKS=(
     "claude/settings.json|$HOME/.claude/settings.json"
     "claude/statusline-command.sh|$HOME/.claude/statusline-command.sh"
     "claude/hooks/rustfmt.sh|$HOME/.claude/hooks/rustfmt.sh"
+    "claude/skills/handoff|$HOME/.claude/skills/handoff"
+    "claude/commands/validate-spec.md|$HOME/.claude/commands/validate-spec.md"
     "ssh/config|$HOME/.ssh/config"
 )
 
