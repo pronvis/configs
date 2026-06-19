@@ -89,10 +89,18 @@ LINKS=(
     "scripts|$HOME/bin/scripts"
     "claude/settings.json|$HOME/.claude/settings.json"
     "claude/statusline-command.sh|$HOME/.claude/statusline-command.sh"
-    "claude/hooks/rustfmt.sh|$HOME/.claude/hooks/rustfmt.sh"
-    "claude/skills/handoff|$HOME/.claude/skills/handoff"
-    "claude/commands/validate-spec.md|$HOME/.claude/commands/validate-spec.md"
     "ssh/config|$HOME/.ssh/config"
+)
+
+# Directory-contents symlinks, as "source dir | destination dir". Every entry
+# directly inside the repo source dir is linked into the destination dir
+# (which is a real, shared dir — e.g. ~/.claude/* also holds plugin files, so
+# we can't link the whole dir). Add files to the repo dir and they're picked
+# up automatically — no need to edit this script.
+LINK_GLOBS=(
+    "claude/commands|$HOME/.claude/commands"
+    "claude/skills|$HOME/.claude/skills"
+    "claude/hooks|$HOME/.claude/hooks"
 )
 
 # Encrypted GPG key backup to import.
@@ -222,6 +230,23 @@ create_links() {
     done
 }
 
+# args: "source dir | destination dir" — links each entry inside the source
+# dir into the destination dir (non-recursive). New files are picked up
+# automatically on re-run.
+link_globs() {
+    info "Links: directory contents"
+    local spec srcdir dstdir src
+    for spec in "$@"; do
+        IFS='|' read -r srcdir dstdir <<<"$spec"
+        srcdir="$(resolve_src "$srcdir")"
+        [[ -d "$srcdir" ]] || { warn "link source dir missing, skipping: $srcdir"; continue; }
+        for src in "$srcdir"/*; do
+            [[ -e "$src" ]] || continue   # empty dir → glob stays literal
+            link_one "$src" "$dstdir/$(basename "$src")"
+        done
+    done
+}
+
 # args: Mason package names
 mason_install() {
     if ! have nvim || [[ ! -e "$HOME/.config/nvim" ]]; then
@@ -338,6 +363,7 @@ phase_links() {
     ensure_dirs        "${LINK_DIRS[@]}"
     ensure_secure_dirs "${SECURE_DIRS[@]}"
     create_links       "${LINKS[@]}"
+    link_globs         "${LINK_GLOBS[@]}"
 }
 
 phase_keys() {
