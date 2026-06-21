@@ -45,6 +45,13 @@ CARGO_INSTALLS=(
     "tree-sitter|binstall -y tree-sitter-cli"
 )
 
+# Global npm packages. These live per-node-version, so `nvm install node`
+# bumping to a newer node orphans them — re-running tools reinstalls them
+# under the current default node.
+NPM_GLOBALS=(
+    "@fission-ai/openspec@latest"
+)
+
 # Mason LSP servers (installed headless via nvim).
 MASON_PACKAGES=(
     marksman clangd lua-language-server html-lsp typescript-language-server codelldb
@@ -184,6 +191,16 @@ install_cargo() {
         try cargo $args
     done
     try rustup component add clippy
+}
+
+# args: npm package specs (e.g. "@scope/pkg@latest")
+install_npm_globals() {
+    info "Tools: global npm packages"
+    have npm || { warn "npm unavailable; skipping global npm packages"; return; }
+    local pkg
+    for pkg in "$@"; do
+        try npm install -g "$pkg"
+    done
 }
 
 # args: "url | destination"
@@ -329,7 +346,13 @@ setup_nvm_node() {
     export NVM_DIR="$HOME/.nvm"
     # shellcheck disable=SC1091
     [[ -s "$NVM_DIR/nvm.sh" ]] && . "$NVM_DIR/nvm.sh"
-    type nvm >/dev/null 2>&1 && try nvm install node
+    # Install the latest LTS and make new shells default to it. Using LTS
+    # (not bleeding-edge `node`) keeps the version stable and avoids orphaning
+    # globally-installed npm packages on every run.
+    if type nvm >/dev/null 2>&1; then
+        try nvm install --lts
+        try nvm alias default 'lts/*'
+    fi
     return 0
 }
 
@@ -353,9 +376,10 @@ phase_tools() {
     setup_nvm_node
     setup_oh_my_zsh
 
-    install_brew  "${BREW_PACKAGES[@]}"
-    install_cargo "${CARGO_INSTALLS[@]}"
-    clone_repos   "${GIT_CLONES[@]}"
+    install_brew        "${BREW_PACKAGES[@]}"
+    install_cargo       "${CARGO_INSTALLS[@]}"
+    install_npm_globals "${NPM_GLOBALS[@]}"
+    clone_repos         "${GIT_CLONES[@]}"
 }
 
 phase_links() {
