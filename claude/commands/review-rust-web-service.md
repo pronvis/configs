@@ -4,20 +4,20 @@ argument-hint: <feature-branch>
 ---
 
 You are reviewing a Rust web-service project. The baseline is the default branch
-(`master`, or `main` if `master` does not exist); the feature branch under review is
-`$1`. Your job is to audit the **entire diff** the feature branch adds relative to the
+(`$1`, or `main` if `$1` does not exist); the feature branch under review is
+`$2`. Your job is to audit the **entire diff** the feature branch adds relative to the
 baseline, and judge it against the project's authoritative guidelines.
 
 ## Guardrails (do these first, stop on failure)
 
-- If `$1` is empty, stop and ask the user for the feature branch name.
-- Determine the baseline: `git show-ref --verify --quiet refs/heads/master && echo master || echo main`.
-- Verify the branch exists: `git rev-parse --verify $1`. If it fails, stop and report.
-- If `git diff <baseline>...$1` is empty, report "no changes to review" and stop.
+- If `$2` is empty, stop and ask the user for the feature branch name.
+- Determine the baseline: `git show-ref --verify --quiet refs/heads/$1 && echo $1 || echo main`.
+- Verify the branch exists: `git rev-parse --verify $2`. If it fails, stop and report.
+- If `git diff <baseline>...$2` is empty, report "no changes to review" and stop.
 
 ## Step 1 — Get the diff
 
-Run `git diff <baseline>...$1` (three-dot: exactly what `$1` adds relative to the
+Run `git diff <baseline>...$2` (three-dot: exactly what `$2` adds relative to the
 common ancestor). Then **read every changed file in full** — not just the hunks — so you
 have the surrounding context (function signatures, error types, trait impls, call sites)
 needed to judge correctness, not just syntax.

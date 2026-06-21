@@ -1,21 +1,21 @@
 ---
-description: High-scrutiny review of the `$1` branch diff — money-movement safety + guideline compliance
+description: High-scrutiny review of the `$2` branch diff — money-movement safety + guideline compliance
 ---
 
 You are reviewing a Rust web-service project that handles **real payments moving real
-money**. Baseline branch: `master`. Feature branch under review: `$1`. Your job is
-to audit the **entire diff** the `$1` branch adds relative to `master`, with the
+money**. Baseline branch: `$1`. Feature branch under review: `$2`. Your job is
+to audit the **entire diff** the `$2` branch adds relative to `$1`, with the
 highest possible scrutiny. **This pass is review-only — do not modify any code unless the
 user explicitly asks.**
 
 ## Guardrails (do these first, stop on failure)
 
-- Verify both branches exist: `git rev-parse --verify master` and `git rev-parse --verify $1`. If either fails, stop and report.
-- If `git diff master...$1` is empty, report "no changes to review" and stop.
+- Verify both branches exist: `git rev-parse --verify $1` and `git rev-parse --verify $2`. If either fails, stop and report.
+- If `git diff $1...$2` is empty, report "no changes to review" and stop.
 
 ## Step 1 — Get the diff
 
-Run `git diff master...$1` (three-dot: exactly what `$1` adds relative to the
+Run `git diff $1...$2` (three-dot: exactly what `$2` adds relative to the
 common ancestor). Then **read every changed file in full** — not just the hunks — so you
 have the surrounding context (error types, transaction boundaries, call sites, trait
 impls) needed to judge correctness. For money-handling code, also read the *unchanged*
