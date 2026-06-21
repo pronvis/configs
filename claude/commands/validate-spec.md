@@ -1,1 +1,1 @@
-go through this spec and validate it, make sure it does not have contradictions
+go through the spec '$ARGUMENTS' (or current one) and validate it, make sure it does not have contradictions
