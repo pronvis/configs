@@ -128,6 +128,7 @@ fi
 alias ccache="sudo dscacheutil -flushcache;sudo killall -HUP mDNSResponder"
 alias mydate="date '+DATE: %m/%d/%y%nTIME: %H:%M:%S'"
 alias clean="printf '\e]50;ClearScrollback\a'"
+alias gcsm='git commit -S --message'   # GPG-sign instead of oh-my-zsh's --signoff
 
 export JAVA_OPTS="-Xmx4096m $JAVA_OPTS"
 
