@@ -76,10 +76,13 @@ Host vpn-sub-service-tmux
     RemoteCommand tmux -u new-session -A -s vpn
     RequestTTY yes
 
-Host vps-aws-test-6
+Host vpn-aws-test-6
     HostName 108.131.104.79
     User ec2-user
 
+Host vpn-aws-test-7
+    HostName 18.202.175.149
+    User ec2-user
 
 Host vpn-vds-0
     HostName 92.63.100.194
@@ -100,7 +103,7 @@ Host vpn-veesp-0
 Host vpn-veesp-0-tmux
     HostName 94.242.59.70
     User root
-    RemoteCommand tmux -u new-session -A -s vpn
+    RemoteCommand tmux -u new-session -A -s veesp-0
     RequestTTY yes
 
 Host vpn-veesp-1
@@ -110,7 +113,7 @@ Host vpn-veesp-1
 Host vpn-veesp-1-tmux
     HostName 13.140.9.64
     User root
-    RemoteCommand tmux -u new-session -A -s vpn
+    RemoteCommand tmux -u new-session -A -s veesp-1
     RequestTTY yes
 
 # =================================================================================
