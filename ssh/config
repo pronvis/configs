@@ -94,6 +94,16 @@ Host vpn-aws-test-8-tmux
     RemoteCommand tmux -u new-session -A -s aws-test-8
     RequestTTY yes
 
+Host vpn-aws-paris-0
+    HostName 35.180.27.245
+    User ubuntu
+
+Host vpn-aws-paris-0-tmux
+    HostName 35.180.27.245
+    User ubuntu
+    RemoteCommand tmux -u new-session -A -s aws-paris-0
+    RequestTTY yes
+
 Host vpn-vds-0
     HostName 92.63.100.194
     User root
@@ -101,7 +111,7 @@ Host vpn-vds-0
 Host vpn-vds-0-tmux
     HostName 92.63.100.194
     User root
-    RemoteCommand tmux -u new-session -A -s vpn
+    RemoteCommand tmux -u new-session -A -s vds-0
     RequestTTY yes
 
 # ==================================== VEESP ======================================
