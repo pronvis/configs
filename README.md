@@ -63,16 +63,26 @@ codelldb.
 
 # Remote Servers
 
-### First time on the server (install missing tools):
-Pick the script matching the server's architecture (`uname -m`):
-- `aarch64` (e.g. AWS Graviton, Amazon Linux 2023 / dnf) → `install-remote-aarch64.sh`
-- `x86_64` (e.g. Ubuntu 24.04 / apt) → `install-remote-x86_64.sh`
+### First time on the server (one command):
+Detects the server's architecture, runs the matching installer, and pushes the dotfiles:
+```
+./lite/provision-remote.sh host
+```
+`host` is an ssh-config alias or `user@host`.
+
+<details><summary>What it does / manual equivalent</summary>
+
+It picks the installer by the remote's package manager (each installer is
+arch-aware and handles both x86_64 and aarch64):
+- `apt` (Ubuntu/Debian) → `install-remote-apt.sh`
+- `dnf` (Amazon Linux 2023 / Fedora / RHEL) → `install-remote-dnf.sh`
 
 ```
-scp ./lite/install-remote-x86_64.sh host:~/
-ssh host 'bash ~/install-remote-x86_64.sh'
+scp ./lite/install-remote-apt.sh host:~/
+ssh host 'bash ~/install-remote-apt.sh'
 ./lite/dot-push.sh host
 ```
+</details>
 
 ### Push configs (run any time):
 

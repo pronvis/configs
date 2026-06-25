@@ -1,18 +1,21 @@
 #!/usr/bin/env bash
 #
-# Bootstrap a fresh Amazon Linux 2023 (Graviton/arm64) host with the
-# tools the lite dotfiles assume. Idempotent — re-runs are safe.
+# Bootstrap a fresh dnf-based host (Amazon Linux 2023 / Fedora / RHEL) with
+# the tools the lite dotfiles assume. Works on both x86_64 and aarch64.
+# Idempotent — re-runs are safe.
 #
 # Usage (run ON THE REMOTE, not the laptop):
-#   curl -fsSL https://… | bash         # or:
-#   scp install-remote-aarch64.sh ec2_host:~/ && ssh ec2_host 'bash ~/install-remote-aarch64.sh'
+#   scp install-remote-dnf.sh host:~/ && ssh host 'bash ~/install-remote-dnf.sh'
 
 set -euo pipefail
 
 ARCH=$(uname -m)
-if [[ "$ARCH" != "aarch64" ]]; then
-    echo "warn: this script is tuned for aarch64 (Graviton). Detected: $ARCH" >&2
-fi
+# Map uname arch -> the naming each upstream uses.
+case "$ARCH" in
+    x86_64)  NVIM_ARCH=x86_64; RG_ARCH=x86_64 ;;
+    aarch64) NVIM_ARCH=arm64;  RG_ARCH=aarch64 ;;
+    *) echo "error: unsupported arch '$ARCH'" >&2; exit 1 ;;
+esac
 
 echo "==> dnf packages"
 # AL2023 ships curl-minimal preinstalled; installing the full `curl` package
@@ -22,25 +25,25 @@ sudo dnf install -y zsh git tmux tar gzip rsync
 
 # ── neovim ──────────────────────────────────────────────────────────────
 if ! command -v nvim >/dev/null 2>&1; then
-    echo "==> Installing neovim (arm64 prebuilt)"
+    echo "==> Installing neovim (${NVIM_ARCH} prebuilt)"
     curl -fSL \
-        https://github.com/neovim/neovim/releases/latest/download/nvim-linux-arm64.tar.gz \
+        "https://github.com/neovim/neovim/releases/latest/download/nvim-linux-${NVIM_ARCH}.tar.gz" \
         -o /tmp/nvim.tar.gz
     sudo tar -C /opt -xzf /tmp/nvim.tar.gz
-    sudo ln -sf /opt/nvim-linux-arm64/bin/nvim /usr/local/bin/nvim
+    sudo ln -sf "/opt/nvim-linux-${NVIM_ARCH}/bin/nvim" /usr/local/bin/nvim
     rm /tmp/nvim.tar.gz
 fi
 
 # ── ripgrep ─────────────────────────────────────────────────────────────
 if ! command -v rg >/dev/null 2>&1; then
-    echo "==> Installing ripgrep (arm64 prebuilt)"
+    echo "==> Installing ripgrep (${RG_ARCH} prebuilt)"
     RG_VER=$(curl -fsSL https://api.github.com/repos/BurntSushi/ripgrep/releases/latest \
              | grep -oP '"tag_name":\s*"\K[^"]+')
     curl -fSL \
-        "https://github.com/BurntSushi/ripgrep/releases/download/${RG_VER}/ripgrep-${RG_VER}-aarch64-unknown-linux-gnu.tar.gz" \
+        "https://github.com/BurntSushi/ripgrep/releases/download/${RG_VER}/ripgrep-${RG_VER}-${RG_ARCH}-unknown-linux-gnu.tar.gz" \
         -o /tmp/rg.tar.gz
     sudo tar -C /opt -xzf /tmp/rg.tar.gz
-    sudo ln -sf "/opt/ripgrep-${RG_VER}-aarch64-unknown-linux-gnu/rg" /usr/local/bin/rg
+    sudo ln -sf "/opt/ripgrep-${RG_VER}-${RG_ARCH}-unknown-linux-gnu/rg" /usr/local/bin/rg
     rm /tmp/rg.tar.gz
 fi
 
@@ -84,7 +87,7 @@ fi
 # user-scope CLI plugins dir so `docker compose ...` works.
 COMPOSE_PLUGIN="$HOME/.docker/cli-plugins/docker-compose"
 if [[ ! -x "$COMPOSE_PLUGIN" ]]; then
-    echo "==> Installing docker compose plugin (arm64 prebuilt)"
+    echo "==> Installing docker compose plugin (${ARCH} prebuilt)"
     COMPOSE_VER=$(curl -fsSL https://api.github.com/repos/docker/compose/releases/latest \
                  | grep -oP '"tag_name":\s*"\K[^"]+')
     mkdir -p "$(dirname "$COMPOSE_PLUGIN")"

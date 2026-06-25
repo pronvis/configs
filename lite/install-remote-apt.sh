@@ -1,19 +1,23 @@
 #!/usr/bin/env bash
 #
-# Bootstrap a fresh Ubuntu 24.04 (x86_64) host with the tools the lite
-# dotfiles assume. Idempotent — re-runs are safe.
+# Bootstrap a fresh apt-based host (Ubuntu/Debian) with the tools the lite
+# dotfiles assume. Works on both x86_64 and aarch64. Idempotent.
 #
 # Usage (run ON THE REMOTE, not the laptop):
-#   scp install-remote-x86_64.sh host:~/ && ssh host 'bash ~/install-remote-x86_64.sh'
+#   scp install-remote-apt.sh host:~/ && ssh host 'bash ~/install-remote-apt.sh'
 
 set -euo pipefail
 
 ARCH=$(uname -m)
-if [[ "$ARCH" != "x86_64" ]]; then
-    echo "warn: this script is tuned for x86_64. Detected: $ARCH" >&2
-fi
+# Map uname arch -> the naming each upstream uses.
+case "$ARCH" in
+    x86_64)  NVIM_ARCH=x86_64; RG_ARCH=x86_64 ;;
+    aarch64) NVIM_ARCH=arm64;  RG_ARCH=aarch64 ;;
+    *) echo "error: unsupported arch '$ARCH'" >&2; exit 1 ;;
+esac
+DPKG_ARCH=$(dpkg --print-architecture)   # amd64 / arm64 — for the docker apt repo
 
-echo "==> apt packages"
+echo "==> apt packages (arch: $ARCH)"
 export DEBIAN_FRONTEND=noninteractive
 sudo apt-get update -y
 sudo apt-get install -y zsh git tmux tar gzip curl ca-certificates rsync
@@ -21,12 +25,12 @@ sudo apt-get install -y zsh git tmux tar gzip curl ca-certificates rsync
 # ── neovim ──────────────────────────────────────────────────────────────
 # Ubuntu's apt nvim is too old for the lite config; use the prebuilt tarball.
 if ! command -v nvim >/dev/null 2>&1; then
-    echo "==> Installing neovim (x86_64 prebuilt)"
+    echo "==> Installing neovim (${NVIM_ARCH} prebuilt)"
     curl -fSL \
-        https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz \
+        "https://github.com/neovim/neovim/releases/latest/download/nvim-linux-${NVIM_ARCH}.tar.gz" \
         -o /tmp/nvim.tar.gz
     sudo tar -C /opt -xzf /tmp/nvim.tar.gz
-    sudo ln -sf /opt/nvim-linux-x86_64/bin/nvim /usr/local/bin/nvim
+    sudo ln -sf "/opt/nvim-linux-${NVIM_ARCH}/bin/nvim" /usr/local/bin/nvim
     rm /tmp/nvim.tar.gz
 fi
 
@@ -35,14 +39,14 @@ fi
 if ! command -v rg >/dev/null 2>&1; then
     echo "==> Installing ripgrep"
     sudo apt-get install -y ripgrep || {
-        echo "==> apt ripgrep unavailable; using x86_64 prebuilt"
+        echo "==> apt ripgrep unavailable; using ${RG_ARCH} prebuilt"
         RG_VER=$(curl -fsSL https://api.github.com/repos/BurntSushi/ripgrep/releases/latest \
                  | grep -oP '"tag_name":\s*"\K[^"]+')
         curl -fSL \
-            "https://github.com/BurntSushi/ripgrep/releases/download/${RG_VER}/ripgrep-${RG_VER}-x86_64-unknown-linux-musl.tar.gz" \
+            "https://github.com/BurntSushi/ripgrep/releases/download/${RG_VER}/ripgrep-${RG_VER}-${RG_ARCH}-unknown-linux-musl.tar.gz" \
             -o /tmp/rg.tar.gz
         sudo tar -C /opt -xzf /tmp/rg.tar.gz
-        sudo ln -sf "/opt/ripgrep-${RG_VER}-x86_64-unknown-linux-musl/rg" /usr/local/bin/rg
+        sudo ln -sf "/opt/ripgrep-${RG_VER}-${RG_ARCH}-unknown-linux-musl/rg" /usr/local/bin/rg
         rm /tmp/rg.tar.gz
     }
 fi
@@ -70,13 +74,13 @@ fi
 # ── docker ──────────────────────────────────────────────────────────────
 # Install Docker Engine + compose plugin from Docker's official apt repo.
 if ! command -v docker >/dev/null 2>&1; then
-    echo "==> Installing docker engine (official apt repo)"
+    echo "==> Installing docker engine (official apt repo, arch ${DPKG_ARCH})"
     sudo install -m 0755 -d /etc/apt/keyrings
     sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
         -o /etc/apt/keyrings/docker.asc
     sudo chmod a+r /etc/apt/keyrings/docker.asc
     echo \
-      "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+      "deb [arch=${DPKG_ARCH} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
       $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
       | sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
     sudo apt-get update -y

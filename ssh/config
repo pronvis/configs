@@ -88,6 +88,12 @@ Host vpn-aws-test-8
     HostName 3.252.216.143
     User ubuntu
 
+Host vpn-aws-test-8-tmux
+    HostName 3.252.216.143
+    User ubuntu
+    RemoteCommand tmux -u new-session -A -s aws-test-8
+    RequestTTY yes
+
 Host vpn-vds-0
     HostName 92.63.100.194
     User root
