@@ -84,6 +84,10 @@ Host vpn-aws-test-7
     HostName 34.244.17.179
     User ubuntu
 
+Host vpn-aws-test-8
+    HostName 3.252.216.143
+    User ubuntu
+
 Host vpn-vds-0
     HostName 92.63.100.194
     User root
