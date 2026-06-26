@@ -116,6 +116,7 @@ map("n", "<leader>gn", ':GitGutterNextHunk<CR>', 'Jump to next git hunk')
 -- diffview
 map("n", "<leader>gd", '<cmd>DiffviewOpen<cr>', 'Diffview')
 map("n", "<leader>gh", '<cmd>DiffviewFileHistory %<cr>', 'File history')
+map("n", "<leader>ga", '<cmd>DiffviewFileHistory<cr>', 'File history')
 
 -- file tree
 map('n', '<F2>', (require "nvim-tree.api").tree.toggle, 'Show file tree')
