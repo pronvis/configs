@@ -33,6 +33,11 @@ require('lazy').setup({
     'tpope/vim-fugitive',
     'airblade/vim-gitgutter',
     'rhysd/git-messenger.vim',
+    {
+        'sindrets/diffview.nvim',
+        dependencies = { 'nvim-lua/plenary.nvim' },
+        cmd = { 'DiffviewOpen', 'DiffviewClose', 'DiffviewFileHistory' },
+    },
 
     -- Language Server Protocol
     'williamboman/mason.nvim',
