@@ -76,23 +76,13 @@ Host vpn-sub-service-tmux
     RemoteCommand tmux -u new-session -A -s vpn
     RequestTTY yes
 
-Host vpn-aws-test-6
-    HostName 108.131.104.79
-    User ec2-user
-
-Host vpn-aws-test-7
-    HostName 34.244.17.179
+Host vpn-aws-ireland-9
+    HostName 18.201.109.237
     User ubuntu
 
-Host vpn-aws-test-8
-    HostName 3.252.216.143
+Host vpn-aws-ireland-10
+    HostName 18.202.246.208
     User ubuntu
-
-Host vpn-aws-test-8-tmux
-    HostName 3.252.216.143
-    User ubuntu
-    RemoteCommand tmux -u new-session -A -s aws-test-8
-    RequestTTY yes
 
 Host vpn-aws-paris-0
     HostName 35.180.27.245
