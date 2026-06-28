@@ -13,6 +13,17 @@
           }
         ]
       }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/rust-review-reminder.sh"
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
