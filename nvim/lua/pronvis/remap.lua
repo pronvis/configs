@@ -146,8 +146,10 @@ map('n', '<leader>i', ':lua IndentEntireFile()<CR>', 'Indent entire file')
 
 -- open new file adjacent to current file
 map('n', '<leader>e', ':e <C-R>=expand("%:p:h") . "/" <CR>', 'Open new file adjacent to current file')
--- copy full file name to clipboard
-map('n', '<leader>P', ':let @+ = expand("%:p")<CR>', 'Copy full file name to clipboard')
+-- copy project-relative file path to clipboard
+map('n', '<leader>P', ':let @+ = expand("%:.")<CR>', 'Copy project-relative file path to clipboard')
+-- copy full (absolute) file path to clipboard
+map('n', '<leader>F', ':let @+ = expand("%:p")<CR>', 'Copy full file path to clipboard')
 
 -- do Highlighting a search term without moving the cursor https://superuser.com/questions/255023/highlighting-a-search-term-without-moving-the-cursor
 map('n', '*', ':let @/ = \'\\<\'.expand(\'<cword>\').\'\\>\'|set hlsearch<C-M>', 'Search for current word')
