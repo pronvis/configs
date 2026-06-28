@@ -55,6 +55,29 @@ gpg -d ~/Yandex.Disk.localized/PGP/ed25519_key.gpg | gpg --import
 - Test signing: `echo "test" | gpg --clearsign`
 - Test SSH identity: `ssh-add -L` (should list the Ed25519 auth subkey)
 
+### Troubleshooting: gpg/SSH/signed commits hang
+
+If `git pull`, signed commits (`gcsm`), or any gpg command "does nothing" while
+`git status` works fine, gpg-agent can't start. Most common cause is a Homebrew
+dependency mismatch after `brew upgrade` — e.g. `gnupg` built against an old
+`libassuan` soname:
+
+```
+gpg-agent: Library not loaded: .../libassuan.0.dylib  # agent aborts on launch
+```
+
+Fix by rebuilding the gpg stack against current libs:
+
+```bash
+brew upgrade gnupg          # or: brew reinstall gnupg
+pkill -9 -f gpg-agent       # drop the wedged agent; it respawns clean
+gpg-agent --gpgconf-test    # should print nothing + exit 0
+gpg-connect-agent /bye      # should say "connection to the agent established"
+```
+
+Also ensure `pinentry-mac` is installed (it's in `BREW_PACKAGES` and referenced
+by `gpg-agent.conf`); `pinentry-curses` hangs inside other TUIs.
+
 ## NeoVim
 
 LSP servers are installed automatically via Mason during `./install.sh tools`:

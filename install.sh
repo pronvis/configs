@@ -31,8 +31,12 @@ DRY_RUN="${DRY_RUN:-0}"               # DRY_RUN=1 ./install.sh — preview, chan
 # ═════════════════════════════════════════════════════════════════════════
 
 # Homebrew formulae.
+# Note: pinentry-mac gives a native macOS passphrase dialog (and Keychain
+# storage). Without it, gpg-agent falls back to pinentry-curses, whose TUI
+# breaks inside other TUIs (e.g. Claude Code) and hangs gpg/SSH/signed commits.
+# It must match the `pinentry-program` line in gpg-agent.conf.
 BREW_PACKAGES=(
-    tmux neovim fd ripgrep go autojump fzf cargo-binstall python3 awscli gnupg
+    tmux neovim fd ripgrep go autojump fzf cargo-binstall python3 awscli gnupg pinentry-mac
 )
 
 # Cargo installs, as "binary-to-check | cargo subcommand and args".
