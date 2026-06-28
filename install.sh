@@ -77,6 +77,7 @@ LINK_DIRS=(
     "$HOME/.config"
     "$HOME/bin"
     "$HOME/.claude/hooks"
+    "$HOME/.claude/rules/rust/"
     "$HOME/.claude/commands"
     "$HOME/.claude/skills"
 )
@@ -112,6 +113,7 @@ LINK_GLOBS=(
     "claude/commands|$HOME/.claude/commands"
     "claude/skills|$HOME/.claude/skills"
     "claude/hooks|$HOME/.claude/hooks"
+    "claude/rules/rust|$HOME/.claude/rules/rust"
 )
 
 # Encrypted GPG key backup to import.
