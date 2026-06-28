@@ -1,3 +1,17 @@
+-- Detach LSP clients from diffview's pseudo-buffers (git blobs like
+-- `diffview://.../.git/:0:/file.md`). marksman crashes (exit code 1) on
+-- textDocument/didClose because it tries to re-read the non-existent path.
+vim.api.nvim_create_autocmd('LspAttach', {
+    callback = function(event)
+        local name = vim.api.nvim_buf_get_name(event.buf)
+        if name:match('^diffview://') or name:match('%.git/') or name:match('^fugitive://') then
+            vim.schedule(function()
+                vim.lsp.buf_detach_client(event.buf, event.data.client_id)
+            end)
+        end
+    end,
+})
+
 vim.api.nvim_create_autocmd('LspAttach', {
     callback = function(event)
         local bufnr = event.buf;
