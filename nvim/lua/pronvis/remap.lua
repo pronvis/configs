@@ -93,7 +93,7 @@ map('n', '#', '#zz', 'Search for current word and jump to prev', { silent = true
 map('n', 'g*', 'g*zz', 'Search for current word and jump to next', { silent = true })
 
 -- <leader>p for paste without yanking
-map('v', '<leader>p', '\"_dp', 'Paste without yanking')
+map('v', '<leader>p', '\"_dP', 'Paste without yanking')
 
 -- close buffer without closing the window
 map('n', '<leader>q', ':bp<bar>sp<bar>bn<bar>bd<CR>')
