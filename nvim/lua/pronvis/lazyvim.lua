@@ -37,6 +37,10 @@ require('lazy').setup({
         'sindrets/diffview.nvim',
         dependencies = { 'nvim-lua/plenary.nvim' },
         cmd = { 'DiffviewOpen', 'DiffviewClose', 'DiffviewFileHistory' },
+        -- enhanced_diff_hl: git-style colors (deletions red in their own pane,
+        -- additions green) instead of vimdiff's symmetric scheme where removed
+        -- code looks green on the left.
+        opts = { enhanced_diff_hl = true },
     },
 
     -- Language Server Protocol
