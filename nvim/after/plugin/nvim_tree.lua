@@ -16,6 +16,11 @@ local function my_on_attach(bufnr)
     vim.keymap.set('n', '?', api.tree.toggle_help, opts('Help'))
     vim.keymap.set('n', 'l', api.node.open.edit, opts('Open'))
     vim.keymap.set('n', 'h', api.node.navigate.parent_close, opts('Close'))
+
+    -- free <C-k> (default: file info popup) so vim-tmux-navigator can use it
+    -- to move to the window above. Keep the info popup on 'i' instead.
+    pcall(vim.keymap.del, 'n', '<C-k>', { buffer = bufnr })
+    vim.keymap.set('n', 'i', api.node.show_info_popup, opts('Info'))
 end
 
 require("nvim-tree").setup({
