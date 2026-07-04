@@ -151,6 +151,12 @@ map('n', '<leader>P', ':let @+ = expand("%:.")<CR>', 'Copy project-relative file
 -- copy full (absolute) file path to clipboard
 map('n', '<leader>F', ':let @+ = expand("%:p")<CR>', 'Copy full file path to clipboard')
 
+-- pretty-print JSON/JSONL buffer with jq and highlight as json
+map('n', '<leader>j', function()
+    vim.cmd('%!jq .')
+    vim.bo.filetype = 'json'
+end, 'Pretty-print JSON with jq')
+
 -- do Highlighting a search term without moving the cursor https://superuser.com/questions/255023/highlighting-a-search-term-without-moving-the-cursor
 map('n', '*', ':let @/ = \'\\<\'.expand(\'<cword>\').\'\\>\'|set hlsearch<C-M>', 'Search for current word')
 

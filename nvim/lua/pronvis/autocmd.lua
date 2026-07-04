@@ -19,6 +19,9 @@ vim.api.nvim_create_autocmd({ "Filetype" }, {
     end
 })
 
+-- treat .jsonl as json so it gets JSON syntax highlighting
+vim.filetype.add({ extension = { jsonl = 'json' } })
+
 -- help filetype detection
 local gnuplot_syntax = vim.api.nvim_create_augroup("gnuplot_syntax", { clear = true })
 vim.api.nvim_create_autocmd({ "BufRead" }, {
