@@ -159,6 +159,9 @@ map('n', '<leader>P', ':let @+ = expand("%:.")<CR>', 'Copy project-relative file
 -- copy full (absolute) file path to clipboard
 map('n', '<leader>F', ':let @+ = expand("%:p")<CR>', 'Copy full file path to clipboard')
 
+-- toggle line wrap
+map('n', '<leader>tw', ':set wrap!<CR>', 'Toggle line wrap')
+
 -- pretty-print JSON/JSONL buffer with jq and highlight as json
 map('n', '<leader>j', function()
     vim.cmd('%!jq .')
