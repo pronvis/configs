@@ -86,3 +86,26 @@ vim.api.nvim_create_autocmd("User", {
     pattern = "LspProgressStatusUpdated",
     callback = require("lualine").refresh,
 })
+
+-- :ClaudeLog  → open the latest Claude Code transcript for the current project.
+-- :ClaudeLog! → text-only: dump just Claude's prose messages into a scratch buffer.
+-- Transcripts live at ~/.claude/projects/<cwd-with-slashes-as-dashes>/<session>.jsonl
+vim.api.nvim_create_user_command('ClaudeLog', function(o)
+    local dir = vim.fn.expand('~/.claude/projects/') .. vim.fn.getcwd():gsub('/', '-')
+    local file = vim.fn.system({ 'sh', '-c', 'ls -t "' .. dir .. '"/*.jsonl 2>/dev/null | head -1' })
+        :gsub('%s+$', '')
+    if file == '' then
+        vim.notify('no Claude transcript for this project (' .. dir .. ')', vim.log.levels.WARN)
+        return
+    end
+    if o.bang then -- text-only scratch buffer
+        vim.cmd('enew')
+        vim.cmd(([[r !jq -r 'select(.type=="assistant") | .message.content[]? | select(.type=="text") | .text' %s]])
+            :format(vim.fn.shellescape(file)))
+        vim.bo.buftype = 'nofile'
+        vim.bo.bufhidden = 'wipe'
+        vim.bo.filetype = 'markdown'
+    else -- raw jsonl (highlighted as json via ftplugin)
+        vim.cmd('edit ' .. vim.fn.fnameescape(file))
+    end
+end, { bang = true, desc = 'Open latest Claude Code transcript (! = text only)' })

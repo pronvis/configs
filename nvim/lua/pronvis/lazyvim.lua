@@ -43,6 +43,22 @@ require('lazy').setup({
         opts = { enhanced_diff_hl = true },
     },
 
+    -- Claude Code IDE integration (selection/context sharing, in-editor diffs)
+    {
+        'coder/claudecode.nvim',
+        dependencies = { 'nvim-lua/plenary.nvim' },
+        config = true,
+        keys = {
+            { '<leader>cc', '<cmd>ClaudeCode<cr>',       desc = 'Toggle Claude Code' },
+            { '<leader>cf', '<cmd>ClaudeCodeFocus<cr>',  desc = 'Focus Claude Code' },
+            { '<leader>cs', '<cmd>ClaudeCodeSend<cr>',   mode = 'v', desc = 'Send selection to Claude' },
+            { '<leader>cb', '<cmd>ClaudeCodeAdd %<cr>',  desc = 'Add current buffer/file to Claude' },
+            -- accept/reject Claude's proposed diffs in-editor
+            { '<leader>cy', '<cmd>ClaudeCodeDiffAccept<cr>', desc = 'Accept Claude diff' },
+            { '<leader>cn', '<cmd>ClaudeCodeDiffDeny<cr>',   desc = 'Reject Claude diff' },
+        },
+    },
+
     -- Language Server Protocol
     'williamboman/mason.nvim',
     'williamboman/mason-lspconfig.nvim',
