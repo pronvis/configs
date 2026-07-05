@@ -139,6 +139,14 @@ map('n', '/', '/\\v', 'Uearch next')
 -- exit terminal mode
 map('t', '<F1>', '<C-\\><C-n>', 'Exit terminal mode')
 
+-- vim-tmux-navigator inside terminal buffers (e.g. the Claude Code terminal):
+-- <Cmd> runs the navigate command without leaving terminal mode, so C-hjkl
+-- move between splits instead of being sent to the terminal program.
+map('t', '<C-h>', '<Cmd>TmuxNavigateLeft<CR>',  'Navigate left')
+map('t', '<C-j>', '<Cmd>TmuxNavigateDown<CR>',  'Navigate down')
+map('t', '<C-k>', '<Cmd>TmuxNavigateUp<CR>',    'Navigate up')
+map('t', '<C-l>', '<Cmd>TmuxNavigateRight<CR>', 'Navigate right')
+
 -- to search for visually selected text
 map('v', '//', "y/\\V<C-R>=escape(@\",'/\\')<CR><CR>", 'Search for visually selected text')
 
