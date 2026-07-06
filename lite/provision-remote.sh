@@ -20,10 +20,16 @@ fi
 HOST="$1"
 HERE="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 
+# Override any RemoteCommand/RequestTTY from the user's ssh config — they break
+# running our own command ("Cannot execute command-line and remote command").
+# Same workaround dot-push.sh uses.
+SSH=(ssh -o RemoteCommand=none -o RequestTTY=no)
+SCP=(scp -o RemoteCommand=none -o RequestTTY=no)
+
 echo "==> Detecting package manager on ${HOST}"
 # Pick apt or dnf based on what the remote actually has. Each installer is
 # arch-aware, so the CPU architecture doesn't affect this choice.
-PKGMGR="$(ssh "$HOST" 'command -v apt-get >/dev/null 2>&1 && echo apt || { command -v dnf >/dev/null 2>&1 && echo dnf; }')"
+PKGMGR="$("${SSH[@]}" "$HOST" 'command -v apt-get >/dev/null 2>&1 && echo apt || { command -v dnf >/dev/null 2>&1 && echo dnf; }')"
 PKGMGR="${PKGMGR//[$'\r\n']/}"   # strip stray CR/LF
 echo "    detected: ${PKGMGR:-<none>}"
 
@@ -42,10 +48,10 @@ fi
 
 REMOTE_NAME="$(basename "$INSTALLER")"
 echo "==> Copying ${REMOTE_NAME} to ${HOST}"
-scp "$INSTALLER" "${HOST}:~/"
+"${SCP[@]}" "$INSTALLER" "${HOST}:~/"
 
 echo "==> Running ${REMOTE_NAME} on ${HOST}"
-ssh "$HOST" "bash ~/${REMOTE_NAME}"
+"${SSH[@]}" "$HOST" "bash ~/${REMOTE_NAME}"
 
 echo "==> Pushing dotfiles to ${HOST}"
 "${HERE}/dot-push.sh" "$HOST"

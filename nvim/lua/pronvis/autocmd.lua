@@ -87,8 +87,9 @@ vim.api.nvim_create_autocmd("User", {
     callback = require("lualine").refresh,
 })
 
--- :ClaudeLog  → open the latest Claude Code transcript for the current project.
--- :ClaudeLog! → text-only: dump just Claude's prose messages into a scratch buffer.
+-- :ClaudeLog  → full conversation as readable text (your prompts + Claude's
+--               replies, labeled) in a scratch buffer.
+-- :ClaudeLog! → the raw jsonl transcript file (structured, json-highlighted).
 -- Transcripts live at ~/.claude/projects/<cwd-with-slashes-as-dashes>/<session>.jsonl
 vim.api.nvim_create_user_command('ClaudeLog', function(o)
     local dir = vim.fn.expand('~/.claude/projects/') .. vim.fn.getcwd():gsub('/', '-')
@@ -98,14 +99,18 @@ vim.api.nvim_create_user_command('ClaudeLog', function(o)
         vim.notify('no Claude transcript for this project (' .. dir .. ')', vim.log.levels.WARN)
         return
     end
-    if o.bang then -- text-only scratch buffer
+    if o.bang then -- raw jsonl (highlighted as json via ftplugin)
+        vim.cmd('edit ' .. vim.fn.fnameescape(file))
+    else -- text-only scratch buffer: full labeled conversation
+        -- both user + assistant text blocks; tool_result/tool_use blocks skipped.
+        local prog = 'select(.type=="user" or .type=="assistant") | (.type) as $t | '
+            .. '(if (.message.content|type)=="string" then [.message.content] '
+            .. 'else [.message.content[]?|select(.type=="text")|.text] end) | .[] | '
+            .. '(if $t=="user" then "\\n\\n===== YOU =====\\n" else "\\n\\n===== CLAUDE =====\\n" end) + .'
         vim.cmd('enew')
-        vim.cmd(([[r !jq -r 'select(.type=="assistant") | .message.content[]? | select(.type=="text") | .text' %s]])
-            :format(vim.fn.shellescape(file)))
+        vim.cmd(([[r !jq -r '%s' %s]]):format(prog, vim.fn.shellescape(file)))
         vim.bo.buftype = 'nofile'
         vim.bo.bufhidden = 'wipe'
         vim.bo.filetype = 'markdown'
-    else -- raw jsonl (highlighted as json via ftplugin)
-        vim.cmd('edit ' .. vim.fn.fnameescape(file))
     end
-end, { bang = true, desc = 'Open latest Claude Code transcript (! = text only)' })
+end, { bang = true, desc = 'Claude transcript: full text (! = raw jsonl)' })
