@@ -107,11 +107,11 @@ map("n", "<leader>;",
 
 -- show git commit info
 map("n", "<F3>", ':GitMessenger<CR>', 'Show git commit info for current line')
--- git show hunk diff
-map("n", "<leader>hj", ':GitGutterPreviewHunk<CR>', 'Show git differece for current hunk')
+-- git show hunk diff (gitsigns)
+map("n", "<leader>hj", function() require('gitsigns').preview_hunk() end, 'Show git difference for current hunk')
 
-map("n", "<leader>gp", ':GitGutterPrevHunk<CR>', 'Jump to previous git hunk')
-map("n", "<leader>gn", ':GitGutterNextHunk<CR>', 'Jump to next git hunk')
+map("n", "<leader>gp", function() require('gitsigns').nav_hunk('prev') end, 'Jump to previous git hunk')
+map("n", "<leader>gn", function() require('gitsigns').nav_hunk('next') end, 'Jump to next git hunk')
 
 -- diffview
 map("n", "<leader>gd", '<cmd>DiffviewOpen<cr>', 'Diffview')
@@ -142,9 +142,9 @@ map('t', '<F1>', '<C-\\><C-n>', 'Exit terminal mode')
 -- vim-tmux-navigator inside terminal buffers (e.g. the Claude Code terminal):
 -- <Cmd> runs the navigate command without leaving terminal mode, so C-hjkl
 -- move between splits instead of being sent to the terminal program.
-map('t', '<C-h>', '<Cmd>TmuxNavigateLeft<CR>',  'Navigate left')
-map('t', '<C-j>', '<Cmd>TmuxNavigateDown<CR>',  'Navigate down')
-map('t', '<C-k>', '<Cmd>TmuxNavigateUp<CR>',    'Navigate up')
+map('t', '<C-h>', '<Cmd>TmuxNavigateLeft<CR>', 'Navigate left')
+map('t', '<C-j>', '<Cmd>TmuxNavigateDown<CR>', 'Navigate down')
+map('t', '<C-k>', '<Cmd>TmuxNavigateUp<CR>', 'Navigate up')
 map('t', '<C-l>', '<Cmd>TmuxNavigateRight<CR>', 'Navigate right')
 
 -- to search for visually selected text

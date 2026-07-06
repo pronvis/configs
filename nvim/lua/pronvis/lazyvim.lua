@@ -31,7 +31,7 @@ require('lazy').setup({
 
     -- git related
     'tpope/vim-fugitive',
-    'airblade/vim-gitgutter',
+    { 'lewis6991/gitsigns.nvim',                 opts = {} },
     'rhysd/git-messenger.vim',
     {
         'sindrets/diffview.nvim',
@@ -63,8 +63,14 @@ require('lazy').setup({
 
     -- Colorschemes. Active default = kanagawa (set in colorscheme.lua).
     -- Compare live with :colorscheme kanagawa | gruvbox
-    { 'rebelot/kanagawa.nvim', lazy = false },
-    { 'ellisonleao/gruvbox.nvim', lazy = false },
+    { 'rebelot/kanagawa.nvim',                   lazy = false },
+    { 'ellisonleao/gruvbox.nvim',                lazy = false },
+
+    -- which-key: popup cheatsheet of available <leader> keybindings
+    { 'folke/which-key.nvim',                    event = 'VeryLazy', opts = { delay = 700 } },
+
+    -- treesitter-context: sticky header showing current fn/scope while scrolling
+    { 'nvim-treesitter/nvim-treesitter-context', opts = {} },
 
     -- Language Server Protocol
     'williamboman/mason.nvim',
@@ -114,7 +120,12 @@ require('lazy').setup({
     'mtdl9/vim-log-highlighting',
     'jiangmiao/auto-pairs',
 
-    'preservim/vim-markdown',
+    {
+        'MeanderingProgrammer/render-markdown.nvim',
+        dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' },
+        ft = { 'markdown' },
+        opts = {},
+    },
 
     -- file tree
     'nvim-tree/nvim-tree.lua',

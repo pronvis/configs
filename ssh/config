@@ -49,7 +49,7 @@ Host whootale-waitlist-tmux
 # =================================================================================
 
 Host routes-map
-    HostName ec2-34-255-191-79.eu-west-1.compute.amazonaws.com
+    HostName ec2-54-171-137-89.eu-west-1.compute.amazonaws.com
     User ec2-user
     ServerAliveInterval 60
     ServerAliveCountMax 10
@@ -57,7 +57,7 @@ Host routes-map
     RequestTTY yes
 
 Host routes-map-tmux
-    HostName ec2-34-255-191-79.eu-west-1.compute.amazonaws.com
+    HostName ec2-54-171-137-89.eu-west-1.compute.amazonaws.com
     User ec2-user
     RemoteCommand tmux -u new-session -A -s waitlist
     RequestTTY yes

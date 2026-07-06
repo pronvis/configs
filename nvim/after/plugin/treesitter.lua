@@ -7,15 +7,14 @@
 local ensure_installed = {
     "java", "javascript", "typescript", "bash", "c", "lua",
     "vim", "vimdoc", "query", "rust", "toml", "cpp",
+    "markdown", "markdown_inline", -- for render-markdown.nvim
 }
 
 -- Install any missing parsers (async; a no-op when already present).
 require('nvim-treesitter').install(ensure_installed)
 
 -- Filetypes for which treesitter highlighting stays OFF.
--- markdown is handled by vim-markdown.
 local highlight_disabled = {
-    markdown = true,
     vimdoc = true,
 }
 
