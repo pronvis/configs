@@ -11,6 +11,9 @@ vim.opt.colorcolumn = '120'
 vim.opt.textwidth = 120
 vim.opt.cursorline = false
 
+-- lualine already shows the mode, so hide the native '-- INSERT --'/'-- TERMINAL --' message
+vim.opt.showmode = false
+
 -- nowrap
 vim.wo.wrap = false
 vim.wo.linebreak = true
