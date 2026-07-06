@@ -16,7 +16,7 @@ vim.keymap.del('n', 'grr')
 --┌───────────┬─────────────────────────────┬───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
 --│   Keys    │           Action            │                                                            Use for                                                            │
 --├───────────┼─────────────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
---│ <Space>ws │ Workspace Symbols (dynamic) │ Find any struct/enum/trait/fn across the whole project — type the name, fuzzy-search. This is the main one for "find a type." │
+--│ <Space>ss │ Workspace Symbols (dynamic) │ Find any struct/enum/trait/fn across the whole project — type the name, fuzzy-search. This is the main one for "find a type." │
 --├───────────┼─────────────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
 --│ <Space>ds │ Document Symbols            │ List all types/fns in the current file                                                                                        │
 --├───────────┼─────────────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
