@@ -125,7 +125,7 @@ map('n', '<F2>', (require "nvim-tree.api").tree.toggle, 'Show file tree')
 map('n', '<leader>es', function() require("luasnip.loaders").edit_snippet_files() end, 'Edit Snippet Files',
     { silent = true })
 
-map("n", "<leader>gg", ':so $HOME/config_repo/nvim/after/plugin/base16.lua<CR>', 'Reload color theme')
+map("n", "<leader>gg", ':so $HOME/.config/nvim/after/plugin/colorscheme.lua<CR>', 'Reload color theme')
 
 -- dont need that anymore, cause I have same behavior with <Tab>, which is configured in 'lsp.lua'
 -- map('i', '<A-s>', (require "luasnip").expand, 'Expand snippet' { silent = true })

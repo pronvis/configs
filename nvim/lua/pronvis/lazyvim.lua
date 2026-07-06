@@ -61,9 +61,10 @@ require('lazy').setup({
         },
     },
 
-    -- Colorscheme trial trio (base16 is still the active default via base16.lua).
-    -- Compare live with :colorscheme kanagawa | tokyonight-storm | catppuccin-mocha
+    -- Colorschemes. Active default = kanagawa (set in colorscheme.lua).
+    -- Compare live with :colorscheme kanagawa | gruvbox
     { 'rebelot/kanagawa.nvim', lazy = false },
+    { 'ellisonleao/gruvbox.nvim', lazy = false },
 
     -- Language Server Protocol
     'williamboman/mason.nvim',
@@ -129,11 +130,6 @@ require('lazy').setup({
 
     -- highlight arguments
     'm-demare/hlargs.nvim',
-
-    -- color themes
-    -- use { 'tanvirtin/monokai.nvim' }
-    -- use { 'arcticicestudio/nord-vim' }
-    'RRethy/nvim-base16',
 
     "stevearc/conform.nvim",
     {

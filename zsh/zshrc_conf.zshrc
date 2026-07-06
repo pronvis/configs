@@ -17,13 +17,7 @@ export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME=""
 plugins=(git colored-man-pages pip python brew macos zsh-syntax-highlighting zsh-autosuggestions)
 
-# Terminal colors now come from Alacritty ([colors] = kanagawa wave). base16-shell
-# is disabled so it doesn't override the palette via OSC escape sequences.
-# BASE16_SHELL_PATH="$HOME/.config/base16-shell"
-# if [[ -o interactive && -s "$BASE16_SHELL_PATH/profile_helper.sh" ]]; then
-#     source "$BASE16_SHELL_PATH/profile_helper.sh"
-#     (( $+functions[set_theme] )) && set_theme tomorrow-night-eighties
-# fi
+# Terminal colors come from Alacritty ([colors] = kanagawa wave).
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"

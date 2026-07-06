@@ -63,7 +63,6 @@ MASON_PACKAGES=(
 
 # Git repos to clone, as "url | destination".
 GIT_CLONES=(
-    "https://github.com/tinted-theming/base16-shell.git|$HOME/.config/base16-shell"
     "https://github.com/zsh-users/zsh-autosuggestions|${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
     "https://github.com/zsh-users/zsh-syntax-highlighting.git|${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
     "https://github.com/tmux-plugins/tpm|$HOME/.tmux/plugins/tpm"
