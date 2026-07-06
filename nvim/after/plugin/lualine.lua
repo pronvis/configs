@@ -2,10 +2,19 @@ function ObsStatus()
     return string.format("%s", vim.fn.ObsessionStatus('Ⓡ', 'ⓟ'))
 end
 
+-- lualine's 'auto' theme doesn't define a `terminal` mode color, so terminal
+-- mode falls back to normal (both show blue). Give it a distinct color.
+local theme = require('lualine.themes.auto')
+theme.terminal = {
+    a = { fg = '#1F1F28', bg = '#98BB6C', gui = 'bold' }, -- kanagawa springGreen
+    b = theme.normal.b,
+    c = theme.normal.c,
+}
+
 require('lualine').setup {
     options = {
         icons_enabled = true,
-        theme = 'auto',
+        theme = theme,
         component_separators = { left = '', right = '' },
         section_separators = { left = '', right = '' },
     },
