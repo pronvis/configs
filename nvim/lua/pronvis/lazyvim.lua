@@ -52,14 +52,18 @@ require('lazy').setup({
             { '<leader>cc', '<cmd>ClaudeCode<cr>',            desc = 'Toggle Claude Code' },
             { '<leader>cr', '<cmd>ClaudeCode --resume<cr>',   desc = 'Resume Claude Code session (picker)' },
             { '<leader>cC', '<cmd>ClaudeCode --continue<cr>', desc = 'Continue latest Claude Code session' },
-            { '<leader>cf', '<cmd>ClaudeCodeFocus<cr>',     desc = 'Focus Claude Code' },
-            { '<leader>cs', '<cmd>ClaudeCodeSend<cr>',   mode = 'v', desc = 'Send selection to Claude' },
-            { '<leader>cb', '<cmd>ClaudeCodeAdd %<cr>',  desc = 'Add current buffer/file to Claude' },
+            { '<leader>cf', '<cmd>ClaudeCodeFocus<cr>',       desc = 'Focus Claude Code' },
+            { '<leader>cs', '<cmd>ClaudeCodeSend<cr>',        mode = 'v',                                  desc = 'Send selection to Claude' },
+            { '<leader>cb', '<cmd>ClaudeCodeAdd %<cr>',       desc = 'Add current buffer/file to Claude' },
             -- accept/reject Claude's proposed diffs in-editor
-            { '<leader>cy', '<cmd>ClaudeCodeDiffAccept<cr>', desc = 'Accept Claude diff' },
-            { '<leader>cn', '<cmd>ClaudeCodeDiffDeny<cr>',   desc = 'Reject Claude diff' },
+            { '<leader>cy', '<cmd>ClaudeCodeDiffAccept<cr>',  desc = 'Accept Claude diff' },
+            { '<leader>cn', '<cmd>ClaudeCodeDiffDeny<cr>',    desc = 'Reject Claude diff' },
         },
     },
+
+    -- Colorscheme trial trio (base16 is still the active default via base16.lua).
+    -- Compare live with :colorscheme kanagawa | tokyonight-storm | catppuccin-mocha
+    { 'rebelot/kanagawa.nvim', lazy = false },
 
     -- Language Server Protocol
     'williamboman/mason.nvim',

@@ -13,11 +13,10 @@ local ensure_installed = {
 require('nvim-treesitter').install(ensure_installed)
 
 -- Filetypes for which treesitter highlighting stays OFF.
--- markdown is handled by vim-markdown; rust by rustaceanvim/LSP.
+-- markdown is handled by vim-markdown.
 local highlight_disabled = {
     markdown = true,
     vimdoc = true,
-    rust = true,
 }
 
 vim.api.nvim_create_autocmd('FileType', {
