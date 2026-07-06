@@ -37,10 +37,22 @@ require('lazy').setup({
         'sindrets/diffview.nvim',
         dependencies = { 'nvim-lua/plenary.nvim' },
         cmd = { 'DiffviewOpen', 'DiffviewClose', 'DiffviewFileHistory' },
-        -- enhanced_diff_hl: git-style colors (deletions red in their own pane,
-        -- additions green) instead of vimdiff's symmetric scheme where removed
-        -- code looks green on the left.
-        opts = { enhanced_diff_hl = true },
+        opts = function()
+            local actions = require('diffview.actions')
+            return {
+                -- enhanced_diff_hl: git-style colors (deletions red in their own
+                -- pane, additions green) instead of vimdiff's symmetric scheme
+                -- where removed code looks green on the left.
+                enhanced_diff_hl = true,
+                keymaps = {
+                    -- '-' already stages in the file panel; add it in the diff
+                    -- panes too, so you can stage the file you're viewing.
+                    view = {
+                        { 'n', '-', actions.toggle_stage_entry, { desc = 'Stage / unstage the current file' } },
+                    },
+                },
+            }
+        end,
     },
 
     -- Claude Code IDE integration (selection/context sharing, in-editor diffs)
