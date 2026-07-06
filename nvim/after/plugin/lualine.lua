@@ -1,5 +1,5 @@
 function ObsStatus()
-    return string.format("%s", vim.fn.ObsessionStatus('Ⓡ', 'ⓟ'))
+    return string.format("%s", vim.fn.ObsessionStatus('Ⓡ ', 'ⓟ '))
 end
 
 -- lualine's 'auto' theme doesn't define a `terminal` mode color, so terminal
@@ -15,8 +15,8 @@ require('lualine').setup {
     options = {
         icons_enabled = true,
         theme = theme,
-        component_separators = { left = '', right = '' },
-        section_separators = { left = '', right = '' },
+        component_separators = { left = '', right = '' },
+        section_separators = { left = '', right = '' },
     },
     sections = {
         lualine_a = { 'mode' },
