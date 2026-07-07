@@ -115,7 +115,7 @@ map("n", "<leader>gn", function() require('gitsigns').nav_hunk('next') end, 'Jum
 
 -- diffview
 map("n", "<leader>gd", '<cmd>DiffviewOpen<cr>', 'Diffview')
-map("n", "<leader>gh", '<cmd>DiffviewFileHistory %<cr>', 'File history')
+map("n", "<leader>gh", '<cmd>DiffviewFileHistory %<cr>', 'All files history')
 map("n", "<leader>ga", '<cmd>DiffviewFileHistory<cr>', 'File history')
 
 -- file tree
