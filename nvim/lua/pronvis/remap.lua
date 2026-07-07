@@ -162,6 +162,10 @@ map('n', '<leader>F', ':let @+ = expand("%:p")<CR>', 'Copy full file path to cli
 -- toggle line wrap
 map('n', '<leader>tw', ':set wrap!<CR>', 'Toggle line wrap')
 
+-- tab pages (navigate with built-in gt / gT)
+map('n', '<leader>tn', ':tabnew<CR>', 'New tab')
+map('n', '<leader>tc', ':tabclose<CR>', 'Close tab')
+
 -- pretty-print JSON/JSONL buffer with jq and highlight as json
 map('n', '<leader>j', function()
     vim.cmd('%!jq .')
