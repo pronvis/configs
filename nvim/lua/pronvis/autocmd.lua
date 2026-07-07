@@ -8,6 +8,40 @@ vim.api.nvim_create_autocmd({ "BufRead" }, {
     end
 })
 
+-- View PDFs as extracted text. Neovim can't render PDFs, so on open replace the
+-- binary buffer with `pdftotext -layout` output and mark it read-only.
+-- Requires poppler: `brew install poppler`.
+local pdf_view = vim.api.nvim_create_augroup("pdf_view", { clear = true })
+vim.api.nvim_create_autocmd({ "BufReadPost" }, {
+    pattern = "*.pdf",
+    group = pdf_view,
+    callback = function(ev)
+        if vim.fn.executable('pdftotext') == 0 then
+            vim.notify('pdftotext not found — run `brew install poppler`', vim.log.levels.WARN)
+            return
+        end
+        local name = vim.api.nvim_buf_get_name(ev.buf)
+        -- Only convert genuine PDFs (magic bytes "%PDF-"). A file that merely has
+        -- a .pdf extension but is actually text is left as-is so nvim just shows it.
+        local fh = io.open(name, 'rb')
+        if not fh then return end
+        local magic = fh:read(5)
+        fh:close()
+        if magic ~= '%PDF-' then return end
+        -- systemlist with a list arg: no shell, no quoting, reads the file directly.
+        local out = vim.fn.systemlist({ 'pdftotext', '-layout', '-nopgbrk', name, '-' })
+        if vim.v.shell_error ~= 0 then
+            vim.notify('pdftotext failed on ' .. name, vim.log.levels.WARN)
+            return
+        end
+        vim.bo[ev.buf].modifiable = true
+        vim.api.nvim_buf_set_lines(ev.buf, 0, -1, false, out)
+        vim.bo[ev.buf].modified = false
+        vim.bo[ev.buf].modifiable = false
+        vim.bo[ev.buf].readonly = true
+    end
+})
+
 -- follow Rust code style rules
 local rust_spacetabs = vim.api.nvim_create_augroup("rust_spacetabs", { clear = true })
 vim.api.nvim_create_autocmd({ "Filetype" }, {

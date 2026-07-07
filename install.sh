@@ -36,7 +36,7 @@ DRY_RUN="${DRY_RUN:-0}"               # DRY_RUN=1 ./install.sh — preview, chan
 # breaks inside other TUIs (e.g. Claude Code) and hangs gpg/SSH/signed commits.
 # It must match the `pinentry-program` line in gpg-agent.conf.
 BREW_PACKAGES=(
-    tmux neovim fd ripgrep go autojump fzf cargo-binstall python3 awscli gnupg pinentry-mac
+    tmux neovim fd ripgrep go autojump fzf cargo-binstall python3 awscli gnupg pinentry-mac poppler
 )
 
 # Cargo installs, as "binary-to-check | cargo subcommand and args".
