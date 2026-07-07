@@ -69,6 +69,7 @@ for dir in \
 	"$HOME/.dotnet/tools" \
 	/usr/local/share/dotnet \
 	/Applications/Alacritty.app/Contents/MacOS \
+	/Applications/kitty.app/Contents/MacOS \
 	/Applications/OpenSCAD.app/Contents/MacOS \
 	"$GOPATH/bin" \
 	"$HOME/.cargo/bin" \

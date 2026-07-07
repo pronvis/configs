@@ -39,6 +39,12 @@ BREW_PACKAGES=(
     tmux neovim fd ripgrep go autojump fzf cargo-binstall python3 awscli gnupg pinentry-mac
 )
 
+# Homebrew casks (GUI apps / fonts). font-d2coding = monospace Korean font,
+# routed to Hangul ranges in kitty.conf so Korean text aligns cleanly.
+BREW_CASKS=(
+    font-d2coding
+)
+
 # Cargo installs, as "binary-to-check | cargo subcommand and args".
 # (Unified so git/binstall variants live in the same list as plain installs.)
 CARGO_INSTALLS=(
@@ -74,6 +80,7 @@ LINK_DIRS=(
     "$HOME/.zsh_functions"
     "$HOME/.vim/undodir"
     "$HOME/.config"
+    "$HOME/.config/kitty"
     "$HOME/bin"
     "$HOME/.claude/hooks"
     "$HOME/.claude/rules/rust/"
@@ -97,6 +104,7 @@ LINKS=(
     "git/gitconfig|$HOME/.gitconfig"
     "gpg-agent.conf|$HOME/.gnupg/gpg-agent.conf"
     "alacritty/alacritty.toml|$HOME/.alacritty.toml"
+    "kitty/kitty.conf|$HOME/.config/kitty/kitty.conf"
     "scripts|$HOME/bin/scripts"
     "claude/settings.json|$HOME/.claude/settings.json"
     "claude/statusline-command.sh|$HOME/.claude/statusline-command.sh"
@@ -181,6 +189,16 @@ install_brew() {
     for f in "$@"; do
         brew list --versions "$f" >/dev/null 2>&1 && { ok "brew: $f"; continue; }
         try brew install "$f"
+    done
+}
+
+# args: cask names
+install_brew_casks() {
+    info "Tools: brew casks"
+    local c
+    for c in "$@"; do
+        brew list --cask --versions "$c" >/dev/null 2>&1 && { ok "cask: $c"; continue; }
+        try brew install --cask "$c"
     done
 }
 
@@ -382,6 +400,7 @@ phase_tools() {
     setup_oh_my_zsh
 
     install_brew        "${BREW_PACKAGES[@]}"
+    install_brew_casks  "${BREW_CASKS[@]}"
     install_cargo       "${CARGO_INSTALLS[@]}"
     install_npm_globals "${NPM_GLOBALS[@]}"
     clone_repos         "${GIT_CLONES[@]}"
