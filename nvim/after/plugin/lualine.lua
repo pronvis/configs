@@ -15,7 +15,7 @@ require('lualine').setup {
     options = {
         icons_enabled = true,
         theme = theme,
-        component_separators = { left = '', right = '' },
+        component_separators = { left = '⌘', right = '' },
         section_separators = { left = '', right = '' },
     },
     sections = {
@@ -25,9 +25,9 @@ require('lualine').setup {
                 'filename',
                 path = 1,
                 shorting_target = 60
-            },
-            'diff', 'diagnostics' },
-        lualine_c = { 'branch', require('lsp-progress').progress },
+            }
+        },
+        lualine_c = { 'branch', 'diff', 'diagnostics', require('lsp-progress').progress },
         lualine_x = { ObsStatus, 'encoding', 'fileformat', 'filetype' },
         lualine_y = { 'progress' },
         lualine_z = { 'location' }
