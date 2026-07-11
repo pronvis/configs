@@ -120,6 +120,12 @@ LINK_GLOBS=(
 # Encrypted GPG key backup to import.
 GPG_KEY_BACKUP="GPG/ed25519_key.gpg"
 
+# launchd user agents, as "repo plist template | installed name". The template
+# uses __HOME__ (launchd can't expand ~), rendered to $HOME at install time.
+LAUNCH_AGENTS=(
+    "launchd/com.pronvis.nvim-mem-watch.plist|com.pronvis.nvim-mem-watch.plist"
+)
+
 # ═════════════════════════════════════════════════════════════════════════
 # Pure helpers — compute or query only, no side effects.
 # ═════════════════════════════════════════════════════════════════════════
@@ -395,6 +401,7 @@ phase_links() {
     ensure_secure_dirs "${SECURE_DIRS[@]}"
     create_links       "${LINKS[@]}"
     link_globs         "${LINK_GLOBS[@]}"
+    setup_launch_agents "${LAUNCH_AGENTS[@]}"
 }
 
 phase_keys() {
@@ -425,6 +432,33 @@ phase_keys() {
     trust_key "$fpr"
     register_ssh_keygrip "$grip"
     print_ssh_pubkey "$fpr"
+}
+
+# Render + (re)load launchd user agents. Renders __HOME__ -> $HOME into
+# ~/Library/LaunchAgents, then bootstraps each into the GUI domain so it runs
+# now and on every login. Idempotent: an already-loaded agent is booted out
+# first. macOS only (no launchctl elsewhere -> skipped).
+setup_launch_agents() {
+    have launchctl || { warn "  launchctl missing — skipping launch agents"; return; }
+    local dest_dir="$HOME/Library/LaunchAgents"
+    run mkdir -p "$dest_dir"
+    local spec src name dest uid
+    uid="$(id -u)"
+    for spec in "$@"; do
+        IFS='|' read -r src name <<<"$spec"
+        src="$(resolve_src "$src")"
+        dest="$dest_dir/$name"
+        if [[ ! -f "$src" ]]; then warn "  launch agent template missing: $src"; continue; fi
+        info "  launch agent: $name"
+        if [[ "$DRY_RUN" == 1 ]]; then
+            dry "sed 's|__HOME__|$HOME|g' '$src' > '$dest'"
+            dry "launchctl bootout gui/$uid '$dest' (if loaded); launchctl bootstrap gui/$uid '$dest'"
+            continue
+        fi
+        sed "s|__HOME__|$HOME|g" "$src" >"$dest"
+        launchctl bootout "gui/$uid/${name%.plist}" 2>/dev/null || true
+        try launchctl bootstrap "gui/$uid" "$dest"
+    done
 }
 
 # App-internal bootstrap — runs after links so the configs exist. Best-effort.

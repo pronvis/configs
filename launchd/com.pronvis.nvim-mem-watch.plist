@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Keeps scripts/nvim-mem-watch.sh alive across logins/reboots so a runaway
+     nvim core is always caught. install.sh renders __HOME__ -> $HOME and loads
+     this into ~/Library/LaunchAgents. Log: ~/.local/state/nvim-leak/report.log -->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.pronvis.nvim-mem-watch</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/bin/bash</string>
+        <string>__HOME__/bin/scripts/nvim-mem-watch.sh</string>
+        <string>1500</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>ThrottleInterval</key>
+    <integer>30</integer>
+    <key>StandardOutPath</key>
+    <string>__HOME__/.local/state/nvim-leak/launchd.out</string>
+    <key>StandardErrorPath</key>
+    <string>__HOME__/.local/state/nvim-leak/launchd.err</string>
+</dict>
+</plist>
