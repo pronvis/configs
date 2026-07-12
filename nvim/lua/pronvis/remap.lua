@@ -165,6 +165,13 @@ map('n', '<leader>tw', ':set wrap!<CR>', 'Toggle line wrap')
 -- tab pages (navigate with built-in gt / gT)
 map('n', '<leader>tn', ':tabnew<CR>', 'New tab')
 map('n', '<leader>tc', ':tabclose<CR>', 'Close tab')
+map('n', '<leader>tr', function()
+    vim.ui.input({ prompt = 'Tab name: ', default = vim.t.tabname or '' }, function(name)
+        if name == nil then return end
+        if name == '' then vim.cmd('unlet! t:tabname') else vim.t.tabname = name end
+        vim.cmd.redrawtabline()
+    end)
+end, 'Rename current tab')
 
 -- pretty-print JSON/JSONL buffer with jq and highlight as json
 map('n', '<leader>j', function()
