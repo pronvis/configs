@@ -159,8 +159,15 @@ map('n', '<leader>P', ':let @+ = expand("%:.")<CR>', 'Copy project-relative file
 -- copy full (absolute) file path to clipboard
 map('n', '<leader>F', ':let @+ = expand("%:p")<CR>', 'Copy full file path to clipboard')
 
--- toggle line wrap
-map('n', '<leader>tw', ':set wrap!<CR>', 'Toggle line wrap')
+-- toggle line wrap everywhere ('wrap' is window-local, so flip it on every open
+-- window and update the global default so new windows inherit the new state)
+map('n', '<leader>tw', function()
+    local new = not vim.wo.wrap
+    vim.go.wrap = new
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+        vim.wo[win].wrap = new
+    end
+end, 'Toggle line wrap (all windows)')
 
 -- tab pages (navigate with built-in gt / gT)
 map('n', '<leader>tn', ':tabnew<CR>', 'New tab')
