@@ -234,8 +234,8 @@ export LESS_TERMCAP_se=$'\E[39;49m'
 # git branch symbol
 local git_branch_symbol="\ue0a0"
 # %{ %} - means zero width inside
-# branch name in bright red (%F{9} / #E82424); plain %{$fg[red]%} (#C34043) was too dark
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[blue]%}$git_branch_symbol:(%{%F{9}%}"
+# branch name in 256-color 203 (#ff5f5f, coral red)
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[blue]%}$git_branch_symbol:(%{%F{203}%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg[blue]%})%{$reset_color%} "
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%}"
