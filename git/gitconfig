@@ -25,8 +25,18 @@ please = push --force-with-lease
 	excludesfile = ~/.gitignore
 [diff]
 	tool = nvim
+[color "status"]
+	changed = 203
+	untracked = brightmagenta
+	added = brightgreen
+    branch = brightgreen
+    localBranch = brightgreen
+    remoteBranch = 203
+[color "diff"]
+	new = brightgreen
+	old = 203
 [push]
-        default = simple
+    default = simple
 [commit]
 	gpgsign = true
 [filter "lfs"]

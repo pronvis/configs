@@ -99,6 +99,23 @@ done
 
 source "$ZSH/oh-my-zsh.sh"
 
+# Brighten a few zsh-syntax-highlighting colors that read too dark on kanagawa.
+# Set after oh-my-zsh loads the plugin so these override its defaults.
+# fg=10 / fg=11 are the terminal's *bright* green/yellow (kitty color10 #98BB6C,
+# color11 #E6C384) — the lighter siblings of the default fg=green / fg=yellow.
+if (( ${+ZSH_HIGHLIGHT_STYLES} )); then
+	# valid commands were dark green (fg=green / color2 #76946A)
+	ZSH_HIGHLIGHT_STYLES[command]='fg=10'
+	ZSH_HIGHLIGHT_STYLES[alias]='fg=10'
+	ZSH_HIGHLIGHT_STYLES[builtin]='fg=10'
+	ZSH_HIGHLIGHT_STYLES[function]='fg=10'
+	ZSH_HIGHLIGHT_STYLES[precommand]='fg=10,underline'
+	# quoted strings were dark gold (fg=yellow / color3 #C0A36E)
+	ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=11'
+	ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=11'
+	ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=11'
+fi
+
 fpath+=("$HOME/.zsh_functions")
 
 # For autojump
@@ -132,6 +149,7 @@ alias ccache="sudo dscacheutil -flushcache;sudo killall -HUP mDNSResponder"
 alias mydate="date '+DATE: %m/%d/%y%nTIME: %H:%M:%S'"
 alias clean="printf '\e]50;ClearScrollback\a'"
 alias gcsm='git commit -S --message'   # GPG-sign instead of oh-my-zsh's --signoff
+alias gst='git status -sb'   # GPG-sign instead of oh-my-zsh's --signoff
 
 export JAVA_OPTS="-Xmx4096m $JAVA_OPTS"
 
@@ -216,7 +234,8 @@ export LESS_TERMCAP_se=$'\E[39;49m'
 # git branch symbol
 local git_branch_symbol="\ue0a0"
 # %{ %} - means zero width inside
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[blue]%}$git_branch_symbol:(%{$fg[red]%}"
+# branch name in bright red (%F{9} / #E82424); plain %{$fg[red]%} (#C34043) was too dark
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[blue]%}$git_branch_symbol:(%{%F{9}%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg[blue]%})%{$reset_color%} "
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[green]%}"
