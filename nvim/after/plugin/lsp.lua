@@ -49,7 +49,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 require('mason').setup()
 require('mason-lspconfig').setup()
 
-local servers = { html, clang, lua_ls, typescript, javascript }
+local servers = { 'html', 'clangd', 'lua_ls', 'ts_ls' }
 
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -61,7 +61,7 @@ mason_lspconfig.setup {
     ensure_installed = servers,
 }
 
-vim.lsp.config("clang", {
+vim.lsp.config("clangd", {
     cmd = {
         "clangd",
         "--offset-encoding=utf-16",
@@ -152,8 +152,6 @@ cmp.setup {
         { name = 'nvim_lua' },
     },
 }
-
-require('neodev').setup()
 
 -- Hide all semantic highlights
 for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do

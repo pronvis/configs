@@ -99,8 +99,17 @@ require('lazy').setup({
     'saadparwaiz1/cmp_luasnip',
     -- Adds a number of user-friendly snippets
     'rafamadriz/friendly-snippets',
-    -- full signature help, docs and completion for the nvim lua API
-    'folke/neodev.nvim',
+    -- lazydev: feeds the Neovim runtime + plugin type defs to lua_ls so `gd`,
+    -- hover and completion resolve `vim.*` and plugin modules (replaces neodev).
+    {
+        'folke/lazydev.nvim',
+        ft = 'lua',
+        opts = {
+            library = {
+                { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+            },
+        },
+    },
     -- rust
     {
         'mrcjkb/rustaceanvim',
