@@ -107,8 +107,9 @@ map("n", "<leader>;",
 
 -- show git commit info
 map("n", "<F3>", ':GitMessenger<CR>', 'Show git commit info for current line')
--- git show hunk diff (gitsigns)
+-- git show hunk diff
 map("n", "<leader>hj", function() require('gitsigns').preview_hunk() end, 'Show git difference for current hunk')
+map("n", "<leader>hu", function() require('gitsigns').reset_hunk() end, 'Reset current git hunk')
 
 map("n", "<leader>gp", function() require('gitsigns').nav_hunk('prev') end, 'Jump to previous git hunk')
 map("n", "<leader>gn", function() require('gitsigns').nav_hunk('next') end, 'Jump to next git hunk')
