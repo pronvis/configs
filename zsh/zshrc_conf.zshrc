@@ -114,6 +114,8 @@ if (( ${+ZSH_HIGHLIGHT_STYLES} )); then
 	ZSH_HIGHLIGHT_STYLES[single-quoted-argument]='fg=11'
 	ZSH_HIGHLIGHT_STYLES[double-quoted-argument]='fg=11'
 	ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]='fg=11'
+	# comments were near-invisible (fg=black / color0 #090618) — use magenta
+	ZSH_HIGHLIGHT_STYLES[comment]='fg=magenta'
 fi
 
 fpath+=("$HOME/.zsh_functions")
