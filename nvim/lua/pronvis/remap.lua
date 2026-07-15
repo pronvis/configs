@@ -165,6 +165,11 @@ map('n', '<leader>j', function()
     vim.bo.filetype = 'json'
 end, 'Pretty-print JSON with jq')
 
+map('n', '<leader>J', function()
+    vim.cmd('%!jq -c .')
+    vim.bo.filetype = 'json'
+end, 'Compact JSON with jq')
+
 -- do Highlighting a search term without moving the cursor https://superuser.com/questions/255023/highlighting-a-search-term-without-moving-the-cursor
 map('n', '*', ':let @/ = \'\\<\'.expand(\'<cword>\').\'\\>\'|set hlsearch<C-M>', 'Search for current word')
 
