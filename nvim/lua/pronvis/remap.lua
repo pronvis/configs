@@ -131,8 +131,6 @@ map('v', '//', "y/\\V<C-R>=escape(@\",'/\\')<CR><CR>", 'Search for visually sele
 
 map('n', '<leader>i', ':lua IndentEntireFile()<CR>', 'Indent entire file')
 
--- open new file adjacent to current file
-map('n', '<leader>e', ':e <C-R>=expand("%:p:h") . "/" <CR>', 'Open new file adjacent to current file')
 -- copy project-relative file path to clipboard
 map('n', '<leader>P', ':let @+ = expand("%:.")<CR>', 'Copy project-relative file path to clipboard')
 -- copy full (absolute) file path to clipboard

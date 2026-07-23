@@ -20,6 +20,13 @@ require('lazy').setup({
         dependencies = { { 'nvim-lua/plenary.nvim' } }
     },
 
+    -- file browser: fuzzy "smart path editing" — navigate dirs, filter by
+    -- substring, and create files (bound to <leader>ee in telescope.lua).
+    {
+        'nvim-telescope/telescope-file-browser.nvim',
+        dependencies = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
+    },
+
     {
         'nvim-treesitter/nvim-treesitter',
         branch = 'main',
