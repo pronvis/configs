@@ -28,8 +28,6 @@ single failed install warns and continues.
 
 ## Manual steps (not automated)
 
-- **Nerd Font** (for icons in nvim-tree): install a patched font from
-  <https://www.nerdfonts.com/>. Backup: `~/Yandex.Disk.localized/fonts/JetBrainsMono_hacked.zip`.
 - **SSH cutover**: `./install.sh keys` prints your SSH public key — add it to
   each server's `~/.ssh/authorized_keys`, verify login, then retire the old key.
 

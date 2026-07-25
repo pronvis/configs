@@ -39,6 +39,11 @@ BREW_PACKAGES=(
     tmux neovim fd ripgrep go autojump fzf cargo-binstall python3 awscli gnupg pinentry-mac poppler
 )
 
+# Homebrew casks.
+BREW_CASKS=(
+    font-jetbrains-mono-nerd-font
+)
+
 # Cargo installs, as "binary-to-check | cargo subcommand and args".
 # (Unified so git/binstall variants live in the same list as plain installs.)
 CARGO_INSTALLS=(
@@ -189,6 +194,16 @@ install_brew() {
     for f in "$@"; do
         brew list --versions "$f" >/dev/null 2>&1 && { ok "brew: $f"; continue; }
         try brew install "$f"
+    done
+}
+
+# args: cask names
+install_brew_casks() {
+    info "Tools: brew casks"
+    local c
+    for c in "$@"; do
+        brew list --cask --versions "$c" >/dev/null 2>&1 && { ok "cask: $c"; continue; }
+        try brew install --cask "$c"
     done
 }
 
@@ -390,6 +405,7 @@ phase_tools() {
     setup_oh_my_zsh
 
     install_brew        "${BREW_PACKAGES[@]}"
+    install_brew_casks  "${BREW_CASKS[@]}"
     install_cargo       "${CARGO_INSTALLS[@]}"
     install_npm_globals "${NPM_GLOBALS[@]}"
     clone_repos         "${GIT_CLONES[@]}"
@@ -517,7 +533,6 @@ info "Done."
 cat <<'EOF'
 
 Manual steps the script can't do:
-  - Install a Nerd Font (icons in nvim-tree): https://www.nerdfonts.com/
   - SSH cutover: add the printed key to servers' authorized_keys, verify login,
     then remove the old key and strip 'IdentityFile ~/.ssh/id_rsa' from ssh config.
   - Log out/in so zsh becomes the default login shell, and open a fresh shell so

@@ -2,6 +2,7 @@
   "env": {
     "ECC_DISABLED_HOOKS": "pre:bash:gateguard-fact-force,pre:edit-write:gateguard-fact-force"
   },
+  "model": "claude-fable-5[1m]",
   "hooks": {
     "PostToolUse": [
       {
@@ -33,7 +34,8 @@
   "enabledPlugins": {
     "everything-claude-code@everything-claude-code": true,
     "revdiff@revdiff": true,
-    "compound-engineering@compound-engineering-plugin": true
+    "compound-engineering@compound-engineering-plugin": true,
+    "rust-analyzer-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "everything-claude-code": {
