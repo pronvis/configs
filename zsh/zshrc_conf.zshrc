@@ -1,17 +1,6 @@
 export LANG=en_US.UTF-8
 export LC_CTYPE="$LANG"
 
-# Alt/Option + Left/Right = jump by word.
-#   mod 3 (\e[1;3D / \e[1;3C) — Alacritty's Alt+arrow, and what tmux forwards
-#   mod 9 (\e[1;9D / \e[1;9C) — Kitty's Option+arrow (Meta), sent directly
-#   mod 5 (\e[1;5D / \e[1;5C) — Ctrl+arrow
-bindkey "^[[1;3C" forward-word
-bindkey "^[[1;3D" backward-word
-bindkey "^[[1;9C" forward-word
-bindkey "^[[1;9D" backward-word
-bindkey "^[[1;5C" forward-word
-bindkey "^[[1;5D" backward-word
-
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -98,6 +87,19 @@ do
 done
 
 source "$ZSH/oh-my-zsh.sh"
+
+# Alt/Option + Left/Right = jump by word. MUST be after oh-my-zsh: it runs
+# `bindkey -e`, which reinitializes the emacs keymap and wipes any bindings made
+# before it (that's why a fresh shell lost these but `source ~/.zshrc` fixed it).
+#   mod 3 (\e[1;3D / \e[1;3C) — Alacritty's Alt+arrow, and what tmux forwards
+#   mod 9 (\e[1;9D / \e[1;9C) — Kitty's Option+arrow (Meta), sent directly
+#   mod 5 (\e[1;5D / \e[1;5C) — Ctrl+arrow
+bindkey "^[[1;3C" forward-word
+bindkey "^[[1;3D" backward-word
+bindkey "^[[1;9C" forward-word
+bindkey "^[[1;9D" backward-word
+bindkey "^[[1;5C" forward-word
+bindkey "^[[1;5D" backward-word
 
 # Brighten a few zsh-syntax-highlighting colors that read too dark on kanagawa.
 # Set after oh-my-zsh loads the plugin so these override its defaults.
