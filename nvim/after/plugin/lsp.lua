@@ -1,6 +1,8 @@
--- Detach LSP clients from diffview's pseudo-buffers (git blobs like
--- `diffview://.../.git/:0:/file.md`). marksman crashes (exit code 1) on
--- textDocument/didClose because it tries to re-read the non-existent path.
+-- Keep LSP clients off diffview/fugitive git-blob buffers (`.git/:0:/…`) — they
+-- aren't real files. marksman is handled separately (see its root_dir below): it
+-- must never even *attach*, because detaching sends textDocument/didClose and
+-- marksman crashes fatally trying to re-read the non-existent path. Other servers
+-- tolerate the didClose, so detaching them here is fine.
 vim.api.nvim_create_autocmd('LspAttach', {
     callback = function(event)
         local name = vim.api.nvim_buf_get_name(event.buf)
@@ -66,6 +68,20 @@ vim.lsp.config("clangd", {
         "clangd",
         "--offset-encoding=utf-16",
     },
+})
+
+-- marksman crashes fatally on textDocument/didClose for diffview/fugitive
+-- git-blob buffers (it re-reads the non-existent `.git/:0:/…` path). Refuse to
+-- attach to those buffers at all: returning without calling on_dir means no
+-- client is started, so there's no didOpen and thus no crashing didClose.
+vim.lsp.config("marksman", {
+    root_dir = function(bufnr, on_dir)
+        local name = vim.api.nvim_buf_get_name(bufnr)
+        if name:match("%.git/") or name:match("^diffview://") or name:match("^fugitive://") then
+            return
+        end
+        on_dir(vim.fs.root(bufnr, { ".marksman.toml", ".git" }) or vim.fn.getcwd())
+    end,
 })
 
 vim.lsp.config("lua_ls", {
