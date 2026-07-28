@@ -21,6 +21,9 @@ local function my_on_attach(bufnr)
     -- to move to the window above.
     pcall(vim.keymap.del, 'n', '<C-k>', { buffer = bufnr })
 
+    -- free <C-e> (default: "Open: In Place") — a different <C-e> logic owns it.
+    pcall(vim.keymap.del, 'n', '<C-e>', { buffer = bufnr })
+
     -- 'i' shows node info in a float we own. nvim-tree's built-in info popup
     -- auto-closes on the next CursorMoved/BufLeave and flashes; this one only
     -- closes on a keypress (CursorMoved is deliberately NOT a close trigger).

@@ -66,26 +66,6 @@ Host routes-map-tmux
 # ===================================== VPN =======================================
 # =================================================================================
 
-# ==================================== AWS ======================================
-
-Host vpn-aws-ireland-9
-    HostName 18.201.109.237
-    User ubuntu
-
-Host vpn-aws-ireland-10
-    HostName 18.202.246.208
-    User ubuntu
-
-Host vpn-aws-paris-0
-    HostName 35.180.27.245
-    User ubuntu
-
-Host vpn-aws-paris-0-tmux
-    HostName 35.180.27.245
-    User ubuntu
-    RemoteCommand tmux -u new-session -A -s aws-paris-0
-    RequestTTY yes
-
 # ==================================== VDS ======================================
 
 Host vpn-sub-service
@@ -131,7 +111,7 @@ Host vpn-vienna-0
     User root
 
 Host vpn-hel-0
-    HostName 109.172.95.134
+    HostName 62.60.249.167
     User root
 
 # =================================================================================
