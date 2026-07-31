@@ -96,6 +96,25 @@ map("n", "<leader>gn", function() require('gitsigns').nav_hunk('next') end, 'Jum
 map("n", "<leader>gd", '<cmd>DiffviewOpen<cr>', 'Diffview')
 map("n", "<leader>gh", '<cmd>DiffviewFileHistory %<cr>', 'File history')
 map("n", "<leader>ga", '<cmd>DiffviewFileHistory<cr>', 'All files history')
+-- <leader>gD: pick a commit (telescope) and show what that commit changed
+-- (its parent vs. itself, via the `<sha>^!` rev syntax)
+map("n", "<leader>gD", function()
+    local builtin = require('telescope.builtin')
+    local actions = require('telescope.actions')
+    local action_state = require('telescope.actions.state')
+    builtin.git_commits({
+        attach_mappings = function(prompt_bufnr)
+            actions.select_default:replace(function()
+                local entry = action_state.get_selected_entry()
+                actions.close(prompt_bufnr)
+                if entry and entry.value then
+                    vim.cmd('DiffviewOpen ' .. entry.value .. '^!')
+                end
+            end)
+            return true
+        end,
+    })
+end, "Diffview a picked commit's own changes")
 
 -- file tree
 map('n', '<F2>', (require "nvim-tree.api").tree.toggle, 'Show file tree')
