@@ -1,5 +1,14 @@
+---
+description: Apply the current OpenSpec proposal via /opsx:apply, enforcing the ~/it/knowledge_base rules
+argument-hint: [extra instructions]
+---
+
 Apply the current opsx proposal by running `/opsx:apply`, while following the rules and
 conventions in my Knowledge-Base at `~/it/knowledge_base`.
+
+Note: `/opsx:apply` is a **project-scoped** command created by `openspec init`
+(`.claude/commands/opsx/`). If it doesn't exist in this repo, stop and tell me — this
+command only works inside an OpenSpec-initialized project.
 
 Before applying:
 1. Identify which topics the current proposal touches (e.g. ansible, clickhouse, docker,

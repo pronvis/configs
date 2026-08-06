@@ -1,3 +1,8 @@
+---
+description: Two-phase Rust web-service refactor — research best practices into docs/, then refactor behavior-preserving on a branch
+argument-hint: [known problem areas]
+---
+
 Let's refactor this code to make it robust and easier to support in the future.
 
 ## Phase 1 — Research (do this first, commit the output before touching code)

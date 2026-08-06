@@ -1,18 +1,20 @@
 ---
 description: Audit a feature branch's diff for Rust web-service logic against the knowledge-base guidelines
-argument-hint: <feature-branch>
+argument-hint: <baseline-branch> <feature-branch>
 ---
 
-You are reviewing a Rust web-service project. The baseline is the default branch
-(`$1`, or `main` if `$1` does not exist); the feature branch under review is
-`$2`. Your job is to audit the **entire diff** the feature branch adds relative to the
-baseline, and judge it against the project's authoritative guidelines.
+You are reviewing a Rust web-service project. The baseline branch is `$1`; the feature
+branch under review is `$2`. Your job is to audit the **entire diff** the feature branch
+adds relative to the baseline, and judge it against the project's authoritative guidelines.
 
 ## Guardrails (do these first, stop on failure)
 
-- If `$2` is empty, stop and ask the user for the feature branch name.
-- Determine the baseline: `git show-ref --verify --quiet refs/heads/$1 && echo $1 || echo main`.
-- Verify the branch exists: `git rev-parse --verify $2`. If it fails, stop and report.
+- If `$2` is empty, stop and ask the user for both branch names — this command takes
+  **two** positional arguments, baseline first: `/review-rust-web-service master my-feature`.
+- Determine the baseline: use `$1` if it resolves
+  (`git show-ref --verify --quiet refs/heads/$1`); otherwise fall back to whichever of
+  `master` / `main` exists in this repo, and say which one you picked.
+- Verify the feature branch exists: `git rev-parse --verify $2`. If it fails, stop and report.
 - If `git diff <baseline>...$2` is empty, report "no changes to review" and stop.
 
 ## Step 1 — Get the diff

@@ -1,5 +1,6 @@
 ---
-description: High-scrutiny review of the `$2` branch diff — money-movement safety + guideline compliance
+description: High-scrutiny payment-safety review of a feature branch diff — money movement, idempotency, and guideline compliance
+argument-hint: <baseline-branch> <feature-branch>
 ---
 
 You are reviewing a Rust web-service project that handles **real payments moving real
@@ -10,6 +11,8 @@ user explicitly asks.**
 
 ## Guardrails (do these first, stop on failure)
 
+- If `$1` or `$2` is empty, stop and ask the user — this command takes **two** positional
+  arguments, baseline first: `/review-rust-web-service-payments master my-feature`.
 - Verify both branches exist: `git rev-parse --verify $1` and `git rev-parse --verify $2`. If either fails, stop and report.
 - If `git diff $1...$2` is empty, report "no changes to review" and stop.
 
@@ -24,7 +27,8 @@ code.
 
 ## Step 2 — Load the guides
 
-Read every guideline file under `./docs/rust-*`:
+Read every project-local guideline file matching `./docs/rust-*.md` (glob it — don't
+assume a fixed list). In this project family that's typically:
 
 - `rust-web-service-architecture.md`
 - `rust-error-handling.md`
@@ -32,6 +36,8 @@ Read every guideline file under `./docs/rust-*`:
 - `rust-external-clients-and-resilience.md`
 - `rust-testing-patterns.md`
 - `rust-knowledge-base.md`
+
+If `./docs/` has no `rust-*.md` files, say so and rely on the knowledge base alone.
 
 Also read the knowledge base under `~/it/knowledge_base` (prioritize
 `rust/error-handling.md`, `rust/web-api-axum.md`, `rust/database-sqlx.md`,

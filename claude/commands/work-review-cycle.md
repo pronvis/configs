@@ -27,10 +27,12 @@ If `$2` has **no commits** ahead of the baseline yet, run the worker command
 If `$2` already has work on it, skip straight to the review loop.
 
 ## Review loop — repeat for cycle `i` = 1, 2, … up to `$1`
-1. **Spawn a reviewer agent** (use the Task tool, fresh context). Instruct it to:
+1. **Spawn a reviewer agent** (use the Agent tool, fresh context). Instruct it to:
    - Create an isolated worktree:
      `git worktree add -b <work-branch>-reviewer-<i> ~/it/<work-branch>-reviewer-<i> <work-branch>`
-   - From inside that worktree, run `/review-rust-web-service <baseline> <work-branch>`.
+   - From inside that worktree, invoke the `review-rust-web-service` skill with the
+     arguments `<baseline> <work-branch>`. (A subagent can't type `/slash-commands` — it
+     must call the Skill tool by name.)
    - Return the full review output (findings grouped by severity + the verdict).
    - Then remove the worktree: `git worktree remove --force ~/it/<work-branch>-reviewer-<i>`
      and delete the branch `git branch -D <work-branch>-reviewer-<i>`.
@@ -53,5 +55,3 @@ Report:
 - A short summary of what changed across cycles.
 - Any remaining open findings (typically LOW/comment-only nits) if it stopped on the cap.
 - Confirm no stray reviewer worktrees/branches are left (`git worktree list`).
-
-$ARGUMENTS
