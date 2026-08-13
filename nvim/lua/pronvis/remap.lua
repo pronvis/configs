@@ -73,8 +73,9 @@ map('n', 'g*', 'g*zz', 'Search for current word and jump to next', { silent = tr
 -- <leader>p for paste without yanking
 map('v', '<leader>p', '\"_dP', 'Paste without yanking')
 
--- close buffer without closing the window
-map('n', '<leader>q', ':bp<bar>sp<bar>bn<bar>bd<CR>')
+-- close buffer without disturbing the window layout (see pronvis/buffers.lua)
+map('n', '<leader>q', function() require('pronvis.buffers').close() end,
+    'Close buffer, keep window layout')
 
 -- <leader>r replace text on curent word
 map("n", "<leader>r", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], 'Replace text on curent word')
