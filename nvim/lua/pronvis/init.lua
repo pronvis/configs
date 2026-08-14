@@ -1,6 +1,7 @@
 require("pronvis.lazyvim")
 require("pronvis.functions")
 require("pronvis.autocmd")
+require("pronvis.swapfile").setup()
 require("pronvis.set")
 require("pronvis.tabline")
 require("pronvis.remap")
