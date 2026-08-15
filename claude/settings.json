@@ -89,7 +89,8 @@
     "revdiff@revdiff": true,
     "compound-engineering@compound-engineering-plugin": false,
     "rust-analyzer-lsp@claude-plugins-official": true,
-    "mattpocock-skills@claude-plugins-official": true
+    "mattpocock-skills@claude-plugins-official": true,
+    "excalidraw@excalidraw-skill": true
   },
   "extraKnownMarketplaces": {
     "everything-claude-code": {
@@ -109,10 +110,16 @@
         "source": "github",
         "repo": "EveryInc/compound-engineering-plugin"
       }
+    },
+    "excalidraw-skill": {
+      "source": {
+        "source": "github",
+        "repo": "edwingao28/excalidraw-skill"
+      }
     }
   },
-  "effortLevel": "high",
   "language": "English",
+  "effortLevel": "high",
   "tui": "fullscreen",
   "voice": {
     "enabled": true,
