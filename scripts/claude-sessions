@@ -183,10 +183,10 @@ counts() {
         esac
     done < <(collect)
 
-    [ "$waiting" -gt 0 ] && out="$out#[fg=#E6C384]●$waiting "
-    [ "$working" -gt 0 ] && out="$out#[fg=#7E9CD8]◐$working "
-    [ "$idle" -gt 0 ] && out="$out#[fg=#7AA89F]○$idle "
-    [ "$stale" -gt 0 ] && out="$out#[fg=#C34043]✕$stale "
+    [ "$waiting" -gt 0 ] && out="$out#[fg=#E6C384]● $waiting "
+    [ "$working" -gt 0 ] && out="$out#[fg=#7E9CD8]◐ $working "
+    [ "$idle" -gt 0 ] && out="$out#[fg=#7AA89F]○ $idle "
+    [ "$stale" -gt 0 ] && out="$out#[fg=#C34043]✕ $stale "
 
     [ -n "$out" ] && printf '%s' "${out% }"
     return 0
