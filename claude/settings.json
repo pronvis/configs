@@ -4,6 +4,26 @@
   },
   "model": "opus[1m]",
   "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/tmux-claude-status.sh idle"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/tmux-claude-status.sh working"
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Edit|Write|MultiEdit",
@@ -11,6 +31,25 @@
           {
             "type": "command",
             "command": "bash ~/.claude/hooks/rustfmt.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/tmux-claude-status.sh working"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/tmux-claude-status.sh waiting"
           }
         ]
       }
@@ -22,6 +61,20 @@
           {
             "type": "command",
             "command": "bash ~/.claude/hooks/rust-review-reminder.sh"
+          },
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/tmux-claude-status.sh idle"
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/tmux-claude-status.sh gone"
           }
         ]
       }

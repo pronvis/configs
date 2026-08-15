@@ -1,0 +1,210 @@
+#!/usr/bin/env bash
+#
+# List every Claude Code session running inside tmux with its current status,
+# and jump to the one you pick — the same shape as the prefix+S session picker,
+# but landing on the exact pane rather than just the session.
+#
+#   claude-sessions          fzf picker; enter or click jumps to the session
+#   claude-sessions list     one plain "session/window#index<TAB>status" line each
+#   claude-sessions count    compact summary for the tmux status bar
+#
+# Status comes from claude/hooks/tmux-claude-status.sh, which every Claude
+# session writes to a file named after its tmux pane id. This script joins that
+# state against the live pane list, so names always reflect renamed windows and
+# sessions whose pane has gone away simply drop out.
+
+set -uo pipefail
+
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/claude-tmux"
+
+# How long a non-idle session may go without reporting before it is flagged
+# stale. Working sessions refresh on every tool call, so an hour of silence
+# means the session most likely died without firing its SessionEnd hook.
+STALE_AFTER=$((60 * 60))
+
+# Kanagawa, to match the status bar in tmux/tmux.conf.
+C_RESET=$'\033[0m'
+C_DIM=$'\033[38;2;114;113;105m'
+C_WAITING=$'\033[38;2;230;195;132m'
+C_WORKING=$'\033[38;2;126;156;216m'
+C_IDLE=$'\033[38;2;122;168;159m'
+C_STALE=$'\033[38;2;195;64;67m'
+
+die() {
+    printf '%s\n' "$*" >&2
+    exit 1
+}
+
+# Emit "rank <TAB> label <TAB> status <TAB> age <TAB> pane" for each live
+# Claude session, ordered so the ones needing you come first.
+collect() {
+    [ -d "$STATE_DIR" ] || return 0
+
+    local now
+    now=$(date +%s)
+
+    # "###{window_index}" is a literal '#' (from '##') followed by the index,
+    # producing labels like "inkflock/backend#2".
+    tmux list-panes -a -F '#{pane_id} #{session_name}/#{window_name}###{window_index}' 2>/dev/null |
+        while read -r pane label; do
+            local file status ts age rank
+
+            file="$STATE_DIR/${pane#%}"
+            [ -f "$file" ] || continue
+
+            IFS=$'\t' read -r status ts <"$file" || continue
+            [ -n "${status:-}" ] || continue
+
+            age=$((now - ${ts:-0}))
+            [ "$age" -ge 0 ] || age=0
+            if [ "$status" != "idle" ] && [ "$age" -gt "$STALE_AFTER" ]; then
+                status=stale
+            fi
+
+            case "$status" in
+                waiting) rank=0 ;;
+                working) rank=1 ;;
+                idle) rank=2 ;;
+                *) rank=3 ;;
+            esac
+
+            printf '%s\t%s\t%s\t%s\t%s\n' "$rank" "$label" "$status" "$age" "$pane"
+        done | sort -t$'\t' -k1,1n -k2,2
+}
+
+human_age() {
+    local s=$1
+    if [ "$s" -lt 60 ]; then
+        printf '%ds' "$s"
+    elif [ "$s" -lt 3600 ]; then
+        printf '%dm' $((s / 60))
+    elif [ "$s" -lt 86400 ]; then
+        printf '%dh' $((s / 3600))
+    else
+        printf '%dd' $((s / 86400))
+    fi
+}
+
+# Turn collect() rows into "coloured display text <TAB> pane id". fzf shows
+# only the first field and we recover the pane id from the second.
+render() {
+    local rank label status age pane icon color
+    while IFS=$'\t' read -r rank label status age pane; do
+        case "$status" in
+            waiting) icon='●' color=$C_WAITING ;;
+            working) icon='◐' color=$C_WORKING ;;
+            idle) icon='○' color=$C_IDLE ;;
+            *) icon='✕' color=$C_STALE ;;
+        esac
+        printf '%s%s %-40s %-8s%s %s%5s%s\t%s\n' \
+            "$color" "$icon" "$label" "$status" "$C_RESET" \
+            "$C_DIM" "$(human_age "$age")" "$C_RESET" "$pane"
+    done
+}
+
+# Drop state files whose pane no longer exists. Only disk hygiene — collect()
+# already ignores them, since it iterates live panes rather than state files.
+reap() {
+    [ -d "$STATE_DIR" ] || return 0
+
+    local live file pane
+    live=$(tmux list-panes -a -F '#{pane_id}' 2>/dev/null) || return 0
+    [ -n "$live" ] || return 0
+
+    for file in "$STATE_DIR"/*; do
+        [ -f "$file" ] || continue
+        pane="%${file##*/}"
+        case $'\n'"$live"$'\n' in
+            *$'\n'"$pane"$'\n'*) ;;
+            *) rm -f "$file" ;;
+        esac
+    done
+}
+
+# Move the current client to the session, window and pane a session runs in.
+# Resolved fresh from tmux rather than from the stored label, so a window
+# renamed or moved since the hook last fired still lands correctly.
+jump() {
+    local pane=$1 session window
+    session=$(tmux display -p -t "$pane" '#{session_name}' 2>/dev/null) || return 1
+    window=$(tmux display -p -t "$pane" '#{window_index}' 2>/dev/null) || return 1
+    [ -n "$session" ] && [ -n "$window" ] || return 1
+
+    tmux switch-client -t "$session" &&
+        tmux select-window -t "$session:$window" &&
+        tmux select-pane -t "$pane"
+}
+
+pick() {
+    reap
+
+    local rows sel pane
+    rows=$(collect)
+
+    if [ -z "$rows" ]; then
+        printf '%sNo Claude Code sessions are running in tmux.%s\n\n' "$C_DIM" "$C_RESET"
+        printf 'Press any key to close.\n'
+        read -r -n 1 -s
+        return 0
+    fi
+
+    # --with-nth=1 hides the pane id column; left-click:accept makes a single
+    # click jump, matching how the list reads as a set of buttons.
+    sel=$(printf '%s\n' "$rows" | render | fzf \
+        --ansi \
+        --reverse \
+        --no-multi \
+        --exit-0 \
+        --delimiter=$'\t' \
+        --with-nth=1 \
+        --header-first \
+        --header='enter or click to jump · esc to cancel' \
+        --bind='left-click:accept') || return 0
+
+    [ -n "$sel" ] || return 0
+    pane=${sel##*$'\t'}
+    [ -n "$pane" ] || return 0
+
+    jump "$pane" || die "Could not jump to $pane — the pane may have just closed."
+}
+
+# Compact status-bar summary, e.g. "●1 ◐2 ○3". Prints nothing when no Claude
+# session is running, so the status bar stays clean.
+counts() {
+    local rank label status age pane
+    local waiting=0 working=0 idle=0 stale=0 out=''
+
+    while IFS=$'\t' read -r rank label status age pane; do
+        case "$status" in
+            waiting) waiting=$((waiting + 1)) ;;
+            working) working=$((working + 1)) ;;
+            idle) idle=$((idle + 1)) ;;
+            *) stale=$((stale + 1)) ;;
+        esac
+    done < <(collect)
+
+    [ "$waiting" -gt 0 ] && out="$out#[fg=#E6C384]●$waiting "
+    [ "$working" -gt 0 ] && out="$out#[fg=#7E9CD8]◐$working "
+    [ "$idle" -gt 0 ] && out="$out#[fg=#7AA89F]○$idle "
+    [ "$stale" -gt 0 ] && out="$out#[fg=#C34043]✕$stale "
+
+    [ -n "$out" ] && printf '%s' "${out% }"
+    return 0
+}
+
+list() {
+    local rank label status age pane
+    while IFS=$'\t' read -r rank label status age pane; do
+        printf '%s\t%s\n' "$label" "$status"
+    done < <(collect)
+}
+
+command -v tmux >/dev/null 2>&1 || die 'claude-sessions: tmux is not installed.'
+tmux has-session >/dev/null 2>&1 || die 'claude-sessions: no tmux server is running.'
+
+case "${1:-pick}" in
+    pick) pick ;;
+    list) list ;;
+    count) counts ;;
+    *) die "usage: ${0##*/} [pick|list|count]" ;;
+esac
