@@ -103,6 +103,33 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     end
 })
 
+-- re-read files changed outside nvim (a coding agent in another tmux pane, a
+-- branch switch, a formatter) instead of sitting on a stale buffer. 'autoread'
+-- only acts when something asks it to check, so ask on focus and on landing in
+-- a buffer. Needs `set -g focus-events on` in tmux/tmux.conf, otherwise tmux
+-- swallows the focus reports and FocusGained never fires in a pane.
+-- Skipped in command-line mode, where :checktime is not allowed.
+local focus_checktime = vim.api.nvim_create_augroup("focus_checktime", { clear = true })
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "TermClose", "TermLeave" }, {
+    pattern = "*",
+    group = focus_checktime,
+    callback = function()
+        if vim.fn.mode() ~= 'c' then
+            vim.cmd('checktime')
+        end
+    end
+})
+
+-- say so when a buffer was reloaded under you, so a silently changed file is
+-- never a surprise. FileChangedShellPost fires only when the reload happened.
+vim.api.nvim_create_autocmd("FileChangedShellPost", {
+    pattern = "*",
+    group = focus_checktime,
+    callback = function()
+        vim.notify('file changed on disk — buffer reloaded', vim.log.levels.WARN)
+    end
+})
+
 -- highlight on yanking
 local highlight_yank = vim.api.nvim_create_augroup("highlight_yank", { clear = true })
 vim.api.nvim_create_autocmd("TextYankPost", {
