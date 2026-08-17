@@ -6,13 +6,23 @@
 # Registered in claude/settings.json against several hook events, each passing
 # the status it represents as $1:
 #
-#   SessionStart      idle      a session appeared, not doing anything yet
-#   UserPromptSubmit  working   the user just asked for something
-#   PostToolUse       working   a tool finished, so we are past any permission
-#                               prompt and back to work
-#   Notification      waiting   Claude needs the user (a permission prompt)
-#   Stop              idle      the turn ended
-#   SessionEnd        gone      deregister
+#   SessionStart        idle      a session appeared, not doing anything yet
+#   UserPromptSubmit    working   the user just asked for something
+#   PostToolUse         working   a tool finished, so we are past any permission
+#                                 prompt and back to work
+#   PostToolUseFailure  working   same, for a tool that errored — a failed tool
+#                                 fires this INSTEAD of PostToolUse
+#   PermissionRequest   waiting   a tool needs the user to approve it; fires the
+#                                 moment the prompt appears
+#   PermissionDenied    working   a deny rule refused a tool, so Claude carries
+#                                 on without us (a human "No" fires nothing)
+#   Notification        waiting   backstop for the permission prompt, ~6s late
+#   Stop                idle      the turn ended
+#   SessionEnd          gone      deregister
+#
+# Answering a permission prompt with "No", or cancelling it with Esc, aborts the
+# turn and fires NO hook at all, so `waiting` stands until the next prompt is
+# submitted. Nothing to be done about that from here: the events do not exist.
 #
 # Deliberately dependency-free and does no real JSON parsing: it runs on every
 # tool call, so it stays a couple of syscalls. The pane id is enough to identify
@@ -30,14 +40,19 @@ state_dir="${XDG_STATE_HOME:-$HOME/.local/state}/claude-tmux"
 payload=''
 [ -t 0 ] || payload=$(cat)
 
-# Claude Code fires Notification for two unrelated things: it needs the user
-# (a permission prompt), and the input prompt merely sitting untouched for a
-# minute. The second is an idle session, not one waiting on anything, so leave
-# whatever status is already recorded alone — in particular do not clobber a
-# real permission prompt that this idle notice happens to follow.
+# Claude Code fires Notification for a dozen unrelated things, only some of
+# which mean "a person is needed here" — `idle_prompt` in particular is just the
+# input box sitting untouched for a minute, which is an idle session, not a
+# waiting one. The Notification hook is registered with a matcher so the others
+# never reach us; this is the belt to that matcher's braces, and it is written
+# as an allowlist on notification_type rather than a grep for the message text,
+# which is prose and free to change. Events that carry no notification_type at
+# all (PermissionRequest) fall through untouched.
 if [ "$status" = "waiting" ]; then
     case "$payload" in
-        *'waiting for your input'* | *idle_prompt*) exit 0 ;;
+        *'"notification_type":"permission_prompt"'*) ;;
+        *'"notification_type":"elicitation_dialog"'*) ;;
+        *'"notification_type"'*) exit 0 ;;
     esac
 fi
 
@@ -59,3 +74,8 @@ mkdir -p "$state_dir" || exit 0
 # that stopped reporting, which is how a session killed without SessionEnd
 # (kill -9, closed pane, crashed host) shows up as stale rather than "working".
 printf '%s\t%s\n' "$status" "$(date +%s)" >"$state_file"
+
+# Always succeed. PermissionRequest is a decision hook — a non-zero exit there
+# is read as the hook having something to say about the tool, and a failed write
+# to the state dir must never turn into a blocked or denied tool call.
+exit 0
