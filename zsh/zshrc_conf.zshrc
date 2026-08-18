@@ -53,7 +53,12 @@ plugins=(git colored-man-pages pip python brew macos zsh-syntax-highlighting zsh
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
 # User configuration
-export CARGO_TARGET_DIR="$HOME/rust/rust_build_artifacts"
+# No CARGO_TARGET_DIR on purpose: every project builds into its own ./target.
+# A single shared target dir looks like it dedupes dep builds, but Cargo keys
+# artifacts on a hash of features + profile + toolchain + RUSTFLAGS, so
+# unrelated projects rarely collide -- and Cargo never GCs, so it only ever
+# grows (it reached 203GB / 158k stale files). Worse, Cargo locks a target dir
+# exclusively, so one shared dir means one build at a time machine-wide.
 export GOPATH="$HOME/go"
 export CARGO_NET_GIT_FETCH_WITH_CLI=true
 

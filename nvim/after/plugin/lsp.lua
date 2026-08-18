@@ -116,6 +116,22 @@ vim.g.rustaceanvim = {
         -- handshaking, so they join it instead of each starting their own
         -- server for its own crate root. See the module for the full why.
         auto_attach = require('pronvis.rust_analyzer_join').auto_attach,
+
+        -- Give rust-analyzer's `cargo check` its own target dir
+        -- (`<project>/target/rust-analyzer`). Cargo takes an *exclusive* lock
+        -- on a target dir for the duration of a build, so without this the
+        -- LSP's background checks and a foreground `cargo build`/`cargo test`
+        -- serialise against each other -- whichever starts second blocks.
+        -- Costs a duplicate set of dep artifacts per project, buys an editor
+        -- that never stalls waiting on a build to finish.
+        --
+        -- `default_settings` is only the merge base: a project-local
+        -- `rust-analyzer.json` or `.vscode/settings.json` still wins.
+        default_settings = {
+            ['rust-analyzer'] = {
+                cargo = { targetDir = true },
+            },
+        },
     },
 }
 
