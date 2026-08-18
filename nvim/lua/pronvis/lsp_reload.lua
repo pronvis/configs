@@ -13,12 +13,20 @@
 --
 -- Buffer contents are never reloaded, so this is safe with unsaved changes.
 --
+-- Re-attaching happens in two waves. Buffers inside the working directory go
+-- first; everything else (dependency sources, files from another project) waits
+-- until those servers have answered `initialize`. Firing them all at once is
+-- what makes rustaceanvim start a separate rust-analyzer per crate root — see
+-- pronvis/rust_analyzer_join.lua for the mechanism.
+--
 --   :ReloadLsp        every loaded buffer (closest to an nvim restart)
 --   :ReloadLsp buf    just the current buffer (skips re-indexing the workspace)
 
 local M = {}
 
 local STOP_TIMEOUT_MS = 3000
+local SETTLE_POLL_MS = 200
+local SETTLE_LIMIT_MS = 10000
 
 --- Loaded, real buffers worth re-attaching (skips scratch/terminal/plugin UIs).
 --- @return integer[]
@@ -71,6 +79,58 @@ local function reattach(buf)
     vim.bo[buf].filetype = ft
 end
 
+--- Is this buffer part of the workspace being edited, rather than a dependency
+--- source or a file from some other project? Path-based on purpose: it has to be
+--- answerable before any server exists to ask.
+--- @param buf integer
+--- @return boolean
+local function is_workspace_buf(buf)
+    local path = vim.api.nvim_buf_get_name(buf)
+    if path == '' then return false end
+    local cwd = vim.fn.getcwd()
+    return path:sub(1, #cwd + 1) == cwd .. '/'
+end
+
+--- At least one client is up and none is still handshaking.
+--- @return boolean
+local function clients_settled()
+    local clients = vim.lsp.get_clients({ _uninitialized = true })
+    if #clients == 0 then return false end
+    for _, client in ipairs(clients) do
+        if not client.initialized then return false end
+    end
+    return true
+end
+
+--- Run fn once the first wave's clients have initialized, or once the wait runs
+--- out. Polls rather than vim.wait: a blocking wait would freeze the UI, and
+--- there is nothing to gain by holding the editor hostage for it.
+--- @param fn fun()
+--- @param waited integer|nil
+local function when_settled(fn, waited)
+    waited = waited or 0
+    if clients_settled() or waited >= SETTLE_LIMIT_MS then
+        fn()
+        return
+    end
+    vim.defer_fn(function() when_settled(fn, waited + SETTLE_POLL_MS) end, SETTLE_POLL_MS)
+end
+
+--- Servers attach asynchronously; report once they have had a moment to come up.
+--- @param buf_count integer
+local function report(buf_count)
+    vim.defer_fn(function()
+        local names = {}
+        for _, client in ipairs(vim.lsp.get_clients()) do
+            names[#names + 1] = client.name
+        end
+        table.sort(names)
+        vim.notify(('ReloadLsp: %d buffer(s) re-attached — %s')
+            :format(buf_count, #names > 0 and table.concat(names, ', ') or 'no LSP clients'),
+            vim.log.levels.INFO)
+    end, 1500)
+end
+
 --- @param scope string|nil "buf" for the current buffer, anything else = all
 function M.reload(scope)
     local bufs = scope == 'buf' and { vim.api.nvim_get_current_buf() } or reloadable_buffers()
@@ -86,21 +146,33 @@ function M.reload(scope)
             vim.log.levels.WARN)
     end
 
+    local workspace, external = {}, {}
     for _, buf in ipairs(bufs) do
+        table.insert(is_workspace_buf(buf) and workspace or external, buf)
+    end
+
+    -- Nothing from the workspace to lead with (`:ReloadLsp buf` on a dependency
+    -- file, say): there is no server coming that the rest could join, so skip
+    -- the wait entirely.
+    if #workspace == 0 then
+        workspace, external = external, {}
+    end
+
+    for _, buf in ipairs(workspace) do
         reattach(buf)
     end
 
-    -- Servers attach asynchronously; report once they have had a moment to come up.
-    vim.defer_fn(function()
-        local names = {}
-        for _, client in ipairs(vim.lsp.get_clients()) do
-            names[#names + 1] = client.name
+    if #external == 0 then
+        report(#bufs)
+        return
+    end
+
+    when_settled(function()
+        for _, buf in ipairs(external) do
+            reattach(buf)
         end
-        table.sort(names)
-        vim.notify(('ReloadLsp: %d buffer(s) re-attached — %s')
-            :format(#bufs, #names > 0 and table.concat(names, ', ') or 'no LSP clients'),
-            vim.log.levels.INFO)
-    end, 1500)
+        report(#bufs)
+    end)
 end
 
 --- :HlAt — what is actually painting the character under the cursor?

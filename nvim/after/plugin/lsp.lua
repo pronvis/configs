@@ -110,8 +110,12 @@ vim.lsp.config("ts_ls", {
 vim.g.rustaceanvim = {
     server = {
         cmd = { "/usr/local/bin/rust-analyzer-mac" },
-        capabilities = capabilities
+        capabilities = capabilities,
 
+        -- Hold dependency/stdlib buffers back while a rust-analyzer is still
+        -- handshaking, so they join it instead of each starting their own
+        -- server for its own crate root. See the module for the full why.
+        auto_attach = require('pronvis.rust_analyzer_join').auto_attach,
     },
 }
 
