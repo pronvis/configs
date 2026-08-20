@@ -45,7 +45,7 @@ BREW_CASKS=(
     # Covers Enclosed Alphanumerics (U+2460-U+24FF) at a single-cell advance;
     # kitty symbol_map's it so those glyphs stop falling back to a CJK font
     # and rendering clipped. See kitty/kitty.conf.
-    font-juliamono
+    font-iosevka
 )
 
 # Cargo installs, as "binary-to-check | cargo subcommand and args".
