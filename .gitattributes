@@ -1,0 +1,11 @@
+# claude/settings.json is a live runtime store: ~/.claude/settings.json symlinks
+# to it, so Claude Code writes to it whenever you `/model`, and it re-serialises
+# the whole file (key order is not stable) producing diffs with no real change.
+#
+# The clean filter canonicalises what git stores:
+#   jq -S          sort keys, so reordering never shows up as a diff
+#   del(.model)    drop the per-machine model choice entirely
+#
+# Everything else (hooks, env, enabledPlugins, effortLevel, statusLine) stays
+# tracked. Requires jq, and the filter itself (see install.sh: setup_git_filters).
+claude/settings.json filter=claude-settings

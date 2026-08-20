@@ -36,7 +36,7 @@ DRY_RUN="${DRY_RUN:-0}"               # DRY_RUN=1 ./install.sh — preview, chan
 # breaks inside other TUIs (e.g. Claude Code) and hangs gpg/SSH/signed commits.
 # It must match the `pinentry-program` line in gpg-agent.conf.
 BREW_PACKAGES=(
-    tmux neovim fd ripgrep go autojump fzf cargo-binstall python3 awscli gnupg pinentry-mac poppler gh
+    tmux neovim fd ripgrep go autojump fzf cargo-binstall python3 awscli gnupg pinentry-mac poppler gh jq
 )
 
 # Homebrew casks.
@@ -359,6 +359,22 @@ setup_brew() {
     have brew
 }
 
+setup_git_filters() {
+    # claude/settings.json doubles as Claude Code's live runtime store, so it is
+    # rewritten on every `/model` (and re-serialised with unstable key order).
+    # `.gitattributes` points it at this filter; the filter itself lives in
+    # .git/config, which is NOT cloned, so it has to be registered per clone.
+    if ! have jq; then
+        warn "jq missing — skipping claude/settings.json clean filter"
+        return 0
+    fi
+    info "Git: clean filter for claude/settings.json"
+    try git -C "$REPO" config filter.claude-settings.clean 'jq -S "del(.model)"'
+    # Re-stage through the filter so an existing clone stops showing the churn.
+    [[ "$DRY_RUN" == 1 ]] || git -C "$REPO" add --renormalize claude/settings.json 2>/dev/null || true
+    return 0
+}
+
 setup_rustup() {
     if ! have rustup; then
         info "Installing rustup"
@@ -413,6 +429,9 @@ phase_tools() {
     install_cargo       "${CARGO_INSTALLS[@]}"
     install_npm_globals "${NPM_GLOBALS[@]}"
     clone_repos         "${GIT_CLONES[@]}"
+
+    # After install_brew, so jq (which the filter shells out to) already exists.
+    setup_git_filters
 }
 
 phase_links() {

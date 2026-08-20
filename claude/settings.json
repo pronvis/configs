@@ -1,58 +1,70 @@
 {
-  "env": {
-    "ECC_DISABLED_HOOKS": "pre:bash:gateguard-fact-force,pre:edit-write:gateguard-fact-force"
-  },
   "attribution": {
     "commitTrailers": false
   },
-  "model": "opus[1m]",
+  "effortLevel": "high",
+  "enabledPlugins": {
+    "cloudflare@cloudflare": true,
+    "compound-engineering@compound-engineering-plugin": false,
+    "everything-claude-code@everything-claude-code": true,
+    "excalidraw@excalidraw-skill": true,
+    "mattpocock-skills@claude-plugins-official": true,
+    "revdiff@revdiff": true,
+    "rust-analyzer-lsp@claude-plugins-official": true
+  },
+  "env": {
+    "ECC_DISABLED_HOOKS": "pre:bash:gateguard-fact-force,pre:edit-write:gateguard-fact-force"
+  },
+  "extraKnownMarketplaces": {
+    "cloudflare": {
+      "source": {
+        "repo": "cloudflare/skills",
+        "source": "github"
+      }
+    },
+    "compound-engineering-plugin": {
+      "source": {
+        "repo": "EveryInc/compound-engineering-plugin",
+        "source": "github"
+      }
+    },
+    "everything-claude-code": {
+      "source": {
+        "repo": "affaan-m/everything-claude-code",
+        "source": "github"
+      }
+    },
+    "excalidraw-skill": {
+      "source": {
+        "repo": "edwingao28/excalidraw-skill",
+        "source": "github"
+      }
+    },
+    "revdiff": {
+      "source": {
+        "repo": "umputun/revdiff",
+        "source": "github"
+      }
+    }
+  },
   "hooks": {
-    "SessionStart": [
+    "Notification": [
       {
         "hooks": [
           {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/tmux-claude-status.sh idle"
+            "command": "bash ~/.claude/hooks/tmux-claude-status.sh waiting",
+            "type": "command"
           }
-        ]
+        ],
+        "matcher": "permission_prompt|elicitation_dialog"
       }
     ],
-    "UserPromptSubmit": [
+    "PermissionDenied": [
       {
         "hooks": [
           {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/tmux-claude-status.sh working"
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Edit|Write|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/rustfmt.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/tmux-claude-status.sh working"
-          }
-        ]
-      }
-    ],
-    "PostToolUseFailure": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/tmux-claude-status.sh working"
+            "command": "bash ~/.claude/hooks/tmux-claude-status.sh working",
+            "type": "command"
           }
         ]
       }
@@ -61,44 +73,38 @@
       {
         "hooks": [
           {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/tmux-claude-status.sh waiting"
+            "command": "bash ~/.claude/hooks/tmux-claude-status.sh waiting",
+            "type": "command"
           }
         ]
       }
     ],
-    "PermissionDenied": [
+    "PostToolUse": [
       {
         "hooks": [
           {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/tmux-claude-status.sh working"
+            "command": "bash ~/.claude/hooks/rustfmt.sh",
+            "type": "command"
           }
-        ]
+        ],
+        "matcher": "Edit|Write|MultiEdit"
+      },
+      {
+        "hooks": [
+          {
+            "command": "bash ~/.claude/hooks/tmux-claude-status.sh working",
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
       }
     ],
-    "Notification": [
+    "PostToolUseFailure": [
       {
-        "matcher": "permission_prompt|elicitation_dialog",
         "hooks": [
           {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/tmux-claude-status.sh waiting"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "*",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/rust-review-reminder.sh"
-          },
-          {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/tmux-claude-status.sh idle"
+            "command": "bash ~/.claude/hooks/tmux-claude-status.sh working",
+            "type": "command"
           }
         ]
       }
@@ -107,60 +113,53 @@
       {
         "hooks": [
           {
-            "type": "command",
-            "command": "bash ~/.claude/hooks/tmux-claude-status.sh gone"
+            "command": "bash ~/.claude/hooks/tmux-claude-status.sh gone",
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "command": "bash ~/.claude/hooks/tmux-claude-status.sh idle",
+            "type": "command"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "command": "bash ~/.claude/hooks/rust-review-reminder.sh",
+            "type": "command"
+          },
+          {
+            "command": "bash ~/.claude/hooks/tmux-claude-status.sh idle",
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "command": "bash ~/.claude/hooks/tmux-claude-status.sh working",
+            "type": "command"
           }
         ]
       }
     ]
   },
-  "statusLine": {
-    "type": "command",
-    "command": "bash ~/.claude/statusline-command.sh"
-  },
-  "enabledPlugins": {
-    "everything-claude-code@everything-claude-code": true,
-    "revdiff@revdiff": true,
-    "compound-engineering@compound-engineering-plugin": false,
-    "rust-analyzer-lsp@claude-plugins-official": true,
-    "mattpocock-skills@claude-plugins-official": true,
-    "excalidraw@excalidraw-skill": true,
-    "cloudflare@cloudflare": true
-  },
-  "extraKnownMarketplaces": {
-    "everything-claude-code": {
-      "source": {
-        "source": "github",
-        "repo": "affaan-m/everything-claude-code"
-      }
-    },
-    "revdiff": {
-      "source": {
-        "source": "github",
-        "repo": "umputun/revdiff"
-      }
-    },
-    "compound-engineering-plugin": {
-      "source": {
-        "source": "github",
-        "repo": "EveryInc/compound-engineering-plugin"
-      }
-    },
-    "excalidraw-skill": {
-      "source": {
-        "source": "github",
-        "repo": "edwingao28/excalidraw-skill"
-      }
-    },
-    "cloudflare": {
-      "source": {
-        "source": "github",
-        "repo": "cloudflare/skills"
-      }
-    }
-  },
   "language": "English",
-  "effortLevel": "high",
+  "statusLine": {
+    "command": "bash ~/.claude/statusline-command.sh",
+    "type": "command"
+  },
   "tui": "fullscreen",
   "voice": {
     "enabled": true,
