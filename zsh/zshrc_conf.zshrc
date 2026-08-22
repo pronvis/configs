@@ -274,7 +274,12 @@ fi
 # chains — and falls back to the highest installed version if it can't resolve
 # (or resolves to a version that isn't installed).
 if [ -d "$NVM_DIR/versions/node" ]; then
-	__nvm_highest() { /bin/ls -d "$NVM_DIR"/versions/node/"$1"*/bin 2>/dev/null | sort -V | tail -1; }
+	# (N) is a zsh glob qualifier: no match -> expands to nothing. Without it
+	# zsh's default `nomatch` aborts the command with "no matches found" --
+	# and that error comes from the *shell*, before /bin/ls ever runs, so a
+	# `2>/dev/null` on ls cannot suppress it (bash passes unmatched globs
+	# through literally, which is why this read as fine when it was written).
+	__nvm_highest() { print -rl -- "$NVM_DIR"/versions/node/"$1"*/bin(N) | sort -V | tail -1; }
 
 	__nvm_tok=""
 	[ -f "$NVM_DIR/alias/default" ] && __nvm_tok="$(cat "$NVM_DIR/alias/default" 2>/dev/null)"
@@ -290,11 +295,21 @@ if [ -d "$NVM_DIR/versions/node" ]; then
 		v[0-9]*|[0-9]*) __nvm_default_bin="$(__nvm_highest "v${__nvm_tok#v}")" ;; # concrete/partial version
 		*)              __nvm_default_bin="" ;;                                   # node/stable/etc -> fall through
 	esac
-	[ -z "$__nvm_default_bin" ] && __nvm_default_bin="$(__nvm_highest v)"         # fallback: highest installed
+	__nvm_wanted="$__nvm_tok"
+	if [ -z "$__nvm_default_bin" ]; then
+		__nvm_default_bin="$(__nvm_highest v)"                                   # fallback: highest installed
+		# Say so when a *concrete* version was asked for and is missing (nvm
+		# bumps lts/<name> to releases you may not have installed). Stays quiet
+		# for node/stable, where 'highest installed' is the intended answer.
+		case "$__nvm_wanted" in
+			v[0-9]*|[0-9]*) [ -n "$__nvm_default_bin" ] && \
+				print -u2 "nvm: default ${__nvm_wanted} not installed — using ${${__nvm_default_bin:h}:t} (nvm install --lts)" ;;
+		esac
+	fi
 	[ -n "$__nvm_default_bin" ] && export PATH="$__nvm_default_bin:$PATH"
 
 	unset -f __nvm_highest 2>/dev/null
-	unset __nvm_tok __nvm_hops __nvm_default_bin
+	unset __nvm_tok __nvm_hops __nvm_default_bin __nvm_wanted
 fi
 
 # Use a different histfile per shell, and write to it immediately after each command.
