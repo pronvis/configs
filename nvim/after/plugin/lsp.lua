@@ -189,7 +189,26 @@ cmp.setup {
     },
 }
 
--- Hide all semantic highlights
-for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
-    vim.api.nvim_set_hl(0, group, {})
+-- Hide all semantic highlights: clearing the `@lsp.*` groups stops LSP semantic
+-- tokens (extmark priority 125) from painting over treesitter (priority 100), so
+-- treesitter stays the single source of colour.
+--
+-- This MUST re-run on ColorScheme. Applying a theme redefines the @lsp groups
+-- wholesale -- measured: kanagawa restores 44 of the 45 -- which silently undoes
+-- the blanking. From then on semantic tokens win over treesitter again, so the
+-- buffer repaints in rust-analyzer's flatter palette until nvim restarts.
+--
+-- Re-applying a theme is not rare here: <leader>gg re-sources
+-- after/plugin/colorscheme.lua on purpose. Same guard that file already uses for
+-- the diff colours.
+local function blank_lsp_semantic_highlights()
+    for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
+        vim.api.nvim_set_hl(0, group, {})
+    end
 end
+
+blank_lsp_semantic_highlights()
+vim.api.nvim_create_autocmd('ColorScheme', {
+    desc = 'Re-blank @lsp.* groups; applying a theme redefines them',
+    callback = blank_lsp_semantic_highlights,
+})
