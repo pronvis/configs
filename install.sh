@@ -369,7 +369,7 @@ setup_git_filters() {
         return 0
     fi
     info "Git: clean filter for claude/settings.json"
-    try git -C "$REPO" config filter.claude-settings.clean 'jq -S "del(.model)"'
+    try git -C "$REPO" config filter.claude-settings.clean 'jq -S "del(.model, .modelSettings)"'
     # Re-stage through the filter so an existing clone stops showing the churn.
     [[ "$DRY_RUN" == 1 ]] || git -C "$REPO" add --renormalize claude/settings.json 2>/dev/null || true
     return 0
