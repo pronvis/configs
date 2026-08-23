@@ -3,8 +3,10 @@
 # the whole file (key order is not stable) producing diffs with no real change.
 #
 # The clean filter canonicalises what git stores:
-#   jq -S          sort keys, so reordering never shows up as a diff
-#   del(.model)    drop the per-machine model choice entirely
+#   jq -S             sort keys, so reordering never shows up as a diff
+#   del(.model)       the per-machine model choice, rewritten on every `/model`
+#   del(.modelSettings)  per-model effort etc; Claude Code adds an entry per
+#                     model you use, so it accumulates the same way
 #
 # Everything else (hooks, env, enabledPlugins, effortLevel, statusLine) stays
 # tracked. Requires jq, and the filter itself (see install.sh: setup_git_filters).
