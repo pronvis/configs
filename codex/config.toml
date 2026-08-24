@@ -1,9 +1,12 @@
 model = "gpt-5.6-luna"
 model_reasoning_effort = "high"
-[projects."/Users/pronvis/it/claude_tests/codex_free"]
+approval_policy = "never"
+sandbox_mode = "workspace-write"
+
+[projects."~/it/claude_tests/codex_free"]
 trust_level = "trusted"
 
-[projects."/Users/pronvis/it/vpn_service"]
+[projects."~/it/vpn_service"]
 trust_level = "trusted"
 
 [tui]
