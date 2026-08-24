@@ -1,0 +1,26 @@
+model = "gpt-5.6-luna"
+model_reasoning_effort = "high"
+[projects."/Users/pronvis/it/claude_tests/codex_free"]
+trust_level = "trusted"
+
+[projects."/Users/pronvis/it/vpn_service"]
+trust_level = "trusted"
+
+[tui]
+status_line = ["model-with-reasoning", "context-used", "current-dir", "git-branch", "used-tokens", "five-hour-limit", "weekly-limit"]
+status_line_use_colors = true
+
+[tui.model_availability_nux]
+"gpt-5.6-sol" = 1
+
+[marketplaces.ecc]
+source_type = "git"
+source = "https://github.com/affaan-m/ECC.git"
+
+[plugins."ecc@ecc"]
+enabled = true
+
+[hooks.state]
+
+[hooks.state."ecc@ecc:hooks/codex-hooks.json:session_start:0:0"]
+trusted_hash = "sha256:5e150eb206e919dbb3443ef2eb0bce6899ff88da2bdb795247ee0ccb9c8e0576"
