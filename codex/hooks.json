@@ -1,0 +1,59 @@
+{
+  "description": "Report this Codex session's status to the tmux agents view (prefix+C) and status bar.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          { "type": "command", "command": "bash \"$HOME\"/bin/scripts/tmux-agent-status idle codex" }
+        ],
+        "id": "tmux-status:session-start"
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          { "type": "command", "command": "bash \"$HOME\"/bin/scripts/tmux-agent-status working codex" }
+        ],
+        "id": "tmux-status:user-prompt-submit"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          { "type": "command", "command": "bash \"$HOME\"/bin/scripts/tmux-agent-status working codex" }
+        ],
+        "id": "tmux-status:post-tool-use"
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "matcher": "*",
+        "hooks": [
+          { "type": "command", "command": "bash \"$HOME\"/bin/scripts/tmux-agent-status waiting codex" }
+        ],
+        "id": "tmux-status:permission-request"
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          { "type": "command", "command": "bash \"$HOME\"/bin/scripts/tmux-agent-status idle codex" }
+        ],
+        "id": "tmux-status:stop"
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "*",
+        "hooks": [
+          { "type": "command", "command": "bash \"$HOME\"/bin/scripts/tmux-agent-status gone codex" }
+        ],
+        "id": "tmux-status:session-end"
+      }
+    ]
+  }
+}

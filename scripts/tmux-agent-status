@@ -1,24 +1,36 @@
 #!/usr/bin/env bash
 #
-# Record this Claude Code session's status, keyed by the tmux pane it runs in,
-# so `claude-sessions` can list every live session and jump to it.
+# Record a coding agent's status, keyed by the tmux pane it runs in, so
+# `agent-sessions` can list every live session and jump to it.
 #
-# Registered in claude/settings.json against several hook events, each passing
-# the status it represents as $1:
+# Usage: tmux-agent-status <status> [agent]
+#   status  idle | working | waiting | gone
+#   agent   claude (default) | codex — which tool this session is, so the
+#           picker and status bar can tell them apart
+#
+# Registered against lifecycle hooks in claude/settings.json and
+# codex/hooks.json, each passing the status its event represents:
 #
 #   SessionStart        idle      a session appeared, not doing anything yet
 #   UserPromptSubmit    working   the user just asked for something
 #   PostToolUse         working   a tool finished, so we are past any permission
 #                                 prompt and back to work
 #   PostToolUseFailure  working   same, for a tool that errored — a failed tool
-#                                 fires this INSTEAD of PostToolUse
+#                                 fires this INSTEAD of PostToolUse (Claude only)
 #   PermissionRequest   waiting   a tool needs the user to approve it; fires the
 #                                 moment the prompt appears
-#   PermissionDenied    working   a deny rule refused a tool, so Claude carries
-#                                 on without us (a human "No" fires nothing)
+#   PermissionDenied    working   a deny rule refused a tool, so the agent carries
+#                                 on without us (Claude only; a human "No" fires
+#                                 nothing)
 #   Notification        waiting   backstop for the permission prompt, ~6s late
+#                                 (Claude only)
 #   Stop                idle      the turn ended
 #   SessionEnd          gone      deregister
+#
+# Codex has no PostToolUseFailure, PermissionDenied or Notification event, so a
+# Codex session leans on PermissionRequest alone for `waiting`, and a tool that
+# errors leaves the status at whatever the previous event set. Both are cosmetic:
+# the next event corrects them.
 #
 # Answering a permission prompt with "No", or cancelling it with Esc, aborts the
 # turn and fires NO hook at all, so `waiting` stands until the next prompt is
@@ -26,17 +38,18 @@
 #
 # Deliberately dependency-free and does no real JSON parsing: it runs on every
 # tool call, so it stays a couple of syscalls. The pane id is enough to identify
-# the session, because `claude-sessions` resolves names from the live tmux pane
+# the session, because `agent-sessions` resolves names from the live tmux pane
 # list.
 
 set -uo pipefail
 
 status="${1:-idle}"
-state_dir="${XDG_STATE_HOME:-$HOME/.local/state}/claude-tmux"
+agent="${2:-claude}"
+state_dir="${XDG_STATE_HOME:-$HOME/.local/state}/agent-tmux"
 
-# Read the hook payload off stdin so Claude Code never writes into a closed
-# pipe. Only the Notification event looks at it; everywhere else this is just
-# the drain.
+# Read the hook payload off stdin so the agent never writes into a closed pipe.
+# Only the Notification event looks at it; everywhere else this is just the
+# drain.
 payload=''
 [ -t 0 ] || payload=$(cat)
 
@@ -56,7 +69,7 @@ if [ "$status" = "waiting" ]; then
     esac
 fi
 
-# Claude is not running under tmux (plain terminal, cloud, CI) — there is no
+# The agent is not running under tmux (plain terminal, cloud, CI) — there is no
 # pane to attribute this session to, so there is nothing to display.
 [ -n "${TMUX_PANE:-}" ] || exit 0
 
@@ -70,10 +83,11 @@ fi
 
 mkdir -p "$state_dir" || exit 0
 
-# status <TAB> last-updated-epoch. The timestamp lets the picker flag sessions
-# that stopped reporting, which is how a session killed without SessionEnd
-# (kill -9, closed pane, crashed host) shows up as stale rather than "working".
-printf '%s\t%s\n' "$status" "$(date +%s)" >"$state_file"
+# status <TAB> last-updated-epoch <TAB> agent. The timestamp lets the picker
+# flag sessions that stopped reporting, which is how a session killed without
+# SessionEnd (kill -9, closed pane, crashed host) shows up as stale rather than
+# "working".
+printf '%s\t%s\t%s\n' "$status" "$(date +%s)" "$agent" >"$state_file"
 
 # Always succeed. PermissionRequest is a decision hook — a non-zero exit there
 # is read as the hook having something to say about the tool, and a failed write

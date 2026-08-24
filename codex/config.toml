@@ -3,10 +3,10 @@ model_reasoning_effort = "high"
 approval_policy = "never"
 sandbox_mode = "workspace-write"
 
-[projects."~/it/claude_tests/codex_free"]
+[projects."/Users/pronvis/it/claude_tests/codex_free"]
 trust_level = "trusted"
 
-[projects."~/it/vpn_service"]
+[projects."/Users/pronvis/it/omarchy"]
 trust_level = "trusted"
 
 [tui]
@@ -27,3 +27,21 @@ enabled = true
 
 [hooks.state."ecc@ecc:hooks/codex-hooks.json:session_start:0:0"]
 trusted_hash = "sha256:5e150eb206e919dbb3443ef2eb0bce6899ff88da2bdb795247ee0ccb9c8e0576"
+
+[hooks.state."/Users/pronvis/.codex/hooks.json:permission_request:0:0"]
+trusted_hash = "sha256:9720f054c19dea6c1407dfd85bfc0f35a28d00211607925e1a15e1c582126fba"
+
+[hooks.state."/Users/pronvis/.codex/hooks.json:post_tool_use:0:0"]
+trusted_hash = "sha256:3ba5985abca478b06627cd76857b5e6b3471195975b4c3a58f423e8952d5069c"
+
+[hooks.state."/Users/pronvis/.codex/hooks.json:session_start:0:0"]
+trusted_hash = "sha256:5eb338aa59629054c5384bcaf642ba88f037506dfb1bcdbf4745f6f241f51de4"
+
+[hooks.state."/Users/pronvis/.codex/hooks.json:session_end:0:0"]
+trusted_hash = "sha256:1671977efd5edee33d45a2ccbbfade4cf80208bb563c57f639b61ae3059fbcfe"
+
+[hooks.state."/Users/pronvis/.codex/hooks.json:user_prompt_submit:0:0"]
+trusted_hash = "sha256:b65c7d054a64b33b809bba0b082900bc15ebb811ca27327b5cfeea881c9a57b7"
+
+[hooks.state."/Users/pronvis/.codex/hooks.json:stop:0:0"]
+trusted_hash = "sha256:4312c3aeeef22bcb6e15d00e567a52b24201a4299ccd4081b4d782f2cfb0c436"

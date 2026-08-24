@@ -52,7 +52,7 @@
       {
         "hooks": [
           {
-            "command": "bash ~/.claude/hooks/tmux-claude-status.sh waiting",
+            "command": "bash ~/bin/scripts/tmux-agent-status waiting claude",
             "type": "command"
           }
         ],
@@ -63,7 +63,7 @@
       {
         "hooks": [
           {
-            "command": "bash ~/.claude/hooks/tmux-claude-status.sh working",
+            "command": "bash ~/bin/scripts/tmux-agent-status working claude",
             "type": "command"
           }
         ]
@@ -73,7 +73,7 @@
       {
         "hooks": [
           {
-            "command": "bash ~/.claude/hooks/tmux-claude-status.sh waiting",
+            "command": "bash ~/bin/scripts/tmux-agent-status waiting claude",
             "type": "command"
           }
         ]
@@ -92,7 +92,7 @@
       {
         "hooks": [
           {
-            "command": "bash ~/.claude/hooks/tmux-claude-status.sh working",
+            "command": "bash ~/bin/scripts/tmux-agent-status working claude",
             "type": "command"
           }
         ],
@@ -103,7 +103,7 @@
       {
         "hooks": [
           {
-            "command": "bash ~/.claude/hooks/tmux-claude-status.sh working",
+            "command": "bash ~/bin/scripts/tmux-agent-status working claude",
             "type": "command"
           }
         ]
@@ -113,7 +113,7 @@
       {
         "hooks": [
           {
-            "command": "bash ~/.claude/hooks/tmux-claude-status.sh gone",
+            "command": "bash ~/bin/scripts/tmux-agent-status gone claude",
             "type": "command"
           }
         ]
@@ -123,7 +123,7 @@
       {
         "hooks": [
           {
-            "command": "bash ~/.claude/hooks/tmux-claude-status.sh idle",
+            "command": "bash ~/bin/scripts/tmux-agent-status idle claude",
             "type": "command"
           }
         ]
@@ -137,7 +137,7 @@
             "type": "command"
           },
           {
-            "command": "bash ~/.claude/hooks/tmux-claude-status.sh idle",
+            "command": "bash ~/bin/scripts/tmux-agent-status idle claude",
             "type": "command"
           }
         ],
@@ -148,7 +148,7 @@
       {
         "hooks": [
           {
-            "command": "bash ~/.claude/hooks/tmux-claude-status.sh working",
+            "command": "bash ~/bin/scripts/tmux-agent-status working claude",
             "type": "command"
           }
         ]

@@ -1,26 +1,31 @@
 #!/usr/bin/env bash
 #
-# List every Claude Code session running inside tmux with its current status,
+# List every coding-agent session running inside tmux with its current status,
 # and jump to the one you pick — the same shape as the prefix+S session picker,
 # but landing on the exact pane rather than just the session.
 #
-#   claude-sessions          fzf picker; enter or click jumps to the session
-#   claude-sessions list     one plain "session/window#index<TAB>status" line each
-#   claude-sessions count    compact summary for the tmux status bar
+#   agent-sessions          fzf picker; enter or click jumps to the session
+#   agent-sessions list     one plain "session/window#index<TAB>agent<TAB>status" line each
+#   agent-sessions count    compact per-agent summary for the tmux status bar
 #
-# Status comes from claude/hooks/tmux-claude-status.sh, which every Claude
-# session writes to a file named after its tmux pane id. This script joins that
-# state against the live pane list, so names always reflect renamed windows and
-# sessions whose pane has gone away simply drop out.
+# Status comes from scripts/tmux-agent-status, which every Claude Code and
+# Codex session writes to a file named after its tmux pane id. This script
+# joins that state against the live pane list, so names always reflect renamed
+# windows and sessions whose pane has gone away simply drop out.
 
 set -uo pipefail
 
-STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/claude-tmux"
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/agent-tmux"
 
 # How long a non-idle session may go without reporting before it is flagged
 # stale. Working sessions refresh on every tool call, so an hour of silence
 # means the session most likely died without firing its SessionEnd hook.
 STALE_AFTER=$((60 * 60))
+
+# Agents in the order their blocks appear in the status bar, so the bar does
+# not reshuffle as sessions come and go. Anything reporting an agent name not
+# listed here still shows up, appended after these.
+KNOWN_AGENTS='claude codex'
 
 # Kanagawa, to match the status bar in tmux/tmux.conf.
 C_RESET=$'\033[0m'
@@ -35,8 +40,34 @@ die() {
     exit 1
 }
 
-# Emit "rank <TAB> label <TAB> status <TAB> age <TAB> pane" for each live
-# Claude session, ordered so the ones needing you come first.
+# Per-agent badge: icon, 24-bit colour for the picker, tmux colour for the bar.
+# Keeps the two renderers from drifting apart.
+agent_icon() {
+    case "$1" in
+        claude) printf '✳' ;;
+        codex) printf '⬢' ;;
+        *) printf '·' ;;
+    esac
+}
+
+agent_ansi() {
+    case "$1" in
+        claude) printf '\033[38;2;255;160;102m' ;;
+        codex) printf '\033[38;2;210;126;153m' ;;
+        *) printf '%s' "$C_DIM" ;;
+    esac
+}
+
+agent_tmux_color() {
+    case "$1" in
+        claude) printf '#FFA066' ;;
+        codex) printf '#D27E99' ;;
+        *) printf '#727169' ;;
+    esac
+}
+
+# Emit "rank <TAB> label <TAB> status <TAB> age <TAB> pane <TAB> agent" for each
+# live agent session, ordered so the ones needing you come first.
 collect() {
     [ -d "$STATE_DIR" ] || return 0
 
@@ -47,13 +78,15 @@ collect() {
     # producing labels like "inkflock/backend#2".
     tmux list-panes -a -F '#{pane_id} #{session_name}/#{window_name}###{window_index}' 2>/dev/null |
         while read -r pane label; do
-            local file status ts age rank
+            local file status ts agent age rank
 
             file="$STATE_DIR/${pane#%}"
             [ -f "$file" ] || continue
 
-            IFS=$'\t' read -r status ts <"$file" || continue
+            IFS=$'\t' read -r status ts agent <"$file" || continue
             [ -n "${status:-}" ] || continue
+            # Files written before the format grew an agent column.
+            [ -n "${agent:-}" ] || agent=claude
 
             age=$((now - ${ts:-0}))
             [ "$age" -ge 0 ] || age=0
@@ -68,7 +101,7 @@ collect() {
                 *) rank=3 ;;
             esac
 
-            printf '%s\t%s\t%s\t%s\t%s\n' "$rank" "$label" "$status" "$age" "$pane"
+            printf '%s\t%s\t%s\t%s\t%s\t%s\n' "$rank" "$label" "$status" "$age" "$pane" "$agent"
         done | sort -t$'\t' -k1,1n -k2,2
 }
 
@@ -88,17 +121,21 @@ human_age() {
 # Turn collect() rows into "coloured display text <TAB> pane id". fzf shows
 # only the first field and we recover the pane id from the second.
 render() {
-    local rank label status age pane icon color
-    while IFS=$'\t' read -r rank label status age pane; do
+    local rank label status age pane agent icon color
+    while IFS=$'\t' read -r rank label status age pane agent; do
         case "$status" in
             waiting) icon='●' color=$C_WAITING ;;
             working) icon='◐' color=$C_WORKING ;;
             idle) icon='○' color=$C_IDLE ;;
             *) icon='✕' color=$C_STALE ;;
         esac
-        printf '%s%s %-40s %-8s%s %s%5s%s\t%s\n' \
-            "$color" "$icon" "$label" "$status" "$C_RESET" \
-            "$C_DIM" "$(human_age "$age")" "$C_RESET" "$pane"
+        printf '%s%s%s %s%s %-7s%s %-38s %s%-8s%s %s%5s%s\t%s\n' \
+            "$color" "$icon" "$C_RESET" \
+            "$(agent_ansi "$agent")" "$(agent_icon "$agent")" "$agent" "$C_RESET" \
+            "$label" \
+            "$color" "$status" "$C_RESET" \
+            "$C_DIM" "$(human_age "$age")" "$C_RESET" \
+            "$pane"
     done
 }
 
@@ -142,7 +179,7 @@ pick() {
     rows=$(collect)
 
     if [ -z "$rows" ]; then
-        printf '%sNo Claude Code sessions are running in tmux.%s\n\n' "$C_DIM" "$C_RESET"
+        printf '%sNo Claude Code or Codex sessions are running in tmux.%s\n\n' "$C_DIM" "$C_RESET"
         printf 'Press any key to close.\n'
         read -r -n 1 -s
         return 0
@@ -168,39 +205,68 @@ pick() {
     jump "$pane" || die "Could not jump to $pane — the pane may have just closed."
 }
 
-# Compact status-bar summary, e.g. "●1 ◐2 ○3". Prints nothing when no Claude
-# session is running, so the status bar stays clean.
-counts() {
-    local rank label status age pane
+# One agent's slice of the status bar, e.g. "✳ ● 1 ◐ 2". Reads collect() rows on
+# stdin and ignores every other agent. Prints nothing when that agent has no
+# session, so a Claude-only machine sees exactly the bar it saw before Codex
+# was wired in.
+agent_block() {
+    local want=$1
+    local rank label status age pane agent
     local waiting=0 working=0 idle=0 stale=0 out=''
 
-    while IFS=$'\t' read -r rank label status age pane; do
+    while IFS=$'\t' read -r rank label status age pane agent; do
+        [ "$agent" = "$want" ] || continue
         case "$status" in
             waiting) waiting=$((waiting + 1)) ;;
             working) working=$((working + 1)) ;;
             idle) idle=$((idle + 1)) ;;
             *) stale=$((stale + 1)) ;;
         esac
-    done < <(collect)
+    done
 
+    [ $((waiting + working + idle + stale)) -gt 0 ] || return 0
+
+    out="#[fg=$(agent_tmux_color "$want")]$(agent_icon "$want") "
     [ "$waiting" -gt 0 ] && out="$out#[fg=#E6C384]● $waiting "
     [ "$working" -gt 0 ] && out="$out#[fg=#7E9CD8]◐ $working "
     [ "$idle" -gt 0 ] && out="$out#[fg=#7AA89F]○ $idle "
     [ "$stale" -gt 0 ] && out="$out#[fg=#C34043]✕ $stale "
 
-    [ -n "$out" ] && printf '%s' "${out% }"
+    printf '%s' "${out% }"
+}
+
+# Compact status-bar summary, one block per agent: "✳ ● 1 ◐ 2  ⬢ ● 1 ○ 1". Prints
+# nothing when no agent session is running, so the status bar stays clean.
+counts() {
+    local rows agent extra out='' block
+
+    rows=$(collect)
+    [ -n "$rows" ] || return 0
+
+    # Known agents first, in KNOWN_AGENTS order; then anything else that
+    # reported, so a new agent shows up without editing this script.
+    extra=$(printf '%s\n' "$rows" | cut -f6 | sort -u |
+        grep -vxF -e "${KNOWN_AGENTS// /$'\n'}" 2>/dev/null)
+
+    for agent in $KNOWN_AGENTS $extra; do
+        block=$(printf '%s\n' "$rows" | agent_block "$agent")
+        [ -n "$block" ] || continue
+        out="$out$block  "
+    done
+
+    [ -n "$out" ] && printf '%s' "${out%  }"
     return 0
 }
 
 list() {
-    local rank label status age pane
-    while IFS=$'\t' read -r rank label status age pane; do
-        printf '%s\t%s\n' "$label" "$status"
+    local rank label status age pane agent
+    while IFS=$'\t' read -r rank label status age pane agent; do
+        printf '%s\t%s\t%s\n' "$label" "$agent" "$status"
     done < <(collect)
 }
 
-command -v tmux >/dev/null 2>&1 || die 'claude-sessions: tmux is not installed.'
-tmux has-session >/dev/null 2>&1 || die 'claude-sessions: no tmux server is running.'
+command -v tmux >/dev/null 2>&1 || die 'agent-sessions: tmux is not installed.'
+tmux has-session >/dev/null 2>&1 || die 'agent-sessions: no tmux server is running.'
 
 case "${1:-pick}" in
     pick) pick ;;

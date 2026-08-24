@@ -89,6 +89,7 @@ LINK_DIRS=(
     "$HOME/.claude/rules/rust/"
     "$HOME/.claude/commands"
     "$HOME/.claude/skills"
+    "$HOME/.codex"
 )
 
 # Directories that must be mode 0700.
@@ -111,6 +112,9 @@ LINKS=(
     "scripts|$HOME/bin/scripts"
     "claude/settings.json|$HOME/.claude/settings.json"
     "claude/statusline-command.sh|$HOME/.claude/statusline-command.sh"
+    "codex/config.toml|$HOME/.codex/config.toml"
+    "codex/hooks.json|$HOME/.codex/hooks.json"
+    "codex/statusline-command.sh|$HOME/.codex/statusline-command.sh"
     "ssh/config|$HOME/.ssh/config"
 )
 
