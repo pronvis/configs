@@ -115,7 +115,6 @@ LINKS=(
     "codex/config.toml|$HOME/.codex/config.toml"
     "codex/hooks.json|$HOME/.codex/hooks.json"
     "codex/statusline-command.sh|$HOME/.codex/statusline-command.sh"
-    "ssh/config|$HOME/.ssh/config"
 )
 
 # Directory-contents symlinks, as "source dir | destination dir". Every entry
