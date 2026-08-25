@@ -368,14 +368,22 @@ setup_git_filters() {
     # rewritten on every `/model` (and re-serialised with unstable key order).
     # `.gitattributes` points it at this filter; the filter itself lives in
     # .git/config, which is NOT cloned, so it has to be registered per clone.
-    if ! have jq; then
+    if have jq; then
+        info "Git: clean filter for claude/settings.json"
+        try git -C "$REPO" config filter.claude-settings.clean 'jq -S "del(.model, .modelSettings)"'
+        # Re-stage through the filter so an existing clone stops showing the churn.
+        [[ "$DRY_RUN" == 1 ]] || git -C "$REPO" add --renormalize claude/settings.json 2>/dev/null || true
+    else
         warn "jq missing — skipping claude/settings.json clean filter"
-        return 0
     fi
-    info "Git: clean filter for claude/settings.json"
-    try git -C "$REPO" config filter.claude-settings.clean 'jq -S "del(.model, .modelSettings)"'
-    # Re-stage through the filter so an existing clone stops showing the churn.
-    [[ "$DRY_RUN" == 1 ]] || git -C "$REPO" add --renormalize claude/settings.json 2>/dev/null || true
+
+    if have python3; then
+        info "Git: clean filter for codex/config.toml"
+        try git -C "$REPO" config filter.codex-settings.clean 'scripts/codex-settings-clean'
+        [[ "$DRY_RUN" == 1 ]] || git -C "$REPO" add --renormalize codex/config.toml 2>/dev/null || true
+    else
+        warn "python3 missing — skipping codex/config.toml clean filter"
+    fi
     return 0
 }
 

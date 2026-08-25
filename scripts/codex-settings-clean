@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+"""Git clean filter for Codex's machine-local config entries."""
+
+from __future__ import annotations
+
+import re
+import sys
+
+
+TABLE = re.compile(r"^\s*\[\[?\s*([^\]]+)")
+TOP_LEVEL_MODEL = re.compile(r"^\s*model\s*=")
+
+
+def is_projects_table(line: str) -> bool:
+    match = TABLE.match(line)
+    if match is None:
+        return False
+    name = match.group(1).strip()
+    return name == "projects" or name.startswith("projects.")
+
+
+def main() -> None:
+    output: list[str] = []
+    top_level = True
+    skipping_project = False
+    removed_project = False
+
+    for line in sys.stdin:
+        table = TABLE.match(line)
+        if table is not None:
+            top_level = False
+            if is_projects_table(line):
+                while output and not output[-1].strip():
+                    output.pop()
+                skipping_project = True
+                removed_project = True
+                continue
+
+            if skipping_project:
+                skipping_project = False
+                if removed_project and output and output[-1].strip():
+                    output.append("\n")
+                removed_project = False
+
+        if skipping_project:
+            continue
+        if top_level and TOP_LEVEL_MODEL.match(line):
+            continue
+        output.append(line)
+
+    sys.stdout.writelines(output)
+
+
+if __name__ == "__main__":
+    main()
