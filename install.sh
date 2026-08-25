@@ -226,7 +226,7 @@ install_cargo() {
         # shellcheck disable=SC2086
         try cargo $args
     done
-    try rustup component add clippy
+    try rustup component add clippy rust-analyzer
 }
 
 # args: npm package specs (e.g. "@scope/pkg@latest")

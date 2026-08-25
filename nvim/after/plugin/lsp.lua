@@ -109,7 +109,7 @@ vim.lsp.config("ts_ls", {
 
 vim.g.rustaceanvim = {
     server = {
-        cmd = { "/usr/local/bin/rust-analyzer-mac" },
+        cmd = { "rust-analyzer" },
         capabilities = capabilities,
 
         -- Hold dependency/stdlib buffers back while a rust-analyzer is still
