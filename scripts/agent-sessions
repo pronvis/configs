@@ -226,12 +226,14 @@ agent_block() {
 
     [ $((waiting + working + idle + stale)) -gt 0 ] || return 0
 
-    out="#[fg=$(agent_tmux_color "$want")]$(agent_icon "$want") "
+    out="#[fg=$(agent_tmux_color "$want")]$(agent_icon "$want")"
+    out="$out#[fg=#646464]【 "
     [ "$waiting" -gt 0 ] && out="$out#[fg=#E6C384]● $waiting "
     [ "$working" -gt 0 ] && out="$out#[fg=#7E9CD8]◐ $working "
     [ "$idle" -gt 0 ] && out="$out#[fg=#7AA89F]○ $idle "
-    [ "$stale" -gt 0 ] && out="$out#[fg=#C34043]✕ $stale "
-
+    [ "$stale" -gt 0 ] && out="$out#[fg=#C34043]✕ $stale"
+    out="$out#[fg=#646464] 】"
+ 
     printf '%s' "${out% }"
 }
 
