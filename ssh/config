@@ -1,0 +1,6 @@
+Include ~/.ssh/config.shared
+
+Host *
+    HashKnownHosts yes
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
