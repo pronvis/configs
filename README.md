@@ -5,9 +5,10 @@ macOS configuration, managed as symlinks and bootstrapped by `./install.sh`.
 ## Bootstrap
 
 ```sh
-./install.sh             # everything: tools + links + keys
+./install.sh             # everything: tools + links + keys + private configs
 ./install.sh links       # just the config symlinks
 ./install.sh links keys  # symlinks + GPG/SSH key
+./install.sh private     # private configs + ~/.ssh/config.shared
 ./install.sh tools       # CLI tools + app bootstrap (Mason, tmux plugins)
 DRY_RUN=1 ./install.sh   # preview every action, change nothing
 ```
@@ -22,9 +23,16 @@ Phases run in a dependency-safe order regardless of how they're passed:
   nothing is ever destroyed.
 - **keys** — decrypts + imports the GPG key from its encrypted backup and
   registers its authentication subkey with gpg-agent so it also serves SSH.
+- **private** — clones `git@github.com:pronvis/private_configs.git` to
+  `~/it/private_configs` and links its `ssh/config.shared` into `~/.ssh`. It
+  runs after `keys`, so the SSH Git remote can use the restored identity.
 
 The script is idempotent — safe to re-run. Tool installs are best-effort: a
 single failed install warns and continues.
+
+Override the private repository or checkout location with
+`PRIVATE_CONFIGS_REPO` or `PRIVATE_CONFIGS_DIR` when needed. Existing clones
+are left untouched; use normal `git pull`/`git push` to synchronize changes.
 
 ## Manual steps (not automated)
 

@@ -7,11 +7,13 @@
 #            plugin clones) + app-internal bootstrap (Mason LSPs, tmux plugins)
 #   links  - create the config symlinks (existing files are backed up first)
 #   keys   - decrypt + import the GPG key and wire its auth subkey to SSH
+#   private - clone private configs and link the shared SSH host definitions
 #
 # Usage:
 #   ./install.sh                 # everything
 #   ./install.sh links           # just symlinks
 #   ./install.sh links keys      # symlinks + keys
+#   ./install.sh private         # private config clone + shared SSH config link
 #   ./install.sh tools           # installs + app bootstrap only
 #   DRY_RUN=1 ./install.sh       # preview every action, change nothing
 #
@@ -76,6 +78,12 @@ GIT_CLONES=(
     "https://github.com/zsh-users/zsh-syntax-highlighting.git|${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
     "https://github.com/tmux-plugins/tpm|$HOME/.tmux/plugins/tpm"
 )
+
+# Private, machine-identifying configuration. This is cloned only after the
+# GPG authentication subkey has been restored, so the SSH Git remote works on
+# a fresh machine. Override either value in the environment if needed.
+PRIVATE_CONFIGS_REPO="${PRIVATE_CONFIGS_REPO:-git@github.com:pronvis/private_configs.git}"
+PRIVATE_CONFIGS_DIR="${PRIVATE_CONFIGS_DIR:-$HOME/it/private_configs}"
 
 # Directories to create before linking.
 LINK_DIRS=(
@@ -485,6 +493,33 @@ phase_keys() {
     print_ssh_pubkey "$fpr"
 }
 
+phase_private() {
+    info "Private configs"
+
+    if [[ -d "$PRIVATE_CONFIGS_DIR/.git" ]]; then
+        ok "clone: $PRIVATE_CONFIGS_DIR"
+    elif [[ -e "$PRIVATE_CONFIGS_DIR" ]]; then
+        warn "private config destination exists but is not a Git clone: $PRIVATE_CONFIGS_DIR"
+        return
+    else
+        run mkdir -p "$(dirname "$PRIVATE_CONFIGS_DIR")"
+        if [[ "$DRY_RUN" == 1 ]]; then
+            dry "git clone $PRIVATE_CONFIGS_REPO $PRIVATE_CONFIGS_DIR"
+        elif git clone "$PRIVATE_CONFIGS_REPO" "$PRIVATE_CONFIGS_DIR"; then
+            ok "cloned: $PRIVATE_CONFIGS_DIR"
+        else
+            warn "private config clone failed — restore the SSH key, then re-run: ./install.sh private"
+            return
+        fi
+    fi
+
+    # Protect the host inventory from other local accounts. link_one also
+    # enforces mode 0600 on the included SSH config itself.
+    run chmod 700 "$PRIVATE_CONFIGS_DIR"
+    ensure_secure_dirs "$HOME/.ssh"
+    link_one "$PRIVATE_CONFIGS_DIR/ssh/config.shared" "$HOME/.ssh/config.shared"
+}
+
 # Render + (re)load launchd user agents. Renders __HOME__ -> $HOME into
 # ~/Library/LaunchAgents, then bootstraps each into the GUI domain so it runs
 # now and on every login. Idempotent: an already-loaded agent is booted out
@@ -531,22 +566,24 @@ Phases (run any subset; no args = all, in dependency-safe order):
   tools  - install CLI tools + app bootstrap (Mason LSPs, tmux plugins)
   links  - create the config symlinks (existing targets backed up first)
   keys   - decrypt + import the GPG key and wire its auth subkey to SSH
+  private - clone private configs and link ~/.ssh/config.shared
 
 Usage:
   ./install.sh                # everything
   ./install.sh links          # just symlinks
   ./install.sh links keys     # symlinks + keys
+  ./install.sh private        # private config clone + shared SSH config link
   DRY_RUN=1 ./install.sh      # preview every action, change nothing
 USAGE
 }
 
 declare -a want
 if [[ $# -eq 0 ]]; then
-    want=(tools links keys)
+    want=(tools links keys private)
 else
     for a in "$@"; do
         case "$a" in
-            tools | links | keys) want+=("$a") ;;
+            tools | links | keys | private) want+=("$a") ;;
             -h | --help) usage; exit 0 ;;
             *) warn "unknown phase: $a"; usage; exit 2 ;;
         esac
@@ -562,6 +599,7 @@ wants() { local p; for p in "${want[@]}"; do [[ "$p" == "$1" ]] && return 0; don
 wants tools && phase_tools
 wants links && phase_links
 wants keys  && phase_keys
+wants private && phase_private
 wants tools && bootstrap_apps
 
 info "Done."
