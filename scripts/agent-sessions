@@ -231,8 +231,8 @@ agent_block() {
     [ "$waiting" -gt 0 ] && out="$out#[fg=#E6C384]● $waiting "
     [ "$working" -gt 0 ] && out="$out#[fg=#7E9CD8]◐ $working "
     [ "$idle" -gt 0 ] && out="$out#[fg=#7AA89F]○ $idle "
-    [ "$stale" -gt 0 ] && out="$out#[fg=#C34043]✕ $stale"
-    out="$out#[fg=#646464] 】"
+    [ "$stale" -gt 0 ] && out="$out#[fg=#C34043]✕ $stale "
+    out="$out#[fg=#646464]】"
  
     printf '%s' "${out% }"
 }
