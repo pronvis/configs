@@ -16,24 +16,24 @@ set_status() {
 case "$event" in
     session_start)
         # Claude/Codex SessionStart -> idle.
-        set_status idle
+        set_status idle jcode
         ;;
     turn_start)
         # Replaces UserPromptSubmit and covers the time before the first tool.
-        set_status working
+        set_status working jcode
         ;;
     post_tool)
         # Covers both successful and failed tools. Jcode exposes the result in
         # JCODE_HOOK_STATUS, but both states mean the agent is still working.
-        set_status working
+        set_status working jcode
         ;;
     turn_end)
         # Claude/Codex Stop -> idle.
-        set_status idle
+        set_status idle jcode
         ;;
     session_end)
         # Claude/Codex SessionEnd -> gone.
-        set_status gone
+        set_status gone jcode
         ;;
 esac
 

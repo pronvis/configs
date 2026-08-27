@@ -46,6 +46,7 @@ agent_icon() {
     case "$1" in
         claude) printf '✳' ;;
         codex) printf '⬢' ;;
+        jcode) printf '𝔍' ;;
         *) printf '·' ;;
     esac
 }
