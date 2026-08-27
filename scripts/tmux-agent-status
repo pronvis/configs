@@ -5,7 +5,7 @@
 #
 # Usage: tmux-agent-status <status> [agent]
 #   status  idle | working | waiting | gone
-#   agent   claude (default) | codex — which tool this session is, so the
+#   agent   claude (default) | codex | jcode — which tool this session is, so the
 #           picker and status bar can tell them apart
 #
 # Registered against lifecycle hooks in claude/settings.json and
@@ -31,6 +31,9 @@
 # Codex session leans on PermissionRequest alone for `waiting`, and a tool that
 # errors leaves the status at whatever the previous event set. Both are cosmetic:
 # the next event corrects them.
+#
+# Jcode maps UserPromptSubmit to turn_start and Stop to turn_end. It has no
+# permission lifecycle event, so Jcode sessions do not report `waiting` here.
 #
 # Answering a permission prompt with "No", or cancelling it with Esc, aborts the
 # turn and fires NO hook at all, so `waiting` stands until the next prompt is

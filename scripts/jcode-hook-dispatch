@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Jcode lifecycle adapter for the status hooks shared by Claude Code and Codex.
+# Jcode observer hooks do not provide Claude's UserPromptSubmit, permission, or
+# systemMessage response channels. turn_start is the closest working-state
+# boundary, while turn_end carries the idle and review-reminder behavior.
+
+set -uo pipefail
+
+status_command="${JCODE_STATUS_COMMAND:-$HOME/bin/scripts/tmux-agent-status}"
+event="${JCODE_HOOK_EVENT:-}"
+
+set_status() {
+    "$status_command" "$1" jcode >/dev/null 2>&1 || true
+}
+
+case "$event" in
+    session_start)
+        # Claude/Codex SessionStart -> idle.
+        set_status idle
+        ;;
+    turn_start)
+        # Replaces UserPromptSubmit and covers the time before the first tool.
+        set_status working
+        ;;
+    post_tool)
+        # Covers both successful and failed tools. Jcode exposes the result in
+        # JCODE_HOOK_STATUS, but both states mean the agent is still working.
+        set_status working
+        ;;
+    turn_end)
+        # Claude/Codex Stop -> idle.
+        set_status idle
+        ;;
+    session_end)
+        # Claude/Codex SessionEnd -> gone.
+        set_status gone
+        ;;
+esac
+
+exit 0

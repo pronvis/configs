@@ -118,6 +118,7 @@ LINKS=(
     "alacritty/alacritty.toml|$HOME/.alacritty.toml"
     "kitty/kitty.conf|$HOME/.config/kitty/kitty.conf"
     "scripts|$HOME/bin/scripts"
+    "claude/CLAUDE.md|$HOME/AGENTS.md"
     "claude/settings.json|$HOME/.claude/settings.json"
     "claude/statusline-command.sh|$HOME/.claude/statusline-command.sh"
     "codex/config.toml|$HOME/.codex/config.toml"
