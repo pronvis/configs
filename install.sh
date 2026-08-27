@@ -388,7 +388,7 @@ setup_git_filters() {
 
     if have python3; then
         info "Git: clean filter for codex/config.toml"
-        try git -C "$REPO" config filter.codex-settings.clean 'scripts/codex-settings-clean'
+        try git -C "$REPO" config filter.codex-settings.clean 'scripts/agents/codex-settings-clean'
         [[ "$DRY_RUN" == 1 ]] || git -C "$REPO" add --renormalize codex/config.toml 2>/dev/null || true
     else
         warn "python3 missing — skipping codex/config.toml clean filter"

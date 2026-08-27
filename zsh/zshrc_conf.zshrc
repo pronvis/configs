@@ -65,11 +65,11 @@ export CARGO_NET_GIT_FETCH_WITH_CLI=true
 # Jcode lifecycle hooks mirror the status, formatting, and Rust review behavior
 # configured for Claude Code and Codex. Jcode reads these env overrides when its
 # server starts, so the hook wiring remains managed with the dotfiles.
-export JCODE_HOOK_TURN_START="$HOME/bin/scripts/jcode-hook-dispatch"
-export JCODE_HOOK_TURN_END="$HOME/bin/scripts/jcode-hook-dispatch"
-export JCODE_HOOK_SESSION_START="$HOME/bin/scripts/jcode-hook-dispatch"
-export JCODE_HOOK_SESSION_END="$HOME/bin/scripts/jcode-hook-dispatch"
-export JCODE_HOOK_POST_TOOL="$HOME/bin/scripts/jcode-hook-dispatch"
+export JCODE_HOOK_TURN_START="$HOME/bin/scripts/agents/jcode-hook-dispatch"
+export JCODE_HOOK_TURN_END="$HOME/bin/scripts/agents/jcode-hook-dispatch"
+export JCODE_HOOK_SESSION_START="$HOME/bin/scripts/agents/jcode-hook-dispatch"
+export JCODE_HOOK_SESSION_END="$HOME/bin/scripts/agents/jcode-hook-dispatch"
+export JCODE_HOOK_POST_TOOL="$HOME/bin/scripts/agents/jcode-hook-dispatch"
 
 # Keep PATH entries unique and only add directories that actually exist.
 typeset -gU path PATH

@@ -15,6 +15,6 @@ claude/settings.json filter=claude-settings
 # codex/config.toml is also a live runtime store. Keep shared behavior tracked,
 # but omit the machine-local model choice and Codex-generated project trust
 # tables from Git's clean representation. The working file is left untouched.
-# The filter is versioned in scripts/codex-settings-clean and registered per
+# The filter is versioned in scripts/agents/codex-settings-clean and registered per
 # clone by install.sh:setup_git_filters.
 codex/config.toml filter=codex-settings

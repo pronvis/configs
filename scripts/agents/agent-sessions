@@ -8,8 +8,8 @@
 #   agent-sessions list     one plain "session/window#index<TAB>agent<TAB>status" line each
 #   agent-sessions count    compact per-agent summary for the tmux status bar
 #
-# Status comes from scripts/tmux-agent-status, which every Claude Code and
-# Codex session writes to a file named after its tmux pane id. This script
+# Status comes from scripts/agents/tmux-agent-status, which every Claude Code
+# and Codex session writes to a file named after its tmux pane id. This script
 # joins that state against the live pane list, so names always reflect renamed
 # windows and sessions whose pane has gone away simply drop out.
 
@@ -45,7 +45,7 @@ die() {
 agent_icon() {
     case "$1" in
         claude) printf '✳' ;;
-        codex) printf '⬢' ;;
+        codex) printf '𝒞' ;;
         jcode) printf '𝔍' ;;
         *) printf '·' ;;
     esac

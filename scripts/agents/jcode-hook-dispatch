@@ -6,7 +6,7 @@
 
 set -uo pipefail
 
-status_command="${JCODE_STATUS_COMMAND:-$HOME/bin/scripts/tmux-agent-status}"
+status_command="${JCODE_STATUS_COMMAND:-$HOME/bin/scripts/agents/tmux-agent-status}"
 event="${JCODE_HOOK_EVENT:-}"
 
 set_status() {

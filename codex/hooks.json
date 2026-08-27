@@ -5,7 +5,7 @@
       {
         "matcher": "*",
         "hooks": [
-          { "type": "command", "command": "bash \"$HOME\"/bin/scripts/tmux-agent-status idle codex" }
+          { "type": "command", "command": "bash \"$HOME\"/bin/scripts/agents/tmux-agent-status idle codex" }
         ],
         "id": "tmux-status:session-start"
       }
@@ -14,7 +14,7 @@
       {
         "matcher": "*",
         "hooks": [
-          { "type": "command", "command": "bash \"$HOME\"/bin/scripts/tmux-agent-status working codex" }
+          { "type": "command", "command": "bash \"$HOME\"/bin/scripts/agents/tmux-agent-status working codex" }
         ],
         "id": "tmux-status:user-prompt-submit"
       }
@@ -23,7 +23,7 @@
       {
         "matcher": "*",
         "hooks": [
-          { "type": "command", "command": "bash \"$HOME\"/bin/scripts/tmux-agent-status working codex" }
+          { "type": "command", "command": "bash \"$HOME\"/bin/scripts/agents/tmux-agent-status working codex" }
         ],
         "id": "tmux-status:post-tool-use"
       }
@@ -32,7 +32,7 @@
       {
         "matcher": "*",
         "hooks": [
-          { "type": "command", "command": "bash \"$HOME\"/bin/scripts/tmux-agent-status waiting codex" }
+          { "type": "command", "command": "bash \"$HOME\"/bin/scripts/agents/tmux-agent-status waiting codex" }
         ],
         "id": "tmux-status:permission-request"
       }
@@ -41,7 +41,7 @@
       {
         "matcher": "*",
         "hooks": [
-          { "type": "command", "command": "bash \"$HOME\"/bin/scripts/tmux-agent-status idle codex" }
+          { "type": "command", "command": "bash \"$HOME\"/bin/scripts/agents/tmux-agent-status idle codex" }
         ],
         "id": "tmux-status:stop"
       }
@@ -50,7 +50,7 @@
       {
         "matcher": "*",
         "hooks": [
-          { "type": "command", "command": "bash \"$HOME\"/bin/scripts/tmux-agent-status gone codex" }
+          { "type": "command", "command": "bash \"$HOME\"/bin/scripts/agents/tmux-agent-status gone codex" }
         ],
         "id": "tmux-status:session-end"
       }
