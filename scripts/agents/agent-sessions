@@ -47,6 +47,7 @@ agent_icon() {
         claude) printf '✳' ;;
         codex) printf '𝒞' ;;
         jcode) printf '𝔍' ;;
+        omp) printf '𝒪' ;;
         *) printf '·' ;;
     esac
 }
