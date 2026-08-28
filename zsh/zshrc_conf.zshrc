@@ -136,10 +136,18 @@ fi
 
 fpath+=("$HOME/.zsh_functions")
 
+# Homebrew's prefix is a constant, but `brew --prefix` spawns a bash+ruby
+# process tree to print it -- ~1s warm, and 25s when Gatekeeper's assessment
+# cache is cold, twice per shell. Derive it from brew's own location instead:
+# $prefix/bin/brew -> $prefix. ${commands[brew]} is a zsh hash lookup, so this
+# costs no process at all.
+if [[ -z "$HOMEBREW_PREFIX" && -n "${commands[brew]}" ]]; then
+	export HOMEBREW_PREFIX="${commands[brew]:h:h}"
+fi
+
 # For autojump
-if [[ -o interactive ]] && command -v brew >/dev/null 2>&1; then
-	BREW_PREFIX="$(brew --prefix 2>/dev/null)"
-	[[ -n "$BREW_PREFIX" && -s "$BREW_PREFIX/etc/autojump.sh" ]] && source "$BREW_PREFIX/etc/autojump.sh"
+if [[ -o interactive && -s "$HOMEBREW_PREFIX/etc/autojump.sh" ]]; then
+	source "$HOMEBREW_PREFIX/etc/autojump.sh"
 fi
 
 # Preferred editor for local and remote sessions
@@ -232,8 +240,8 @@ PROMPT='${ret_status}%{$reset_color%}$(git_prompt_info)'
 unsetopt share_history
 
 export FZF_DEFAULT_COMMAND='rg --hidden --files'
-if [[ -o interactive ]] && command -v brew >/dev/null 2>&1; then
-    FZF_SHELL="$(brew --prefix)/opt/fzf/shell"
+if [[ -o interactive && -n "$HOMEBREW_PREFIX" ]]; then
+    FZF_SHELL="$HOMEBREW_PREFIX/opt/fzf/shell"
     [[ -f "$FZF_SHELL/key-bindings.zsh" ]] && source "$FZF_SHELL/key-bindings.zsh"
     [[ -f "$FZF_SHELL/completion.zsh"   ]] && source "$FZF_SHELL/completion.zsh"
 fi
