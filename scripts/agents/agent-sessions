@@ -25,7 +25,7 @@ STALE_AFTER=$((60 * 60))
 # Agents in the order their blocks appear in the status bar, so the bar does
 # not reshuffle as sessions come and go. Anything reporting an agent name not
 # listed here still shows up, appended after these.
-KNOWN_AGENTS='claude codex'
+KNOWN_AGENTS='claude codex omp'
 
 # Kanagawa, to match the status bar in tmux/tmux.conf.
 C_RESET=$'\033[0m'
@@ -56,6 +56,7 @@ agent_ansi() {
     case "$1" in
         claude) printf '\033[38;2;255;160;102m' ;;
         codex) printf '\033[38;2;210;126;153m' ;;
+        omp) printf '\033[38;2;152;187;108m' ;;
         *) printf '%s' "$C_DIM" ;;
     esac
 }
@@ -64,6 +65,7 @@ agent_tmux_color() {
     case "$1" in
         claude) printf '#FFA066' ;;
         codex) printf '#D27E99' ;;
+        omp) printf '#98BB6C' ;;
         *) printf '#727169' ;;
     esac
 }

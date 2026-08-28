@@ -396,6 +396,36 @@ setup_git_filters() {
     return 0
 }
 
+# omp (Oh My Pi) has no declarative hook config: a hook is a module registered
+# in its own `extensions` setting, which lives in ~/.omp/agent/config.yml -- a
+# machine-local file this repo deliberately does not track. Only the wiring is
+# versioned, here, the same way the git clean filters above are.
+setup_omp_hook() {
+    have omp || return 0
+    if ! have jq; then
+        warn "jq missing — skipping omp status hook registration"
+        return 0
+    fi
+
+    local hook="$HOME/bin/scripts/agents/omp-hook.mjs"
+    local current updated
+    current="$(omp config get extensions 2>/dev/null)"
+    # Anything that is not a JSON array (unset, error, future format change) is
+    # treated as empty rather than appended to, so we never write back garbage.
+    [[ "$current" == \[* ]] || current='[]'
+
+    if jq -e --arg h "$hook" 'index($h) != null' <<<"$current" >/dev/null 2>&1; then
+        ok "omp: status hook already registered"
+        return 0
+    fi
+
+    # Append rather than overwrite: the user may have other extensions loaded.
+    updated="$(jq -c --arg h "$hook" '. + [$h]' <<<"$current")" || return 0
+    info "omp: registering tmux status hook"
+    try omp config set extensions "$updated"
+    return 0
+}
+
 setup_rustup() {
     if ! have rustup; then
         info "Installing rustup"
@@ -462,6 +492,8 @@ phase_links() {
     create_links       "${LINKS[@]}"
     link_globs         "${LINK_GLOBS[@]}"
     setup_launch_agents "${LAUNCH_AGENTS[@]}"
+    # After create_links, so ~/bin/scripts (and the hook it registers) exists.
+    setup_omp_hook
 }
 
 phase_keys() {
