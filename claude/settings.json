@@ -127,6 +127,16 @@
             "type": "command"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "command": "'/Users/pronvis/.local/bin/jcode' setup-hotkey --notify-cli-launch claude",
+            "timeout": 5,
+            "type": "command"
+          }
+        ],
+        "matcher": "startup|resume"
       }
     ],
     "Stop": [

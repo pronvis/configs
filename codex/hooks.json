@@ -8,6 +8,12 @@
           { "type": "command", "command": "bash \"$HOME\"/bin/scripts/agents/tmux-agent-status idle codex" }
         ],
         "id": "tmux-status:session-start"
+      },
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          { "type": "command", "command": "'/Users/pronvis/.local/bin/jcode' setup-hotkey --notify-cli-launch codex", "timeout": 5 }
+        ]
       }
     ],
     "UserPromptSubmit": [
