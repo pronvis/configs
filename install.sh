@@ -104,8 +104,6 @@ LINK_DIRS=(
 SECURE_DIRS=(
     "$HOME/.gnupg"
     "$HOME/.ssh"
-    # holds auth.json and provider OAuth tokens
-    "$HOME/.jcode"
 )
 
 # Config symlinks, as "source | destination". A relative source is resolved
@@ -126,7 +124,6 @@ LINKS=(
     "codex/config.toml|$HOME/.codex/config.toml"
     "codex/hooks.json|$HOME/.codex/hooks.json"
     "codex/statusline-command.sh|$HOME/.codex/statusline-command.sh"
-    "jcode/config.toml|$HOME/.jcode/config.toml"
     "ssh/config|$HOME/.ssh/config"
 )
 
