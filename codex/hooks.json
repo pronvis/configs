@@ -12,7 +12,7 @@
       {
         "matcher": "startup|resume",
         "hooks": [
-          { "type": "command", "command": "'/Users/pronvis/.local/bin/jcode' setup-hotkey --notify-cli-launch codex", "timeout": 5 }
+          { "type": "command", "command": "\"$HOME/.local/bin/jcode\" setup-hotkey --notify-cli-launch codex", "timeout": 5 }
         ]
       }
     ],

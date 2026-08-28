@@ -131,7 +131,7 @@
       {
         "hooks": [
           {
-            "command": "'/Users/pronvis/.local/bin/jcode' setup-hotkey --notify-cli-launch claude",
+            "command": "\"$HOME/.local/bin/jcode\" setup-hotkey --notify-cli-launch claude",
             "timeout": 5,
             "type": "command"
           }
