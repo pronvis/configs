@@ -6,8 +6,10 @@
 // default export receives the extension API. Registered persistently in the
 // `extensions` config array (see README), or ad hoc with `omp --hook <path>`.
 //
-// Module load stands in for SessionStart -- omp has no session_start event, and
-// the module is imported once per session, before the first turn.
+// Omp imports the module before its runtime actions (including api.exec) are
+// initialized. Report the initial state from session_start instead of directly
+// from the extension factory, otherwise the first report can be rejected during
+// startup and the session stays invisible until another lifecycle event fires.
 //
 // `tool_call` is deliberately unused. A tool_call handler that throws or exceeds
 // extensionHandlers.toolCallTimeoutMs resolves to {block: true}, which refuses
@@ -25,7 +27,9 @@ const ARGV = (status) => ["-c", 'exec "$1" "$2" omp </dev/null', "omp-hook", SCR
 const report = (api, status) => api.exec("bash", ARGV(status)).catch(() => {});
 
 export default function ompTmuxStatus(api) {
-	report(api, "idle");
+	api.on("session_start", () => {
+		report(api, "idle");
+	});
 
 	// session_shutdown was not observed to fire in print mode, and a session that
 	// never deregisters is worse than one that reports late: `idle` entries are

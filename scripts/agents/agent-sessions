@@ -8,10 +8,12 @@
 #   agent-sessions list     one plain "session/window#index<TAB>agent<TAB>status" line each
 #   agent-sessions count    compact per-agent summary for the tmux status bar
 #
-# Status comes from scripts/agents/tmux-agent-status, which every Claude Code
-# and Codex session writes to a file named after its tmux pane id. This script
-# joins that state against the live pane list, so names always reflect renamed
-# windows and sessions whose pane has gone away simply drop out.
+# Status comes from scripts/agents/tmux-agent-status, which each agent session
+# writes to a file named after its tmux pane id. This script joins that state
+# against the live pane list, so names always reflect renamed windows and
+# sessions whose pane has gone away simply drop out. A foreground omp process
+# without a marker is treated as idle, allowing recovery from a missed startup
+# event without inventing an active or waiting state.
 
 set -uo pipefail
 
@@ -80,17 +82,26 @@ collect() {
 
     # "###{window_index}" is a literal '#' (from '##') followed by the index,
     # producing labels like "inkflock/backend#2".
-    tmux list-panes -a -F '#{pane_id} #{session_name}/#{window_name}###{window_index}' 2>/dev/null |
-        while read -r pane label; do
+    tmux list-panes -a -F '#{pane_id} #{pane_current_command} #{session_name}/#{window_name}###{window_index}' 2>/dev/null |
+        while read -r pane command label; do
             local file status ts agent age rank
 
             file="$STATE_DIR/${pane#%}"
-            [ -f "$file" ] || continue
-
-            IFS=$'\t' read -r status ts agent <"$file" || continue
-            [ -n "${status:-}" ] || continue
-            # Files written before the format grew an agent column.
-            [ -n "${agent:-}" ] || agent=claude
+            if [ -f "$file" ]; then
+                IFS=$'\t' read -r status ts agent <"$file" || continue
+                [ -n "${status:-}" ] || continue
+                # Files written before the format grew an agent column.
+                [ -n "${agent:-}" ] || agent=claude
+            elif [ "$command" = "omp" ]; then
+                # Extension factories run before omp's runtime actions are
+                # initialized. If its session_start report was missed, the
+                # foreground process is still enough evidence for idle.
+                status=idle
+                ts=$now
+                agent=omp
+            else
+                continue
+            fi
 
             age=$((now - ${ts:-0}))
             [ "$age" -ge 0 ] || age=0

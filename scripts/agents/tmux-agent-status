@@ -36,7 +36,7 @@
 # permission lifecycle event, so Jcode sessions do not report `waiting` here.
 #
 # Omp has no declarative hook config at all: scripts/agents/omp-hook.mjs is a
-# module registered in omp's `extensions` setting, and it maps module load to
+# module registered in omp's `extensions` setting, and it maps session_start to
 # SessionStart, input to UserPromptSubmit, tool_result to PostToolUse,
 # tool_approval_requested/resolved to PermissionRequest/Denied, and session_stop
 # to Stop. Its session_shutdown event was not seen to fire, so `gone` is sent
