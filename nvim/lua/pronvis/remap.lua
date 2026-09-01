@@ -117,6 +117,15 @@ map("n", "<leader>gD", function()
     })
 end, "Diffview a picked commit's own changes")
 
+-- Show changes introduced on the current branch since it diverged from a selected branch
+map("n", "<leader>gb", function()
+    vim.ui.input({ prompt = "Diff against branch: " }, function(branch)
+        if branch and branch ~= "" then
+            vim.cmd("DiffviewOpen " .. vim.fn.fnameescape(branch) .. "...HEAD")
+        end
+    end)
+end, "Diff against branch")
+
 -- file tree
 map('n', '<F2>', (require "nvim-tree.api").tree.toggle, 'Show file tree')
 

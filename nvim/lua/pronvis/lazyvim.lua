@@ -162,7 +162,14 @@ require('lazy').setup({
     'HiPhish/rainbow-delimiters.nvim',
 
     -- plugin for popup windows
-    'stevearc/dressing.nvim',
+    {
+        'stevearc/dressing.nvim',
+        opts = {
+            input = {
+                relative = 'editor',
+            },
+        },
+    },
 
     -- automatically highlighting other uses of the word under the cursor
     'RRethy/vim-illuminate',
