@@ -30,9 +30,31 @@ local function process_alive(pid)
     return ok
 end
 
+--- Working directory of a running process.
+--- macOS has no /proc, so ask lsof for the process's cwd descriptor.
+--- The wait is bounded: a wedged lsof (stale network mount) must not hold up
+--- the swap prompt.
+--- @param pid integer
+--- @return string|nil
+local function process_cwd(pid)
+    local ok, res = pcall(function()
+        return vim
+            .system({ 'lsof', '-a', '-d', 'cwd', '-Fn', '-w', '-p', tostring(pid) }, { text = true })
+            :wait(500)
+    end)
+    if not ok or res.code ~= 0 or not res.stdout then return nil end
+
+    -- -Fn output is one field per line: `p<pid>`, `fcwd`, `n<path>`.
+    for line in res.stdout:gmatch('[^\n]+') do
+        local path = line:match('^n(/.*)$')
+        if path then return path end
+    end
+end
+
 --- Decide how to answer the swap prompt for `swapname`.
 --- @param swapname string
 --- @return string|nil choice a `v:swapchoice` value, or nil to show the dialog
+--- @return table|nil info the parsed swap info, when it was readable
 local function choose(swapname)
     local ok, info = pcall(vim.fn.swapinfo, swapname)
 
@@ -40,11 +62,11 @@ local function choose(swapname)
     if not ok or type(info) ~= 'table' or info.error then return nil end
 
     -- Unsaved changes live only in this swap file — always ask.
-    if tonumber(info.dirty) == 1 then return nil end
+    if tonumber(info.dirty) == 1 then return nil, info end
 
-    if process_alive(tonumber(info.pid)) then return 'o' end
+    if process_alive(tonumber(info.pid)) then return 'o', info end
 
-    return 'd'
+    return 'd', info
 end
 
 function M.setup()
@@ -53,15 +75,21 @@ function M.setup()
     vim.api.nvim_create_autocmd('SwapExists', {
         group = group,
         callback = function()
-            local choice = choose(vim.v.swapname)
+            local choice, info = choose(vim.v.swapname)
             if not choice then return end -- fall through to the normal dialog
 
             vim.v.swapchoice = choice
 
             if choice == 'o' then
+                local pid = tonumber(info.pid)
+                local cwd = process_cwd(pid)
                 vim.notify(
-                    ('%s is open in another nvim — opened read-only')
-                    :format(vim.fn.fnamemodify(vim.v.swapname, ':t')),
+                    ('%s is open in another nvim (pid %d%s) — opened read-only')
+                    :format(
+                        vim.fn.fnamemodify(vim.v.swapname, ':t'),
+                        pid,
+                        cwd and (', cwd ' .. cwd) or ''
+                    ),
                     vim.log.levels.INFO
                 )
             end
