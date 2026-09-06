@@ -49,7 +49,6 @@ vim.api.nvim_create_autocmd({ "Filetype" }, {
     group = rust_spacetabs,
     callback = function()
         vim.cmd(':source ~/.config/nvim/scripts/rust_spacetab.vim')
-        vim.opt.colorcolumn = ''
     end
 })
 
@@ -162,7 +161,7 @@ vim.api.nvim_create_user_command('ClaudeLog', function(o)
     end
     if o.bang then -- raw jsonl (highlighted as json via ftplugin)
         vim.cmd('edit ' .. vim.fn.fnameescape(file))
-    else -- text-only scratch buffer: full labeled conversation
+    else           -- text-only scratch buffer: full labeled conversation
         -- both user + assistant text blocks; tool_result/tool_use blocks skipped.
         local prog = 'select(.type=="user" or .type=="assistant") | (.type) as $t | '
             .. '(if (.message.content|type)=="string" then [.message.content] '

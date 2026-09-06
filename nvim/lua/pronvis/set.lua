@@ -7,7 +7,7 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.autoindent = true
 vim.opt.encoding = 'utf-8'
-vim.opt.colorcolumn = '120'
+vim.opt.colorcolumn = ''
 vim.opt.textwidth = 120
 vim.opt.cursorline = false
 
