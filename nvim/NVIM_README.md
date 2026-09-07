@@ -25,7 +25,7 @@ The "wait-and-see" hint menus (via **which-key**) appear for any key that is a
 
 | Prefix       | Group             | Members                                                                 |
 |--------------|-------------------|-------------------------------------------------------------------------|
-| `<leader>c`  | **Claude Code**   | `cc cr cC cf cs cb cy cn`                                               |
+| `<leader>c`  | **git conflict**  | `co ct cb ca` hunk · `cO cT cB cA` whole file (diffview merge-tool only) |
 | `<leader>g`  | **git**           | `gd` Diffview · `gh`/`ga` history · `gp`/`gn` hunks · `gm` messenger · `gg` reload theme |
 | `<leader>t`  | **tabs & toggles**| `tn` new · `tc` close · `tr` rename · `tw` wrap                          |
 | `<leader>e`  | **edit/open file**| `e` new-adjacent · `es` snippets                                         |

@@ -14,9 +14,13 @@ please = push --force-with-lease
 [rebase]
         autoStash = true
 [merge]
-	tool = p4merge
-[mergetool "p4merge"]
-	path=/Applications/p4merge.app/Contents/MacOS/p4merge
+	# builtin tool: `git mergetool` opens the 4-way nvim layout (LOCAL/BASE/REMOTE
+	# + merged buffer). Day-to-day resolution goes through diffview instead
+	# (`:DiffviewOpen` on a conflicted repo); this is the CLI fallback.
+	tool = nvimdiff
+	# zdiff3: conflict markers carry a `|||||||` base section, so a hand-edited
+	# conflict shows what the common ancestor said, not just the two sides.
+	conflictStyle = zdiff3
 [push]
 	default = simple
 [core]
@@ -24,7 +28,8 @@ please = push --force-with-lease
 	autocrlf = input
 	excludesfile = ~/.gitignore
 [diff]
-	tool = nvim
+	# builtin tool name; plain `nvim` is not one (`difftool.nvim.cmd not set`)
+	tool = nvimdiff
 [color "status"]
 	changed = 203
 	untracked = brightmagenta
@@ -35,8 +40,6 @@ please = push --force-with-lease
 [color "diff"]
 	new = brightgreen
 	old = 203
-[push]
-    default = simple
 [commit]
 	gpgsign = true
 [filter "lfs"]
