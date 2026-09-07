@@ -5,7 +5,8 @@
 # Phases (run any subset; no args = all, always in dependency-safe order):
 #   tools  - install CLI tools (brew, rustup, nvm, oh-my-zsh, brew/cargo pkgs,
 #            plugin clones) + app-internal bootstrap (Mason LSPs, tmux plugins)
-#   links  - create the config symlinks (existing files are backed up first)
+#   links  - clone the shared skills repo, then create the config symlinks
+#            (existing files are backed up first)
 #   keys   - decrypt + import the GPG key and wire its auth subkey to SSH
 #   private - clone private configs and link the shared SSH host definitions
 #
@@ -85,6 +86,14 @@ GIT_CLONES=(
 PRIVATE_CONFIGS_REPO="${PRIVATE_CONFIGS_REPO:-git@github.com:pronvis/private_configs.git}"
 PRIVATE_CONFIGS_DIR="${PRIVATE_CONFIGS_DIR:-$HOME/it/private_configs}"
 
+# Shared omp configuration and agent definitions live in a separate public
+# repository. Clone over HTTPS so links work before `keys` restores SSH.
+# Pushes use SSH. config.yml stores an absolute skills path, so update it when
+# overriding SKILLS_DIR.
+SKILLS_REPO="${SKILLS_REPO:-https://github.com/pronvis/skills.git}"
+SKILLS_PUSH_REPO="${SKILLS_PUSH_REPO:-git@github.com:pronvis/skills.git}"
+SKILLS_DIR="${SKILLS_DIR:-$HOME/it/skills}"
+
 # Directories to create before linking.
 LINK_DIRS=(
     "$HOME/.zsh_sessions"
@@ -96,8 +105,8 @@ LINK_DIRS=(
     "$HOME/.claude/hooks"
     "$HOME/.claude/rules/rust/"
     "$HOME/.claude/commands"
-    "$HOME/.claude/skills"
     "$HOME/.codex"
+    "$HOME/.omp/agent/agents"
 )
 
 # Directories that must be mode 0700.
@@ -118,13 +127,16 @@ LINKS=(
     "alacritty/alacritty.toml|$HOME/.alacritty.toml"
     "kitty/kitty.conf|$HOME/.config/kitty/kitty.conf"
     "scripts|$HOME/bin/scripts"
-    "claude/CLAUDE.md|$HOME/AGENTS.md"
     "claude/settings.json|$HOME/.claude/settings.json"
     "claude/statusline-command.sh|$HOME/.claude/statusline-command.sh"
     "codex/config.toml|$HOME/.codex/config.toml"
     "codex/hooks.json|$HOME/.codex/hooks.json"
     "codex/statusline-command.sh|$HOME/.codex/statusline-command.sh"
     "ssh/config|$HOME/.ssh/config"
+    # Global omp rules and configuration.
+    "$SKILLS_DIR/AGENTS.md|$HOME/.omp/agent/AGENTS.md"
+    "$SKILLS_DIR/omp/config.yml|$HOME/.omp/agent/config.yml"
+    "$SKILLS_DIR/omp/lsp.json|$HOME/.omp/agent/lsp.json"
 )
 
 # Directory-contents symlinks, as "source dir | destination dir". Every entry
@@ -134,9 +146,9 @@ LINKS=(
 # up automatically — no need to edit this script.
 LINK_GLOBS=(
     "claude/commands|$HOME/.claude/commands"
-    "claude/skills|$HOME/.claude/skills"
     "claude/hooks|$HOME/.claude/hooks"
     "claude/rules/rust|$HOME/.claude/rules/rust"
+    "$SKILLS_DIR/agents|$HOME/.omp/agent/agents"
 )
 
 # Encrypted GPG key backup to import.
@@ -258,6 +270,43 @@ clone_repos() {
         run mkdir -p "$(dirname "$dest")"
         try git clone --depth 1 "$url" "$dest"
     done
+}
+
+# Clone an editable config repo with full history. Return non-zero when the
+# destination is unusable so the caller can skip dependent steps.
+# args: $1 = url, $2 = destination, $3 = hint printed on failure
+ensure_config_clone() {
+    local url="$1" dest="$2" hint="$3"
+    if [[ -d "$dest/.git" ]]; then
+        ok "clone: $dest"
+        return 0
+    fi
+    if [[ -e "$dest" ]]; then
+        warn "destination exists but is not a Git clone: $dest"
+        return 1
+    fi
+    run mkdir -p "$(dirname "$dest")"
+    if [[ "$DRY_RUN" == 1 ]]; then
+        dry "git clone $url $dest"
+        return 0
+    fi
+    if git clone "$url" "$dest"; then
+        ok "cloned: $dest"
+        return 0
+    fi
+    warn "clone failed: $url; $hint"
+    return 1
+}
+
+# Keep fetches on the keyless HTTPS remote while pushes go out over SSH (so
+# they use the GPG auth subkey instead of prompting for a GitHub password).
+set_push_url() { # $1 = clone dir, $2 = ssh url
+    local dir="$1" url="$2" current
+    [[ -d "$dir/.git" ]] || return 0
+    current="$(git -C "$dir" remote get-url --push origin 2>/dev/null || true)"
+    [[ "$current" == "$url" ]] && { ok "push remote: $url"; return 0; }
+    run git -C "$dir" remote set-url --push origin "$url"
+    ok "push remote: $url"
 }
 
 # Create one symlink, backing up an existing target first.
@@ -396,35 +445,6 @@ setup_git_filters() {
     return 0
 }
 
-# omp (Oh My Pi) has no declarative hook config: a hook is a module registered
-# in its own `extensions` setting, which lives in ~/.omp/agent/config.yml -- a
-# machine-local file this repo deliberately does not track. Only the wiring is
-# versioned, here, the same way the git clean filters above are.
-setup_omp_hook() {
-    have omp || return 0
-    if ! have jq; then
-        warn "jq missing — skipping omp status hook registration"
-        return 0
-    fi
-
-    local hook="$HOME/bin/scripts/agents/omp-hook.mjs"
-    local current updated
-    current="$(omp config get extensions 2>/dev/null)"
-    # Anything that is not a JSON array (unset, error, future format change) is
-    # treated as empty rather than appended to, so we never write back garbage.
-    [[ "$current" == \[* ]] || current='[]'
-
-    if jq -e --arg h "$hook" 'index($h) != null' <<<"$current" >/dev/null 2>&1; then
-        ok "omp: status hook already registered"
-        return 0
-    fi
-
-    # Append rather than overwrite: the user may have other extensions loaded.
-    updated="$(jq -c --arg h "$hook" '. + [$h]' <<<"$current")" || return 0
-    info "omp: registering tmux status hook"
-    try omp config set extensions "$updated"
-    return 0
-}
 
 setup_rustup() {
     if ! have rustup; then
@@ -486,14 +506,19 @@ phase_tools() {
 }
 
 phase_links() {
+    info "Links: skills repo"
+    # Before the symlinks, since LINKS/LINK_GLOBS point into this clone.
+    if ensure_config_clone "$SKILLS_REPO" "$SKILLS_DIR" \
+        "check network access, then re-run: ./install.sh links"; then
+        set_push_url "$SKILLS_DIR" "$SKILLS_PUSH_REPO"
+    fi
+
     info "Links: directories"
     ensure_dirs        "${LINK_DIRS[@]}"
     ensure_secure_dirs "${SECURE_DIRS[@]}"
     create_links       "${LINKS[@]}"
     link_globs         "${LINK_GLOBS[@]}"
     setup_launch_agents "${LAUNCH_AGENTS[@]}"
-    # After create_links, so ~/bin/scripts (and the hook it registers) exists.
-    setup_omp_hook
 }
 
 phase_keys() {
@@ -529,22 +554,8 @@ phase_keys() {
 phase_private() {
     info "Private configs"
 
-    if [[ -d "$PRIVATE_CONFIGS_DIR/.git" ]]; then
-        ok "clone: $PRIVATE_CONFIGS_DIR"
-    elif [[ -e "$PRIVATE_CONFIGS_DIR" ]]; then
-        warn "private config destination exists but is not a Git clone: $PRIVATE_CONFIGS_DIR"
-        return
-    else
-        run mkdir -p "$(dirname "$PRIVATE_CONFIGS_DIR")"
-        if [[ "$DRY_RUN" == 1 ]]; then
-            dry "git clone $PRIVATE_CONFIGS_REPO $PRIVATE_CONFIGS_DIR"
-        elif git clone "$PRIVATE_CONFIGS_REPO" "$PRIVATE_CONFIGS_DIR"; then
-            ok "cloned: $PRIVATE_CONFIGS_DIR"
-        else
-            warn "private config clone failed — restore the SSH key, then re-run: ./install.sh private"
-            return
-        fi
-    fi
+    ensure_config_clone "$PRIVATE_CONFIGS_REPO" "$PRIVATE_CONFIGS_DIR" \
+        "restore the SSH key, then re-run: ./install.sh private" || return
 
     # Protect the host inventory from other local accounts. link_one also
     # enforces mode 0600 on the included SSH config itself.
@@ -597,13 +608,14 @@ Bootstrap this macOS machine from the dotfiles repo.
 
 Phases (run any subset; no args = all, in dependency-safe order):
   tools  - install CLI tools + app bootstrap (Mason LSPs, tmux plugins)
-  links  - create the config symlinks (existing targets backed up first)
+  links  - clone the skills repo + create the config symlinks (existing
+           targets backed up first)
   keys   - decrypt + import the GPG key and wire its auth subkey to SSH
   private - clone private configs and link ~/.ssh/config.shared
 
 Usage:
   ./install.sh                # everything
-  ./install.sh links          # just symlinks
+  ./install.sh links          # skills clone + symlinks
   ./install.sh links keys     # symlinks + keys
   ./install.sh private        # private config clone + shared SSH config link
   DRY_RUN=1 ./install.sh      # preview every action, change nothing

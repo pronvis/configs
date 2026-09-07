@@ -6,7 +6,7 @@ macOS configuration, managed as symlinks and bootstrapped by `./install.sh`.
 
 ```sh
 ./install.sh             # everything: tools + links + keys + private configs
-./install.sh links       # just the config symlinks
+./install.sh links       # skills repo clone + the config symlinks
 ./install.sh links keys  # symlinks + GPG/SSH key
 ./install.sh private     # private configs + ~/.ssh/config.shared
 ./install.sh tools       # CLI tools + app bootstrap (Mason, tmux plugins)
@@ -18,9 +18,12 @@ Phases run in a dependency-safe order regardless of how they're passed:
 - **tools** — Homebrew, rustup, nvm + node, oh-my-zsh, the brew & cargo
   packages, and the zsh / base16 / tmux plugin clones. Then app-internal
   bootstrap: headless Mason LSP install and tmux (TPM) plugin install.
-- **links** — symlinks every config into place. Any existing target is moved to
-  `<name>.bak` (timestamped if a `.bak` already exists) before linking, so
-  nothing is ever destroyed.
+- **links** — clones the shared skills repo
+  (`https://github.com/pronvis/skills.git` → `~/it/skills`, pushes re-pointed at
+  SSH) and symlinks every config into place, including `~/.omp/agent/{AGENTS.md,
+  config.yml,lsp.json}` and `~/.omp/agent/agents/*` from that clone. Any
+  existing target is moved to `<name>.bak` (timestamped if a `.bak` already
+  exists) before linking, so nothing is ever destroyed.
 - **keys** — decrypts + imports the GPG key from its encrypted backup and
   registers its authentication subkey with gpg-agent so it also serves SSH.
 - **private** — clones `git@github.com:pronvis/private_configs.git` to
@@ -31,8 +34,11 @@ The script is idempotent — safe to re-run. Tool installs are best-effort: a
 single failed install warns and continues.
 
 Override the private repository or checkout location with
-`PRIVATE_CONFIGS_REPO` or `PRIVATE_CONFIGS_DIR` when needed. Existing clones
-are left untouched; use normal `git pull`/`git push` to synchronize changes.
+`PRIVATE_CONFIGS_REPO` or `PRIVATE_CONFIGS_DIR`, and the skills repository with
+`SKILLS_REPO`, `SKILLS_PUSH_REPO` or `SKILLS_DIR`, when needed. Overriding
+`SKILLS_DIR` also means editing `skills.customDirectories` in that repo's
+`omp/config.yml`, which holds an absolute path. Existing clones are left
+untouched; use normal `git pull`/`git push` to synchronize changes.
 
 ## Manual steps (not automated)
 
