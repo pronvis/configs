@@ -128,7 +128,13 @@ require('lazy').setup({
     },
     'airblade/vim-rooter',
     'mtdl9/vim-log-highlighting',
-    'jiangmiao/auto-pairs',
+    {
+        'jiangmiao/auto-pairs',
+        init = function()
+            -- Lua-backed Enter mappings have no rhs for AutoPairs to wrap.
+            vim.g.AutoPairsMapCR = 0
+        end,
+    },
 
     {
         'MeanderingProgrammer/render-markdown.nvim',
