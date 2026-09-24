@@ -92,6 +92,7 @@ map("n", "<leader>hu", function() require('gitsigns').reset_hunk() end, 'Reset c
 
 map("n", "<leader>gp", function() require('gitsigns').nav_hunk('prev') end, 'Jump to previous git hunk')
 map("n", "<leader>gn", function() require('gitsigns').nav_hunk('next') end, 'Jump to next git hunk')
+map("n", "<leader>hs", function() require('gitsigns').stage_hunk() end, 'Stage current git hunk')
 
 -- diffview
 map("n", "<leader>gd", '<cmd>DiffviewOpen<cr>', 'Diffview')
