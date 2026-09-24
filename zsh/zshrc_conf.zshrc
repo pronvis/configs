@@ -383,3 +383,6 @@ gpg-connect-agent updatestartuptty /bye >/dev/null
 
 export EDITOR="nvim"
 export VISUAL="nvim"
+
+# omp: route provider + OAuth/usage/model-discovery traffic through local proxy
+export PI_PROXY="http://127.0.0.1:7890"
