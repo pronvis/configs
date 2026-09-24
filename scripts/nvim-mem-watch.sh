@@ -48,8 +48,9 @@ while true; do
         sock=$(lsof -p "$pid" 2>/dev/null | grep -oE '/[^[:space:]]*/nvim\.[0-9]+\.[0-9]+' | head -1)
         echo "[$(date '+%F %T')] pid=$pid rss=${mb}MB sock=${sock:-none}" >>"$REPORT"
         if [ -n "$sock" ]; then
-            nvim --server "$sock" --remote-send "<C-\\><C-N>:luafile $DUMP<CR>" 2>>"$REPORT" \
-                || echo "  (core unresponsive — likely blocked allocating)" >>"$REPORT"
+            # Embedded cores have no UI to receive --remote-send keystrokes.
+            nvim --server "$sock" --remote-expr "execute('luafile $DUMP')" 2>>"$REPORT" \
+                || echo "  (RPC snapshot failed)" >>"$REPORT"
         fi
     done < <(ps -axo pid,rss,command | awk '/nvim --embed/ && !/awk/ {print $1, $2}')
     sleep "$POLL"
