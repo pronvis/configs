@@ -8,7 +8,7 @@ vim.opt.relativenumber = true
 vim.opt.autoindent = true
 vim.opt.encoding = 'utf-8'
 vim.opt.colorcolumn = ''
-vim.opt.textwidth = 120
+vim.opt.textwidth = 0
 vim.opt.cursorline = false
 
 -- lualine already shows the mode, so hide the native '-- INSERT --'/'-- TERMINAL --' message
