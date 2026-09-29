@@ -47,3 +47,5 @@ please = push --force-with-lease
 	process = git-lfs filter-process
 	required = true
 	clean = git-lfs clean -- %f
+[log]
+	date = local
