@@ -136,6 +136,7 @@ LINKS=(
     # Global omp rules and configuration.
     "$SKILLS_DIR/AGENTS.md|$HOME/.omp/agent/AGENTS.md"
     "$SKILLS_DIR/omp/config.yml|$HOME/.omp/agent/config.yml"
+    "$SKILLS_DIR/omp/models.yml|$HOME/.omp/agent/models.yml"
     "$SKILLS_DIR/omp/lsp.json|$HOME/.omp/agent/lsp.json"
 )
 
