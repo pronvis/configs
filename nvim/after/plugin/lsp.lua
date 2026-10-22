@@ -129,7 +129,7 @@ vim.g.rustaceanvim = {
         -- `rust-analyzer.json` or `.vscode/settings.json` still wins.
         default_settings = {
             ['rust-analyzer'] = {
-                cargo = { targetDir = true },
+                cargo = { targetDir = true, features = "all" },
             },
         },
     },
