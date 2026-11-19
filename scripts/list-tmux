@@ -1,0 +1,1 @@
+tmux list-panes -a -F '#{pane_id}  #{session_name}:#{window_index}.#{pane_index}  #{pane_current_command}  #{pane_current_path}  pid=#{pane_pid}'
